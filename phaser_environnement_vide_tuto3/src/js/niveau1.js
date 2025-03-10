@@ -26,7 +26,16 @@ export default class niveau1 extends Phaser.Scene {
     this.player.setBounce(0.2);
     this.player.setCollideWorldBounds(true);
     this.clavier = this.input.keyboard.createCursorKeys();
+    this.keyQ = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.Q);
+    this.keyZ = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.Z);
+    this.keyD = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.D);
     this.physics.add.collider(this.player, this.groupe_plateformes);
+    this.player2 = this.physics.add.sprite(100, 450, "img_perso");
+    this.player2.refreshBody();
+    this.player2.setBounce(0.2);
+    this.player2.setCollideWorldBounds(true);
+    this.clavier = this.input.keyboard.createCursorKeys();
+    this.physics.add.collider(this.player2, this.groupe_plateformes);
   }
 
   update() {
@@ -36,15 +45,28 @@ export default class niveau1 extends Phaser.Scene {
     } else if (this.clavier.right.isDown) {
       this.player.setVelocityX(160);
       this.player.anims.play("anim_tourne_droite", true);
+    }  else if (this.keyD.isDown) {
+      this.player2.setVelocityX(160);
+      this.player2.anims.play("anim_tourne_droite", true);
+    } else if (this.keyQ.isDown) {
+      this.player2.setVelocityX(-160);
+      this.player2.anims.play("anim_tourne_gauche", true);
     } else {
       this.player.setVelocityX(0);
       this.player.anims.play("anim_face");
-    }
+      this.player2.setVelocityX(0);
+     this.player2.anims.play("anim_face");}
+   
+    
+
     if (this.clavier.up.isDown && this.player.body.touching.down) {
       this.player.setVelocityY(-330);
     }
+    if (this.keyZ.isDown && this.player2.body.touching.down) {
+      this.player2.setVelocityY(-330);
+    }
     if (Phaser.Input.Keyboard.JustDown(this.clavier.space) == true) {
-      if (this.physics.overlap(this.player, this.porte_retour)) {
+      if (this.physics.overlap(this.player, this.porte_retour)||this.physics.overlap(this.player2, this.porte_retour)) {
         this.scene.start("selection");
         }
     } 
