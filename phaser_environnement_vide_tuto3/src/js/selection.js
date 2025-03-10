@@ -1,6 +1,11 @@
 var groupe_plateformes
 var player
 var clavier
+var player2
+let keyQ
+let keyD
+let keyZ
+
 export default class selection extends Phaser.Scene  {
   constructor() {
   
@@ -19,6 +24,9 @@ export default class selection extends Phaser.Scene  {
     this.load.image("img_porte3", "src/assets/door3.png"); 
   }
   create() {
+keyQ = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.Q);
+keyZ = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.Z);
+keyD = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.D);
     this.add.image(400, 300, "img_ciel");
     groupe_plateformes = this.physics.add.staticGroup();
     groupe_plateformes.create(200, 584, "img_plateforme");
@@ -30,9 +38,13 @@ export default class selection extends Phaser.Scene  {
     this.porte2 = this.physics.add.staticSprite(50, 264, "img_porte2");
     this.porte3 = this.physics.add.staticSprite(750, 234, "img_porte3");
     player = this.physics.add.sprite(100, 450, 'img_perso');
+    player2= this.physics.add.sprite(150,450, 'img_perso');
     player.setCollideWorldBounds(true);
+    player2.setCollideWorldBounds(true);
     this.physics.add.collider(player, groupe_plateformes);
+    this.physics.add.collider(player2, groupe_plateformes);
     player.setBounce(0.3);
+    player2.setBounce(0.3);
     clavier = this.input.keyboard.createCursorKeys();
     this.anims.create({
       key: "anim_tourne_gauche", // key est le nom de l'animation : doit etre unique poru la scene.
@@ -54,22 +66,36 @@ export default class selection extends Phaser.Scene  {
    
   }
 
-  update() {if (clavier.right.isDown == true) {
+  update() {
+  
+    if (clavier.right.isDown == true) {
     player.setVelocityX(160);
     player.anims.play('anim_tourne_droite', true);
   }
   else if (clavier.left.isDown == true) {
     player.setVelocityX(-160);
     player.anims.play('anim_tourne_gauche', true);
-  } else {
-    player.setVelocityX(0);
-    player.anims.play('anim_face', true);
-  
+  } 
+  else if (keyD.isDown == true) {
+    player2.setVelocityX(160);
+    player2.anims.play('anim_tourne_droite', true);
   }
+  else if (keyQ.isDown == true) {
+    player2.setVelocityX(-160);
+    player2.anims.play('anim_tourne_gauche', true);
+  } 
+  else if (keyZ.isDown && player2.body.touching.down) {
+    player2.setVelocityY(-330);}
   
-  if (clavier.up.isDown && player.body.touching.down) {
+  else if(clavier.up.isDown && player.body.touching.down) {
     player.setVelocityY(-330);
   } 
+  else {
+    player2.setVelocityX(0);
+    player2.anims.play('anim_face', true);
+    player.setVelocityX(0);
+    player.anims.play('anim_face', true);
+    }
   if (Phaser.Input.Keyboard.JustDown(clavier.space) == true) {
     if (this.physics.overlap(player, this.porte1)) this.scene.start("niveau1");
     if (this.physics.overlap(player, this.porte2)) this.scene.start("niveau2");
