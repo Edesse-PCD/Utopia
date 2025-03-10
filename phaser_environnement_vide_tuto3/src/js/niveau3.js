@@ -9,16 +9,17 @@ export default class niveau3 extends Phaser.Scene {
     }
     preload() {
      // chargement tuiles de jeu
-this.load.image("Phaser_tuilesdejeu", "src/assets/Assets.png");
-this.load.image("Phaser_tuilesdejeu", "src/assets/Oiseau.png");
-this.load.image("Phaser_tuilesdejeu", "src/assets/tuiles_de_jeu.png");
+this.load.image("Phaser_tuilesdejeu", "src/assets/Niveau_3/Assets.png");
+this.load.image("Phaser_tuilesdejeu", "src/assets/Niveau_3/Oiseau.png");
+this.load.image("Phaser_tuilesdejeu", "src/assets/Niveau_3/tuiles_de_jeu.png");
 // chargement de la carte
-this.load.tilemapTiledJSON("carte", "src/assets/map.json");  
+this.load.tilemapTiledJSON("carte", "src/assets/Niveau_3/map.json");  
     }
   
     create() {
      
 // chargement du jeu de tuiles
+const carteDuNiveau = this.add.tilemap("carte");
 const tileset = carteDuNiveau.addTilesetImage(
           "tuiles_de_jeu",
           "Phaser_tuilesdejeu"
@@ -43,7 +44,7 @@ const calque_plateformes = carteDuNiveau.createLayer(
 
         calque_plateformes.setCollisionByProperty({ estSolide: true }); 
         this.physics.add.collider(player, plateforme); 
-        const carteDuNiveau = this.add.tilemap("carte");
+ 
         this.physics.world.setBounds(0, 0, 3200, 640);
   //  ajout du champs de la caméra de taille identique à celle du monde
   this.cameras.main.setBounds(0, 0, 3200, 640);
