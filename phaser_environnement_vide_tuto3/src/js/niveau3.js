@@ -101,11 +101,13 @@ export default class niveau3 extends Phaser.Scene {
 
   update() {
     if (this.clavier.left.isDown) {
+      player.flipX=true;
       this.player.setVelocityX(-160);
-      this.player.anims.play("anim_tourne_gauche", true);
+      this.player.anims.play("animdino_marche", true);
     } else if (this.clavier.right.isDown) {
+      player.flipX=false;
       this.player.setVelocityX(160);
-      this.player.anims.play("anim_tourne_droite", true);
+      this.player.anims.play("animdino_marche", true);
     } else if (this.keyD.isDown) {
       this.player2.setVelocityX(160);
       this.player2.anims.play("anim_tourne_droite", true);
@@ -114,7 +116,7 @@ export default class niveau3 extends Phaser.Scene {
       this.player2.anims.play("anim_tourne_gauche", true);
     } else {
       this.player.setVelocityX(0);
-      this.player.anims.play("anim_face");
+      this.player.anims.play("animdino_face");
     }
     if (this.clavier.up.isDown && this.player.body.blocked.down) {
       this.player.setVelocityY(-300);
