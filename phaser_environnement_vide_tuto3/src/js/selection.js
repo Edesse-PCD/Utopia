@@ -2,8 +2,9 @@ var groupe_plateformes
 var player
 var clavier
 var player2
-var temple4
 var Pyramide1
+var cabane4
+var igloo2
 let keyQ
 let keyD
 let keyZ
@@ -16,8 +17,9 @@ export default class selection extends Phaser.Scene  {
   }
 
   preload() {
-  
-    this.load.image("img_mountains", "src/assets/Mountains.png");
+    this.load.image("BGdebut", "src/assets/BGdebut.png");
+    this.load.image("Tilesetdebut", "src/assets/Tilesetdebut.png");
+
     this.load.image("img_plateforme", "src/assets/platform.png");
     this.load.spritesheet("img_dino", "src/assets/Dino.png", {
       frameWidth: 24,
@@ -34,35 +36,47 @@ export default class selection extends Phaser.Scene  {
     this.load.image("img_porte1", "src/assets/door1.png");
     this.load.image("img_porte2", "src/assets/door2.png");
     this.load.image("img_porte3", "src/assets/door3.png"); 
-    this.load.image("img_temple4","src/assets/temple4.png");
     this.load.image("img_Pyramide1","src/assets/Pyramide1.png");
+    this.load.image("img_cabane4","src/assets/cabane4.png");
+    this.load.image("img_igloo2","src/assets/igloo2.png");
+    this.load.tilemapTiledJSON("mapdebut", "src/assets/mapdebut.json");
+
 
   }
   create() {
+const carteDuNiveau = this.add.tilemap("mapdebut");
+const BGdebut = carteDuNiveau.addTilesetImage("BGdebut", "BGdebut");
+
+const Tilesetdebut = carteDuNiveau.addTilesetImage("Tilesetdebut", "Tilesetdebut");
+const tilesetselec = [ BGdebut, Tilesetdebut];
+const BG = carteDuNiveau.createLayer("BG", tilesetselec);
+const plateforms = carteDuNiveau.createLayer("plateforms", tilesetselec);
+plateforms.setCollisionByProperty({ estSolide: true });
+const decoration = carteDuNiveau.createLayer("decoration", tilesetselec);
+BG.setScale(2);
+plateforms.setScale(2);
+decoration.setScale(2);
+
+
 
 keyQ = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.Q);
 keyZ = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.Z);
 keyD = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.D);
-const bg_mountains = this.add.image(400, 300, "img_mountains").setScale(0.4);
-    groupe_plateformes = this.physics.add.staticGroup();
-    groupe_plateformes.create(200, 584, "img_plateforme");
-    groupe_plateformes.create(600, 584, "img_plateforme");
-    groupe_plateformes.create(50, 300, "img_plateforme");
-    groupe_plateformes.create(600, 450, "img_plateforme");
-    groupe_plateformes.create(750, 270, "img_plateforme");
-    this.porte2 = this.physics.add.staticSprite(50, 264, "img_porte2");
-    this.porte3 = this.physics.add.staticSprite(750, 234, "img_porte3");
-    temple4 = this.physics.add.staticSprite(300, 540, "img_temple4").setScale(0.2).refreshBody();
-    Pyramide1 = this.physics.add.staticSprite(600, 416, "img_Pyramide1").setScale(0.3).refreshBody();
 
-    player = this.physics.add.sprite(100, 450, 'img_dino');
-    player2= this.physics.add.sprite(150,450, 'img_dino2');
+    this.porte3 = this.physics.add.staticSprite(2100, 460, "img_porte3");
+    cabane4 = this.physics.add.staticSprite(2450, 270, "img_cabane4").setScale(0.3).refreshBody();
+    Pyramide1 = this.physics.add.staticSprite(740, 490, "img_Pyramide1").setScale(0.3).refreshBody();
+    igloo2 = this.physics.add.staticSprite(1270, 410, "img_igloo2").setScale(0.1).refreshBody();
+
+    player = this.physics.add.sprite(100, 400, 'img_dino');
+    this.cameras.main.startFollow(player);
+    player2= this.physics.add.sprite(150,400, 'img_dino2');
     player.setCollideWorldBounds(true);
     player2.setCollideWorldBounds(true);
-    this.physics.add.collider(player, groupe_plateformes);
-    this.physics.add.collider(player2, groupe_plateformes);
-    player.setBounce(0.3);
-    player2.setBounce(0.3);
+    this.physics.add.collider(player, plateforms);
+    this.physics.add.collider(player2, plateforms);
+    this.physics.world.setBounds(0,0,2560,640);
+    this.cameras.main.setBounds(0,0,2560,640);
     clavier = this.input.keyboard.createCursorKeys();
     this.anims.create({
       key: "anim_tourne_gauche", // key est le nom de l'animation : doit etre unique poru la scene.
@@ -121,9 +135,6 @@ const bg_mountains = this.add.image(400, 300, "img_mountains").setScale(0.4);
     player.setVelocityX(-160);
     player.anims.play('animdino_marche', true);
   } 
-else if(clavier.up.isDown && player.body.touching.down) {
-    player.setVelocityY(-330);
-  } 
   else {player.setVelocityX(0);
     player.anims.play('animdino_face', true)
     }
@@ -133,8 +144,6 @@ else if(clavier.up.isDown && player.body.touching.down) {
     player2.setVelocityX(-160);
     player2.anims.play('animdino2_marche', true);
   } 
-  else if (keyZ.isDown && player2.body.touching.down) {
-    player2.setVelocityY(-330);}
   else if (keyD.isDown == true) {
     player2.flipX=false;
     player2.setVelocityX(160);
@@ -144,11 +153,19 @@ else if(clavier.up.isDown && player.body.touching.down) {
     player2.setVelocityX(0);
     player2.anims.play('animdino2_face', true);
     }
+  if (keyZ.isDown && player2.body.onFloor()) {
+      player2.setVelocityY(-330);}
+  if(clavier.up.isDown && player.body.onFloor()) {
+        player.setVelocityY(-330);}
     
   if (Phaser.Input.Keyboard.JustDown(clavier.space) == true) {
     if (this.physics.overlap(player, Pyramide1)) this.scene.start("niveau1");
-    if (this.physics.overlap(player, this.porte2)) this.scene.start("niveau2");
+    if (this.physics.overlap(player, igloo2)) this.scene.start("niveau2");
     if (this.physics.overlap(player, this.porte3)) this.scene.start("niveau3");
-    if (this.physics.overlap(player, temple4)) this.scene.start("niveau4");
+    if (this.physics.overlap(player, cabane4)) this.scene.start("niveau4");
+      if (this.physics.overlap(player2, Pyramide1)) this.scene.start("niveau1");
+      if (this.physics.overlap(player2, igloo2)) this.scene.start("niveau2");
+      if (this.physics.overlap(player2, this.porte3)) this.scene.start("niveau3");
+      if (this.physics.overlap(player2, cabane4)) this.scene.start("niveau4");
   } 
 }}
