@@ -107,7 +107,8 @@ export default class niveau2 extends Phaser.Scene {
       this.player2.setVelocityX(0);
       this.player2.anims.play("animdino2_face");
     }
-
+    this.player.setScale(2);
+    this.player2.setScale(2);
 
 
     if (this.clavier.up.isDown && this.player.body.blocked.down) {

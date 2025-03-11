@@ -172,7 +172,8 @@ this.cameras.main.setBounds(0, 0, 6400, 640);
 // Ancrage de la caméra sur le joueur
 this.cameras.main.startFollow(this.player);
 
-
+this.player.setScale(2);
+this.player2.setScale(2);
     
     
     }
