@@ -13,7 +13,7 @@ export default class selection extends Phaser.Scene  {
   }
 
   preload() {
-    this.load.image("img_ciel", "src/assets/sky.png");
+    this.load.image("img_mountains", "src/assets/Mountains.png");
     this.load.image("img_plateforme", "src/assets/platform.png");
     this.load.spritesheet("img_dino", "src/assets/Dino.png", {
       frameWidth: 24,
@@ -33,10 +33,11 @@ export default class selection extends Phaser.Scene  {
     this.load.image("img_star","src/assets/star.png");
   }
   create() {
+
 keyQ = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.Q);
 keyZ = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.Z);
 keyD = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.D);
-    this.add.image(400, 300, "img_ciel");
+    this.add.image(400, 300, "img_mountains");
     groupe_plateformes = this.physics.add.staticGroup();
     groupe_plateformes.create(200, 584, "img_plateforme");
     groupe_plateformes.create(600, 584, "img_plateforme");
