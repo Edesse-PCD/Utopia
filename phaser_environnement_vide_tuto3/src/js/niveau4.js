@@ -11,6 +11,7 @@ export default class niveau4 extends Phaser.Scene {
   // chargement tuiles de jeu
   this.load.image("crashed_plane_small", "src/assets/Niveau4/crashed_plane_small.png");
   this.load.image("Crate3_big", "src/assets/Niveau4/Crate3_big.png");
+  this.load.image("croc_attack", "src/assets/Niveau4/croc_attack.png");
   this.load.image("Ground_middle_background", "src/assets/Niveau4/Ground_middle_background.png");
   this.load.image("jungle tileset", "src/assets/Niveau4/jungle tileset.png");
   this.load.image("j1", "src/assets/Niveau4/j1.png");
@@ -26,7 +27,7 @@ export default class niveau4 extends Phaser.Scene {
   this.load.image("shack2", "src/assets/Niveau4/shack2.png");
   this.load.image("shack3", "src/assets/Niveau4/shack3.png");
   this.load.image("Tree_2", "src/assets/Niveau4/Tree_2.png");
-
+  
   // chargement de la carte
 this.load.tilemapTiledJSON("CarteJungle", "src/assets/Niveau4/MapJungle.json"); 
  
@@ -44,6 +45,7 @@ const carteDuNiveau = this.add.tilemap("CarteJungle");
 const tilesets = [
     carteDuNiveau.addTilesetImage("crashed_plane_small", "crashed_plane_small"),
     carteDuNiveau.addTilesetImage("Crate3_big", "Crate3_big"),
+    carteDuNiveau.addTilesetImage("croc_attack", "croc_attack"),
     carteDuNiveau.addTilesetImage("Ground_middle_background", "Ground_middle_background"),
     carteDuNiveau.addTilesetImage("jungle tileset", "jungle tileset"),
     carteDuNiveau.addTilesetImage("j1", "j1"),
@@ -99,12 +101,16 @@ const calque_cabane = carteDuNiveau.createLayer(
     "cabane",
     tilesets
 );
+calque_cabane.setCollisionByProperty({ EstSolide: true })
+
+
 
 // Calque ajout cabane : ajout cabane
 const calque_ajoutCabane = carteDuNiveau.createLayer(
   "ajoutCabane",
   tilesets
 );
+calque_ajoutCabane.setCollisionByProperty({ EstSolide: true })
 
 // Calque Animal : Objets ramassables (Animal)
 const calque_Animal = carteDuNiveau.createLayer(
@@ -117,7 +123,7 @@ const calque_feuillageSolide = carteDuNiveau.createLayer(
   "feuillageSolide",
   tilesets
 );
-calque_feuillageSolide.setCollisionByProperty({ estSolide: true })
+calque_feuillageSolide.setCollisionByProperty({ EstSolide: true })
 
 // Calque Lianes :Lianes
 const calque_Lianes = carteDuNiveau.createLayer(
@@ -137,6 +143,9 @@ const calque_Lianes = carteDuNiveau.createLayer(
 
     this.player = this.physics.add.sprite(100, 450, "img_perso");
     this.physics.add.collider(this.player, calque_feuillageSolide);
+    this.physics.add.collider(this.player, this.calque_cabane);
+    this.physics.add.collider(this.player, this.calque_ajoutCabane);
+    
     this.player.refreshBody();
     this.player.setBounce(0.2);
     this.player.setCollideWorldBounds(true);
@@ -144,8 +153,8 @@ const calque_Lianes = carteDuNiveau.createLayer(
     this.keyQ = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.Q);
     this.keyZ = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.Z);
     this.keyD = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.D);
-    this.physics.add.collider(this.player, this.groupe_plateformes);
-
+    
+    
     this.player2 = this.physics.add.sprite(100, 450, "img_perso");
     this.physics.add.collider(this.player2, calque_feuillageSolide);
     this.player2.refreshBody();
