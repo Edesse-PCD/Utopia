@@ -50,6 +50,14 @@ this.load.tilemapTiledJSON("map", "src/assets/niveau1/utopia niveau 1 map.tmj")
 
 
   create() {// Chargement de la carte
+
+   
+// Position de départ (respawn du joueur)
+this.startPosition = { x: 100, y: 450 };
+
+this.deathMessage = null;
+
+
 const carteDuNiveau = this.add.tilemap("map");
 
 // Ajout de chaque tileset individuellement
@@ -181,9 +189,34 @@ let messageDisplayed = false; // Pour s'assurer que le message n'est affiché qu
     let dangerTile = this.calque_dangers.getTileAtWorldXY(playerTopCenter.x, playerTopCenter.y);
     let dangerTile2 = this.calque_dangers.getTileAtWorldXY(playerBottomCenter.x, playerBottomCenter.y);
 
-    // Si une tuile de danger est trouvée et que le message n'a pas encore été affiché
-    if (dangerTile ||dangerTile2 ) {
-        this.add.text(400, 300, 'Désolé, vous êtes mort !', { font: '32px Arial', fill: '#fff', backgroundColor: '#000' });
+    if (dangerTile || dangerTile2) {
+      if (!this.deathMessage) {
+          this.deathMessage = this.add.text(400, 300, 'Vous êtes mort !', { 
+              font: '32px Arial', 
+              fill: '#fff', 
+              backgroundColor: '#000' 
+          });
+      }
+  
+
+            // Désactiver le corps physique du joueur temporairement
+    this.player.setVelocity(0, 0); // Stoppe les mouvements
+    this.player.body.enable = false; 
+
+    // Attendre un court instant avant de le faire respawn (évite un bug de collision)
+    this.time.delayedCall(500, () => {
+        this.player.setPosition(this.startPosition.x, this.startPosition.y); // Respawn au point de départ
+        this.player.body.enable = true; // Réactiver le corps du joueur
+        
+
+        // Supprimer le message de mort
+        if (this.deathMessage) {
+          this.deathMessage.destroy();
+          this.deathMessage = null;
+      }
+    });
+    
+        
     }
 
 
