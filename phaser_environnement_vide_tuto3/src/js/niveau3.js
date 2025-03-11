@@ -101,28 +101,29 @@ export default class niveau3 extends Phaser.Scene {
 
   update() {
     if (this.clavier.left.isDown) {
-      this.player.flipX=true;
       this.player.setVelocityX(-160);
-      this.player.anims.play("animdino_marche", true);
+      this.player.anims.play("anim_tourne_gauche", true);
     } else if (this.clavier.right.isDown) {
-      this.player.flipX=false;
       this.player.setVelocityX(160);
-      this.player.anims.play("animdino_marche", true);
+      this.player.anims.play("anim_tourne_droite", true);
     } else if (this.keyD.isDown) {
       this.player2.setVelocityX(160);
-      this.player2.anims.play("animdino2_marche", true);
+      this.player2.anims.play("anim_tourne_droite", true);
     } else if (this.keyQ.isDown) {
       this.player2.setVelocityX(-160);
-      this.player2.anims.play("animdino2_marche", true);
+      this.player2.anims.play("anim_tourne_gauche", true);
     } else {
       this.player.setVelocityX(0);
-      this.player.anims.play("animdino_face");
-      this.player.anims.play("animdino2_face");
-
+      this.player.anims.play("anim_face");
+      this.player2.setVelocityX(0);
+      this.player2.anims.play("anim_face");
     }
-    if (this.clavier.up.isDown && this.player.body.blocked.down) {
-      this.player.setVelocityY(-300);
 
+    if (this.clavier.up.isDown && this.player.body.blocked.down) {
+      this.player.setVelocityY(-330);
+    }
+    if (this.keyZ.isDown && this.player2.body.blocked.down) {
+      this.player2.setVelocityY(-330);
     }
     if (Phaser.Input.Keyboard.JustDown(this.clavier.space) == true) {
       if (this.physics.overlap(this.player, this.porte_retour) || this.physics.overlap(this.player2, this.porte_retour)) {
