@@ -56,7 +56,7 @@ export default class niveau3 extends Phaser.Scene {
     calque_plateformes.setScale(2);
     calque_background.setScale(2);
     calque_background_2.setScale(2);
-    this.player.setscale(2);
+    
     calque_plateformes.setCollisionByProperty({ estSolide: true });
 
    
@@ -76,7 +76,7 @@ export default class niveau3 extends Phaser.Scene {
       fontSize: "22pt"
     });
 
-    this.player = this.physics.add.sprite(100, 450, "img_perso");
+    this.player = this.physics.add.sprite(100, 450, "img_dino");
     this.player.setBounce(0.2);
     this.player.setCollideWorldBounds(true);
     this.physics.add.collider(this.player, calque_plateformes);
@@ -89,36 +89,60 @@ export default class niveau3 extends Phaser.Scene {
     this.keyZ = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.Z);
     this.keyD = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.D);
 
-    
-    this.player2 = this.physics.add.sprite(100, 450, "img_perso");
+
+    this.player2 = this.physics.add.sprite(100, 450, "img_dino2");
     this.player2.refreshBody();
     this.player2.setBounce(0.2);
     this.player2.setCollideWorldBounds(true);
     this.physics.add.collider(this.player2, calque_plateformes);
+    this.player.setScale(2);
+    this.player2.setScale(2);
+
+
+    this.oiseau = this.physics.add.sprite(300, 300, "tileset_oiseau");
+  
+  
+this.oiseau.setImmovable(true); // L'oiseau ne doit pas bouger s'il est touché
+this.oiseau.body.allowGravity = false; // Il ne doit pas tomber
+
+// Détection de collision entre le joueur et l'oiseau
+this.physics.add.overlap(this.player, this.oiseau, this.gagner, null, this);
+
+// Ajout d'une touche pour redémarrer au niveau 1
+this.toucheEntree = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.ENTER);
 
 
   }
 
   update() {
     if (this.clavier.left.isDown) {
+      this.player.flipX=true;
       this.player.setVelocityX(-160);
-      this.player.anims.play("anim_tourne_gauche", true);
+      this.player.anims.play("animdino_marche", true);
     } else if (this.clavier.right.isDown) {
+      this.player.flipX=false;
       this.player.setVelocityX(160);
-      this.player.anims.play("anim_tourne_droite", true);
+      this.player.anims.play("animdino_marche", true);
     } else if (this.keyD.isDown) {
+      this.player2.flipX=false;
       this.player2.setVelocityX(160);
-      this.player2.anims.play("anim_tourne_droite", true);
+      this.player2.anims.play("animdino2_marche", true);
     } else if (this.keyQ.isDown) {
+      this.player2.flipX=true;
       this.player2.setVelocityX(-160);
-      this.player2.anims.play("anim_tourne_gauche", true);
+      this.player2.anims.play("animdino2_marche", true);
     } else {
       this.player.setVelocityX(0);
-      this.player.anims.play("anim_face");
+      this.player.anims.play("animdino_face");
+      this.player2.setVelocityX(0);
+      this.player2.anims.play("animdino2_face");
     }
-    if (this.clavier.up.isDown && this.player.body.blocked.down) {
-      this.player.setVelocityY(-300);
 
+    if (this.clavier.up.isDown && this.player.body.blocked.down) {
+      this.player.setVelocityY(-330);
+    }
+    if (this.keyZ.isDown && this.player2.body.blocked.down) {
+      this.player2.setVelocityY(-330);
     }
     if (Phaser.Input.Keyboard.JustDown(this.clavier.space) == true) {
       if (this.physics.overlap(this.player, this.porte_retour) || this.physics.overlap(this.player2, this.porte_retour)) {
@@ -126,4 +150,30 @@ export default class niveau3 extends Phaser.Scene {
       }
     }
   }
+
+
+gagner() {
+  // Affichage du message de victoire
+  this.texteVictoire = this.add.text(
+      this.player.x - 100, // Position X légèrement décalée par rapport au joueur
+      this.player.y - 100, // Position Y légèrement au-dessus du joueur
+      "Bravo, tu as gagné ! Appuie sur entrée pour revenir au menu", // Texte affiché
+      {
+          fontSize: "32px", // Taille du texte
+          fill: "#FFFFFF", // Couleur du texte (blanc)
+          backgroundColor: "#000000", // Fond noir pour rendre le texte plus visible
+          padding: { x: 10, y: 5 } // Ajout d'un petit espace autour du texte
+      }
+  );
+
+  // Désactive les mouvements du joueur
+  this.player.setVelocity(0, 0); // Immobilise le joueur en arrêtant ses vitesses X et Y
+  this.player.anims.stop(); // Stoppe l'animation du joueur
+  this.physics.world.pause(); // Met en pause la physique du monde (plus rien ne bouge)
+
+  // Ajout d'un écouteur d'événement sur la touche "Entrée"
+  this.input.keyboard.on("keydown-ENTER", () => {
+      this.scene.start("selection"); // Charge la scène du niveau 1 quand on appuie sur Entrée
+  });
+}
 }

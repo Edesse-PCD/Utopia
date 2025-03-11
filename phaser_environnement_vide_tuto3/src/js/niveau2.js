@@ -60,12 +60,12 @@ export default class niveau2 extends Phaser.Scene {
     const deco = carteDuNiveau.createLayer("deco", tileset2);
     const calque_plateform = carteDuNiveau.createLayer("calque_plateform", tileset2);
     calque_plateform.setCollisionByProperty({ estSolide: true });
-    const piquants = carteDuNiveau.createLayer("piquants", tileset2);
+    this.piquants = carteDuNiveau.createLayer("piquants", tileset2);
     const animal = carteDuNiveau.createLayer("animal", tileset2);
 
 
    
-    this.player = this.physics.add.sprite(100, 450, "img_perso");
+    this.player = this.physics.add.sprite(100, 450, "img_dino");
     this.player.refreshBody();
     this.player.setBounce(0.2);
     this.player.setCollideWorldBounds(true);
@@ -76,7 +76,7 @@ export default class niveau2 extends Phaser.Scene {
     this.keyZ = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.Z);
     this.keyD = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.D);
     this.physics.add.collider(this.player, calque_plateform)
-    this.player2 = this.physics.add.sprite(100, 450, "img_perso");
+    this.player2 = this.physics.add.sprite(100, 450, "img_dino2");
     this.player2.refreshBody();
     this.player2.setBounce(0.2);
     this.player2.setCollideWorldBounds(true);
@@ -87,24 +87,30 @@ export default class niveau2 extends Phaser.Scene {
 
   update() {
     if (this.clavier.left.isDown) {
+      this.player.flipX=true;
       this.player.setVelocityX(-160);
-      this.player.anims.play("anim_tourne_gauche", true);
+      this.player.anims.play("animdino_marche", true);
     } else if (this.clavier.right.isDown) {
+      this.player.flipX=false;
       this.player.setVelocityX(160);
-      this.player.anims.play("anim_tourne_droite", true);
+      this.player.anims.play("animdino_marche", true);
     } else if (this.keyD.isDown) {
+      this.player2.flipX=false;
       this.player2.setVelocityX(160);
-      this.player2.anims.play("anim_tourne_droite", true);
+      this.player2.anims.play("animdino2_marche", true);
     } else if (this.keyQ.isDown) {
+      this.player2.flipX=true;
+
       this.player2.setVelocityX(-160);
-      this.player2.anims.play("anim_tourne_gauche", true);
+      this.player2.anims.play("animdino2_marche", true);
     } else {
       this.player.setVelocityX(0);
-      this.player.anims.play("anim_face");
+      this.player.anims.play("animdino_face");
       this.player2.setVelocityX(0);
-      this.player2.anims.play("anim_face");
+      this.player2.anims.play("animdino2_face");
     }
-
+    this.player.setScale(2);
+    this.player2.setScale(2);
 
 
     if (this.clavier.up.isDown && this.player.body.blocked.down) {
