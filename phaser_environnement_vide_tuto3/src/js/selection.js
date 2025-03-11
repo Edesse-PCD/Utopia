@@ -2,9 +2,12 @@ var groupe_plateformes
 var player
 var clavier
 var player2
+var temple4
+var Pyramide1
 let keyQ
 let keyD
 let keyZ
+
 
 export default class selection extends Phaser.Scene  {
   constructor() {
@@ -31,24 +34,27 @@ export default class selection extends Phaser.Scene  {
     this.load.image("img_porte1", "src/assets/door1.png");
     this.load.image("img_porte2", "src/assets/door2.png");
     this.load.image("img_porte3", "src/assets/door3.png"); 
-    this.load.image("img_star","src/assets/star.png");
+    this.load.image("img_temple4","src/assets/temple4.png");
+    this.load.image("img_Pyramide1","src/assets/Pyramide1.png");
+
   }
   create() {
 
 keyQ = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.Q);
 keyZ = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.Z);
 keyD = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.D);
-    this.add.image(400, 300, "img_mountains");
+const bg_mountains = this.add.image(400, 300, "img_mountains").setScale(0.4);
     groupe_plateformes = this.physics.add.staticGroup();
     groupe_plateformes.create(200, 584, "img_plateforme");
     groupe_plateformes.create(600, 584, "img_plateforme");
     groupe_plateformes.create(50, 300, "img_plateforme");
     groupe_plateformes.create(600, 450, "img_plateforme");
     groupe_plateformes.create(750, 270, "img_plateforme");
-    this.porte1 = this.physics.add.staticSprite(600, 414, "img_porte1");
     this.porte2 = this.physics.add.staticSprite(50, 264, "img_porte2");
     this.porte3 = this.physics.add.staticSprite(750, 234, "img_porte3");
-    this.star=this.physics.add.staticSprite(300, 540, "img_star");
+    temple4 = this.physics.add.staticSprite(300, 540, "img_temple4").setScale(0.2).refreshBody();
+    Pyramide1 = this.physics.add.staticSprite(600, 416, "img_Pyramide1").setScale(0.3).refreshBody();
+
     player = this.physics.add.sprite(100, 450, 'img_dino');
     player2= this.physics.add.sprite(150,450, 'img_dino2');
     player.setCollideWorldBounds(true);
@@ -140,9 +146,9 @@ else if(clavier.up.isDown && player.body.touching.down) {
     }
     
   if (Phaser.Input.Keyboard.JustDown(clavier.space) == true) {
-    if (this.physics.overlap(player, this.porte1)) this.scene.start("niveau1");
+    if (this.physics.overlap(player, Pyramide1)) this.scene.start("niveau1");
     if (this.physics.overlap(player, this.porte2)) this.scene.start("niveau2");
     if (this.physics.overlap(player, this.porte3)) this.scene.start("niveau3");
-    if (this.physics.overlap(player, this.star)) this.scene.start("niveau4");
+    if (this.physics.overlap(player, temple4)) this.scene.start("niveau4");
   } 
 }}

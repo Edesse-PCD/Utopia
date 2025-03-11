@@ -25,11 +25,17 @@ export default class niveau2 extends Phaser.Scene {
     this.load.image("17", "src/assets/niveau2/Tiles/17.png");
     this.load.image("Polarbear", "src/assets/niveau2/PolarBear.png");
     this.load.image("BG", "src/assets/niveau2/BG.png");
+    this.load.image("ours", "src/assets/niveau2/ours.png");
+    this.load.image("tileset_image", "src/assets/Niveau_3/victoire_image.png");
+
     this.load.tilemapTiledJSON("map2", "src/assets/niveau2/mapBanquise.json");
   }
 
 
   create() {
+    this.startPosition = { x: 100, y: 450 };
+    this.deathMessage = null;
+
     const carteDuNiveau = this.add.tilemap("map2");
     const crate = carteDuNiveau.addTilesetImage("Crate", "Crate");
     const Crystal = carteDuNiveau.addTilesetImage("Crystal", "Crystal");
@@ -83,9 +89,107 @@ export default class niveau2 extends Phaser.Scene {
     this.physics.add.collider(this.player2, calque_plateform);    
     this.physics.world.setBounds(0,0,6400,640);
     this.cameras.main.setBounds(0,0,6400,640);
+    this.ours = this.physics.add.sprite(6350, 340, "ours");
+    this.ours.setImmovable(true); // L'oiseau ne doit pas bouger s'il est touché
+this.ours.body.allowGravity = false; // Il ne doit pas tomber
+
+// Détection de collision entre le joueur et l'oiseau
+this.physics.add.overlap(this.player, this.ours, this.gagner, null, this);
+this.physics.add.overlap(this.player2, this.ours, this.gagner2, null, this);
+
+
+// Ajout d'une touche pour redémarrer au niveau 1
+this.toucheEntree = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.ENTER);
+
   }
 
   update() {
+    let messageDisplayed = false; // Pour s'assurer que le message n'est affiché qu'une seule fois
+
+
+    // Obtenez la position du personnage en haut au centre
+    let playerTopCenter = this.player.getTopCenter();
+
+    let playerBottomCenter = this.player.getBottomCenter();
+  
+    // Vérifiez si le joueur interagit avec une tuile du calque danger
+    let dangerTile = this.piquants.getTileAtWorldXY(playerTopCenter.x, playerTopCenter.y);
+    let dangerTile2 = this.piquants.getTileAtWorldXY(playerBottomCenter.x, playerBottomCenter.y);
+
+    if (dangerTile || dangerTile2) {
+      if (!this.deathMessage) {
+          this.deathMessage = this.add.text(400, 300, 'Vous êtes mort !', { 
+              font: '32px Arial', 
+              fill: '#fff', 
+              backgroundColor: '#000' 
+          });
+      }
+  
+
+            // Désactiver le corps physique du joueur temporairement
+    this.player.setVelocity(0, 0); // Stoppe les mouvements
+    this.player.body.enable = false; 
+
+    // Attendre un court instant avant de le faire respawn (évite un bug de collision)
+    this.time.delayedCall(500, () => {
+        this.player.setPosition(this.startPosition.x, this.startPosition.y); // Respawn au point de départ
+        this.player.body.enable = true; // Réactiver le corps du joueur
+        
+
+        // Supprimer le message de mort
+        if (this.deathMessage) {
+          this.deathMessage.destroy();
+          this.deathMessage = null;
+      }
+    });
+    
+        
+    }
+
+    // gestion de la mort et respawn du JOUEUR 2 
+
+    // Supposons que vous avez un calque 'danger' et un personnage (player)
+let message2Displayed = false; // Pour s'assurer que le message n'est affiché qu'une seule fois
+
+
+// Obtenez la position du personnage en haut au centre
+let player2TopCenter = this.player2.getTopCenter();
+
+let player2BottomCenter = this.player2.getBottomCenter();
+
+// Vérifiez si le joueur interagit avec une tuile du calque danger
+let dangerTile3 = this.piquants.getTileAtWorldXY(player2TopCenter.x, player2TopCenter.y);
+let dangerTile4 = this.piquants.getTileAtWorldXY(player2BottomCenter.x, player2BottomCenter.y);
+
+if (dangerTile3 || dangerTile4) {
+  if (!this.deathMessage) {
+      this.deathMessage = this.add.text(400, 300, 'Vous êtes mort !', { 
+          font: '32px Arial', 
+          fill: '#fff', 
+          backgroundColor: '#000' 
+      });
+  }
+
+
+        // Désactiver le corps physique du joueur temporairement
+this.player2.setVelocity(0, 0); // Stoppe les mouvements
+this.player2.body.enable = false; 
+
+// Attendre un court instant avant de le faire respawn (évite un bug de collision)
+this.time.delayedCall(500, () => {
+    this.player2.setPosition(this.startPosition.x, this.startPosition.y); // Respawn au point de départ
+    this.player2.body.enable = true; // Réactiver le corps du joueur
+    
+
+    // Supprimer le message de mort
+    if (this.deathMessage) {
+      this.deathMessage.destroy();
+      this.deathMessage = null;
+  }
+});}
+
+
+
     if (this.clavier.left.isDown) {
       this.player.flipX=true;
       this.player.setVelocityX(-160);
@@ -124,5 +228,48 @@ export default class niveau2 extends Phaser.Scene {
         this.scene.start("selection");
       }
     }
+  }
+
+
+  gagner() {
+    // Affichage du message de victoire
+      // Affichage de l'image de victoire
+      this.add.image(
+        this.player.x-400, // Position X du joueur 2
+        this.player.y+500, // Position Y du joueur 2
+        "tileset_image" // Clé de l'image à afficher
+      ).setOrigin(0.5); // Centrer l'image
+  
+    // Désactive les mouvements du joueur
+    this.player.setVelocity(0, 0); // Immobilise le joueur en arrêtant ses vitesses X et Y
+    this.player.anims.stop();
+    this.player2.setVelocity(0, 0); // Immobilise le joueur en arrêtant ses vitesses X et Y
+    this.player2.anims.stop();  // Stoppe l'animation du joueur
+    this.physics.world.pause(); // Met en pause la physique du monde (plus rien ne bouge)
+  
+    // Ajout d'un écouteur d'événement sur la touche "Entrée"
+    this.input.keyboard.on("keydown-ENTER", () => {
+        this.scene.start("selection"); // Charge la scène du niveau 1 quand on appuie sur Entrée
+    });
+  }
+  gagner2() {
+    // Affichage du message de victoire
+    this.add.image(
+      this.player2.x-400, // Position X du joueur 2
+      this.player2.y +500, // Position Y légèrement au-dessus du joueur 2
+      "tileset_image" // Clé de l'image à afficher
+    ).setOrigin(0.5);
+  
+    // Désactive les mouvements du joueur
+    this.player.setVelocity(0, 0); // Immobilise le joueur en arrêtant ses vitesses X et Y
+    this.player.anims.stop();
+    this.player2.setVelocity(0, 0); // Immobilise le joueur en arrêtant ses vitesses X et Y
+    this.player2.anims.stop(); // Stoppe l'animation du joueur
+    this.physics.world.pause(); // Met en pause la physique du monde (plus rien ne bouge)
+  
+    // Ajout d'un écouteur d'événement sur la touche "Entrée"
+    this.input.keyboard.on("keydown-ENTER", () => {
+        this.scene.start("selection"); // Charge la scène du niveau 1 quand on appuie sur Entrée
+    });
   }
 }
