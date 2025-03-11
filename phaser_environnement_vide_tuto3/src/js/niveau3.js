@@ -56,7 +56,7 @@ export default class niveau3 extends Phaser.Scene {
     calque_plateformes.setScale(2);
     calque_background.setScale(2);
     calque_background_2.setScale(2);
-
+    this.player.setscale(2);
     calque_plateformes.setCollisionByProperty({ estSolide: true });
 
    
@@ -88,6 +88,8 @@ export default class niveau3 extends Phaser.Scene {
     this.keyQ = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.Q);
     this.keyZ = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.Z);
     this.keyD = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.D);
+
+    
     this.player2 = this.physics.add.sprite(100, 450, "img_perso");
     this.player2.refreshBody();
     this.player2.setBounce(0.2);
