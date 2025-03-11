@@ -12,6 +12,8 @@ export default class niveau3 extends Phaser.Scene {
     this.load.image("tileset_assets", "src/assets/Niveau_3/Assets.png");
     this.load.image("tileset_oiseau", "src/assets/Niveau_3/Oiseau.png");
     this.load.image("tileset_tuiles", "src/assets/Niveau_3/tuiles_de_jeu.png");
+    this.load.image("tileset_image", "src/assets/Niveau_3/victoire_image.png");
+    
 
     // chargement de la carte
     this.load.tilemapTiledJSON("carte", "src/assets/Niveau_3/map.json");
@@ -107,6 +109,7 @@ this.oiseau.body.allowGravity = false; // Il ne doit pas tomber
 
 // Détection de collision entre le joueur et l'oiseau
 this.physics.add.overlap(this.player, this.oiseau, this.gagner, null, this);
+this.physics.add.overlap(this.player2, this.oiseau, this.gagner2, null, this);
 
 // Ajout d'une touche pour redémarrer au niveau 1
 this.toucheEntree = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.ENTER);
@@ -154,21 +157,18 @@ this.toucheEntree = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.EN
 
 gagner() {
   // Affichage du message de victoire
-  this.texteVictoire = this.add.text(
-      this.player.x - 100, // Position X légèrement décalée par rapport au joueur
-      this.player.y - 100, // Position Y légèrement au-dessus du joueur
-      "Bravo, tu as gagné ! Appuie sur entrée pour revenir au menu", // Texte affiché
-      {
-          fontSize: "32px", // Taille du texte
-          fill: "#FFFFFF", // Couleur du texte (blanc)
-          backgroundColor: "#000000", // Fond noir pour rendre le texte plus visible
-          padding: { x: 10, y: 5 } // Ajout d'un petit espace autour du texte
-      }
-  );
+    // Affichage de l'image de victoire
+    this.add.image(
+      this.player.x, // Position X du joueur 2
+      this.player.y - 100, // Position Y légèrement au-dessus du joueur 2
+      "victoire_image" // Clé de l'image à afficher
+    ).setOrigin(0.5); // Centrer l'image
 
   // Désactive les mouvements du joueur
   this.player.setVelocity(0, 0); // Immobilise le joueur en arrêtant ses vitesses X et Y
-  this.player.anims.stop(); // Stoppe l'animation du joueur
+  this.player.anims.stop();
+  this.player2.setVelocity(0, 0); // Immobilise le joueur en arrêtant ses vitesses X et Y
+  this.player2.anims.stop();  // Stoppe l'animation du joueur
   this.physics.world.pause(); // Met en pause la physique du monde (plus rien ne bouge)
 
   // Ajout d'un écouteur d'événement sur la touche "Entrée"
@@ -176,4 +176,33 @@ gagner() {
       this.scene.start("selection"); // Charge la scène du niveau 1 quand on appuie sur Entrée
   });
 }
+
+
+gagner2() {
+  // Affichage du message de victoire
+  this.texteVictoire = this.add.text(
+      this.player2.x - 100, // Position X légèrement décalée par rapport au joueur
+      this.player2.y - 100, // Position Y légèrement au-dessus du joueur
+      "Bravo, tu as gagné ! Appuie sur entrée pour revenir au menu", // Texte affiché
+      {
+          fontSize: "16px", // Taille du texte
+          fill: "#FFFFFF", // Couleur du texte (blanc)
+         
+          padding: { x: 10, y: 5 } // Ajout d'un petit espace autour du texte
+      }
+  );
+
+  // Désactive les mouvements du joueur
+  this.player.setVelocity(0, 0); // Immobilise le joueur en arrêtant ses vitesses X et Y
+  this.player.anims.stop();
+  this.player2.setVelocity(0, 0); // Immobilise le joueur en arrêtant ses vitesses X et Y
+  this.player2.anims.stop(); // Stoppe l'animation du joueur
+  this.physics.world.pause(); // Met en pause la physique du monde (plus rien ne bouge)
+
+  // Ajout d'un écouteur d'événement sur la touche "Entrée"
+  this.input.keyboard.on("keydown-ENTER", () => {
+      this.scene.start("selection"); // Charge la scène du niveau 1 quand on appuie sur Entrée
+  });
+}
+
 }
