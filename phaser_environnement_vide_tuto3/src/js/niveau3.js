@@ -98,9 +98,19 @@ export default class niveau3 extends Phaser.Scene {
     this.player.setScale(2);
     this.player2.setScale(2);
 
-    this.oiseau = this.add.image(6300, 300, "tileset_oiseau");
+
+    this.oiseau = this.physics.add.sprite(300, 300, "tileset_oiseau");
   
   
+this.oiseau.setImmovable(true); // L'oiseau ne doit pas bouger s'il est touché
+this.oiseau.body.allowGravity = false; // Il ne doit pas tomber
+
+// Détection de collision entre le joueur et l'oiseau
+this.physics.add.overlap(this.player, this.oiseau, this.gagner, null, this);
+
+// Ajout d'une touche pour redémarrer au niveau 1
+this.toucheEntree = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.ENTER);
+
 
   }
 
@@ -140,4 +150,30 @@ export default class niveau3 extends Phaser.Scene {
       }
     }
   }
+
+
+gagner() {
+  // Affichage du message de victoire
+  this.texteVictoire = this.add.text(
+      this.player.x - 100, // Position X légèrement décalée par rapport au joueur
+      this.player.y - 100, // Position Y légèrement au-dessus du joueur
+      "Bravo, tu as gagné ! Appuie sur entrée pour revenir au menu", // Texte affiché
+      {
+          fontSize: "32px", // Taille du texte
+          fill: "#FFFFFF", // Couleur du texte (blanc)
+          backgroundColor: "#000000", // Fond noir pour rendre le texte plus visible
+          padding: { x: 10, y: 5 } // Ajout d'un petit espace autour du texte
+      }
+  );
+
+  // Désactive les mouvements du joueur
+  this.player.setVelocity(0, 0); // Immobilise le joueur en arrêtant ses vitesses X et Y
+  this.player.anims.stop(); // Stoppe l'animation du joueur
+  this.physics.world.pause(); // Met en pause la physique du monde (plus rien ne bouge)
+
+  // Ajout d'un écouteur d'événement sur la touche "Entrée"
+  this.input.keyboard.on("keydown-ENTER", () => {
+      this.scene.start("selection"); // Charge la scène du niveau 1 quand on appuie sur Entrée
+  });
+}
 }
