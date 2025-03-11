@@ -13,6 +13,7 @@ export default class selection extends Phaser.Scene  {
   }
 
   preload() {
+  
     this.load.image("img_mountains", "src/assets/Mountains.png");
     this.load.image("img_plateforme", "src/assets/platform.png");
     this.load.spritesheet("img_dino", "src/assets/Dino.png", {
