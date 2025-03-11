@@ -15,6 +15,10 @@ export default class selection extends Phaser.Scene  {
   preload() {
     this.load.image("img_ciel", "src/assets/sky.png");
     this.load.image("img_plateforme", "src/assets/platform.png");
+    this.load.spritesheet("img_dino", "src/assets/Dino.png", {
+      frameWidth: 24,
+      frameHeight: 24
+    })
     this.load.spritesheet("img_perso", "src/assets/dude.png", {
       frameWidth: 32,
       frameHeight: 48
@@ -40,7 +44,7 @@ keyD = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.D);
     this.porte2 = this.physics.add.staticSprite(50, 264, "img_porte2");
     this.porte3 = this.physics.add.staticSprite(750, 234, "img_porte3");
     this.star=this.physics.add.staticSprite(300, 540, "img_star");
-    player = this.physics.add.sprite(100, 450, 'img_perso');
+    player = this.physics.add.sprite(100, 450, 'img_dino');
     player2= this.physics.add.sprite(150,450, 'img_perso');
     player.setCollideWorldBounds(true);
     player2.setCollideWorldBounds(true);
@@ -66,24 +70,37 @@ keyD = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.D);
       frames: [{ key: "img_perso", frame: 4 }],
       frameRate: 20
     });
+    this.anims.create({
+      key: "animdino_marche", // key est le nom de l'animation : doit etre unique poru la scene.
+      frames: this.anims.generateFrameNumbers("img_dino", { start: 2, end: 9 }), // on prend toutes les frames de img perso numerotées de 0 à 3
+      frameRate: 10, // vitesse de défilement des frames
+      repeat: -1 // nombre de répétitions de l'animation. -1 = infini
+    });
+    this.anims.create({
+      key: "animdino_face", 
+      frames: [{ key: "img_dino", frame: 0 }],
+      frameRate: 20
+    });
    
   }
 
   update() {
   
     if (clavier.right.isDown == true) {
+    player.flipX=false;
     player.setVelocityX(160);
-    player.anims.play('anim_tourne_droite', true);
+    player.anims.play('animdino_marche', true);
   }
   else if (clavier.left.isDown == true) {
+    player.flipX=true;
     player.setVelocityX(-160);
-    player.anims.play('anim_tourne_gauche', true);
+    player.anims.play('animdino_marche', true);
   } 
 else if(clavier.up.isDown && player.body.touching.down) {
     player.setVelocityY(-330);
   } 
   else {player.setVelocityX(0);
-    player.anims.play('anim_face', true);}
+    player.anims.play('animdino_face', true);}
   
   if (keyQ.isDown == true) {
     player2.setVelocityX(-160);
