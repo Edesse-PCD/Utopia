@@ -78,7 +78,7 @@ export default class niveau3 extends Phaser.Scene {
       fontSize: "22pt"
     });
 
-    this.player = this.physics.add.sprite(100, 450, "img_dino");
+    this.player = this.physics.add.sprite(350, 450, "img_dino");
     this.player.setBounce(0.2);
     this.player.setCollideWorldBounds(true);
     this.physics.add.collider(this.player, calque_plateformes);
@@ -92,7 +92,7 @@ export default class niveau3 extends Phaser.Scene {
     this.keyD = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.D);
 
 
-    this.player2 = this.physics.add.sprite(100, 450, "img_dino2");
+    this.player2 = this.physics.add.sprite(375, 450, "img_dino2");
     this.player2.refreshBody();
     this.player2.setBounce(0.2);
     this.player2.setCollideWorldBounds(true);
@@ -101,7 +101,7 @@ export default class niveau3 extends Phaser.Scene {
     this.player2.setScale(2);
 
 
-    this.oiseau = this.physics.add.sprite(300, 300, "tileset_oiseau");
+    this.oiseau = this.physics.add.sprite(6300, 300, "tileset_oiseau");
   
   
 this.oiseau.setImmovable(true); // L'oiseau ne doit pas bouger s'il est touché
@@ -159,8 +159,8 @@ gagner() {
   // Affichage du message de victoire
     // Affichage de l'image de victoire
     this.add.image(
-      this.player.x, // Position X du joueur 2
-      this.player.y - 100, // Position Y légèrement au-dessus du joueur 2
+      this.player.x-200, // Position X du joueur 2
+      this.player.y, // Position Y du joueur 2
       "tileset_image" // Clé de l'image à afficher
     ).setOrigin(0.5); // Centrer l'image
 
