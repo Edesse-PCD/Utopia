@@ -9,7 +9,7 @@ export default class niveau2 extends Phaser.Scene {
   }
   preload() {
     this.load.image("Crate", "src/assets/niveau2/Object/Crate.png");
-    this.load.image("crystal", "src/assets/niveau2/Object/Crystal.png");
+    this.load.image("Crystal", "src/assets/niveau2/Object/Crystal.png");
     this.load.image("IceBox", "src/assets/niveau2/Object/IceBox.png");
     this.load.image("Igloo", "src/assets/niveau2/Object/Igloo.png");
     this.load.image("SnowMan", "src/assets/niveau2/Object/SnowMan.png");
@@ -32,7 +32,7 @@ export default class niveau2 extends Phaser.Scene {
   create() {
     const carteDuNiveau = this.add.tilemap("map2");
     const crate = carteDuNiveau.addTilesetImage("Crate", "Crate");
-    const crystal = carteDuNiveau.addTilesetImage("crystal", "crystal");
+    const Crystal = carteDuNiveau.addTilesetImage("Crystal", "Crystal");
     const iceBox = carteDuNiveau.addTilesetImage("IceBox", "IceBox");
     const snowMan = carteDuNiveau.addTilesetImage("SnowMan", "SnowMan");
     const tree1 = carteDuNiveau.addTilesetImage("Tree_1", "Tree_1");
@@ -50,7 +50,7 @@ export default class niveau2 extends Phaser.Scene {
 
     // Vous pouvez maintenant les combiner dans un seul tableau
     const tileset2 = [
-      crate, crystal, iceBox, snowMan, tree1, tree2,
+      crate, Crystal, iceBox, snowMan, tree1, tree2,
       tile1, tile2, tile3, tile7, tile14, tile15, tile16, tile17,
       polarBear, bg
     ];
@@ -59,33 +59,30 @@ export default class niveau2 extends Phaser.Scene {
     const calque_BG = carteDuNiveau.createLayer("calque_BG", tileset2);
     const deco = carteDuNiveau.createLayer("deco", tileset2);
     const calque_plateform = carteDuNiveau.createLayer("calque_plateform", tileset2);
+    calque_plateform.setCollisionByProperty({ estSolide: true });
     const piquants = carteDuNiveau.createLayer("piquants", tileset2);
     const animal = carteDuNiveau.createLayer("animal", tileset2);
 
-    calque_plateform.setCollisionByProperty({ estSolide: true });
-    this.physics.add.collider(player, calque_plateform);
-    this.physics.add.collider(player2, calque_plateform);
-    // redimentionnement du monde avec les dimensions calculées via tiled
-    this.physics.world.setBounds(0, 0, 3200, 640);
-    //  ajout du champs de la caméra de taille identique à celle du monde
-    this.cameras.main.setBounds(0, 0, 3200, 640);
-    // ancrage de la caméra sur le joueur
-    this.cameras.main.startFollow(player);
 
+   
     this.player = this.physics.add.sprite(100, 450, "img_perso");
     this.player.refreshBody();
     this.player.setBounce(0.2);
     this.player.setCollideWorldBounds(true);
+    this.cameras.main.startFollow(this.player);
+
     this.clavier = this.input.keyboard.createCursorKeys();
     this.keyQ = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.Q);
     this.keyZ = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.Z);
     this.keyD = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.D);
-    this.physics.add.collider(this.player, this.groupe_plateformes);
+    this.physics.add.collider(this.player, calque_plateform)
     this.player2 = this.physics.add.sprite(100, 450, "img_perso");
     this.player2.refreshBody();
     this.player2.setBounce(0.2);
     this.player2.setCollideWorldBounds(true);
-    this.physics.add.collider(this.player2, this.groupe_plateformes);
+    this.physics.add.collider(this.player2, calque_plateform);    
+    this.physics.world.setBounds(0,0,6400,640);
+    this.cameras.main.setBounds(0,0,6400,640);
   }
 
   update() {
