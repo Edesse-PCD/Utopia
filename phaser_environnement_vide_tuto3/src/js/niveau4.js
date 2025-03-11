@@ -7,6 +7,10 @@ export default class niveau4 extends Phaser.Scene {
         key: "niveau4" //  ici on précise le nom de la classe en tant qu'identifiant
       });
     }
+
+// Fonction pour détecter si le joueur est sur une liane
+
+
     preload() {
   // chargement tuiles de jeu
   this.load.image("crashed_plane_small", "src/assets/Niveau4/crashed_plane_small.png");
@@ -40,6 +44,8 @@ this.load.tilemapTiledJSON("CarteJungle", "src/assets/Niveau4/MapJungle.json");
 
       // Chargement de la carte
 const carteDuNiveau = this.add.tilemap("CarteJungle");
+
+
 
 // Ajout de chaque tileset individuellement
 const tilesets = [
@@ -125,16 +131,28 @@ const calque_feuillageSolide = carteDuNiveau.createLayer(
 );
 calque_feuillageSolide.setCollisionByProperty({ EstSolide: true })
 
-// Calque Lianes :Lianes
-const calque_Lianes = carteDuNiveau.createLayer(
-  "Lianes",
+// Calque feuillageSolide : feuillageSolide)
+const danger = carteDuNiveau.createLayer(
+  "danger",
   tilesets
 );
 
- 
+
+// Création du calque des lianes
+this.ladder_layer = carteDuNiveau.createLayer("Lianes", tilesets);
+
+if (this.ladder_layer) {
+  this.ladder_layer.setDepth(10); // Assure que le joueur n'est pas caché
+  console.log("✅ Calque 'Lianes' chargé avec succès !");
+} else {
+  console.error("⚠️ Erreur : Le calque 'Lianes' est NULL ! Vérifie son nom dans Tiled.");
+}
+
+
 
 
     this.porte_retour = this.physics.add.staticSprite(100, 550, "img_porte1"); 
+
     // ajout d'un texte distintcif  du niveau
     this.add.text(400, 100, "Vous êtes dans le niveau 4   ", {
       fontFamily: 'Georgia, "Goudy Bookletter 1911", Times, serif',
@@ -161,7 +179,7 @@ const calque_Lianes = carteDuNiveau.createLayer(
     this.player2.setBounce(0.2);
     this.player2.setCollideWorldBounds(true);
     this.clavier = this.input.keyboard.createCursorKeys();
-    this.physics.add.collider(this.player2, this.groupe_plateformes);
+    
 
     // Redimensionnement du monde avec les dimensions calculées via Tiled
 this.physics.world.setBounds(0, 0, 6400, 640);
@@ -174,50 +192,132 @@ this.cameras.main.startFollow(this.player);
 
 this.player.setScale(2);
 this.player2.setScale(2);
+
+
+
+// Ajout d'un booléen pour savoir si le joueur est sur une liane
+this.player.onLadder = false;
+
+
+this.player.setDepth(20); // Met le joueur devant
+this.player2.setDepth(20); // Met aussi le 2e joueur devant
+
+
+
     
     
-    }
+    } 
   
     update() {
-      // Déplacements joueur 1 (flèches directionnelles)
-if (this.clavier.left.isDown) {
-  this.player.setVelocityX(-160);
-  this.player.anims.play("anim_tourne_gauche", true);
-} else if (this.clavier.right.isDown) {
-  this.player.setVelocityX(160);
-  this.player.anims.play("anim_tourne_droite", true);
-} else {
-  this.player.setVelocityX(0);
-  this.player.anims.play("anim_face");
-}
+      this.checkLadder();
 
-// Déplacements joueur 2 (touches ZQSD)
-if (this.keyQ.isDown) {
-  this.player2.setVelocityX(-160);
-  this.player2.anims.play("anim_tourne_gauche", true);
-} else if (this.keyD.isDown) {
-  this.player2.setVelocityX(160);
-  this.player2.anims.play("anim_tourne_droite", true);
-} else {
-  this.player2.setVelocityX(0);
-  this.player2.anims.play("anim_face");
-}
-
-// Saut joueur 1 (flèche haut)
-if (this.clavier.up.isDown && this.player.body.blocked.down) {
-  this.player.setVelocityY(-330);
-}
-
-// Saut joueur 2 (touche Z)
-if (this.keyZ.isDown && this.player2.body.blocked.down) {
-  this.player2.setVelocityY(-330);
-}
-
-// Interaction avec la porte (barre espace)
-if (Phaser.Input.Keyboard.JustDown(this.clavier.space)) {
-  if (this.physics.overlap(this.player, this.porte_retour) || this.physics.overlap(this.player2, this.porte_retour)) {
-      this.scene.start("selection");
+      // Déplacement joueur 1
+      if (this.clavier.left.isDown) {
+          this.player.setVelocityX(-160);
+          this.player.anims.play("anim_tourne_gauche", true);
+      } else if (this.clavier.right.isDown) {
+          this.player.setVelocityX(160);
+          this.player.anims.play("anim_tourne_droite", true);
+      } else {
+          this.player.setVelocityX(0);
+          this.player.anims.play("anim_face");
+      }
+  
+      // Saut joueur 1
+      if (this.clavier.up.isDown && this.player.body.blocked.down) {
+          this.player.setVelocityY(-330);
+      }
+  
+      // Déplacement joueur 2
+      if (this.keyQ.isDown) {
+          this.player2.setVelocityX(-160);
+          this.player2.anims.play("anim_tourne_gauche", true);
+      } else if (this.keyD.isDown) {
+          this.player2.setVelocityX(160);
+          this.player2.anims.play("anim_tourne_droite", true);
+      } else {
+          this.player2.setVelocityX(0);
+          this.player2.anims.play("anim_face");
+      }
+  
+      // Saut joueur 2
+      if (this.keyZ.isDown && this.player2.body.blocked.down) {
+          this.player2.setVelocityY(-330);
+      }
+  
+      // Gestion des lianes pour **les deux joueurs**
+      this.handleLadderMovement(this.player, this.clavier.up, this.clavier.down);
+      this.handleLadderMovement(this.player2, this.keyZ, this.clavier.down);
+  
+      // Interaction avec la porte
+      if (Phaser.Input.Keyboard.JustDown(this.clavier.space)) {
+          if (this.physics.overlap(this.player, this.porte_retour) || this.physics.overlap(this.player2, this.porte_retour)) {
+              this.scene.start("selection");
+          }
+      }
   }
-}
+  
+  /**
+   * Gère le mouvement d'un joueur sur les lianes.
+   */
+  handleLadderMovement(player, keyUp, keyDown) {
+      if (player.onLadder) {
+          player.body.setAllowGravity(false); // Désactive la gravité
+  
+          // Déplacement vertical
+          if (keyUp.isDown) {
+              player.setVelocityY(-100); // Monter
+          } else if (keyDown.isDown) {
+              player.setVelocityY(100); // Descendre
+          } else {
+              player.setVelocityY(0); // Arrêt
+          }
+      } else {
+          player.body.setAllowGravity(true); // Réactive la gravité si pas sur une liane
+      }     
+
     }
+    checkLadder() {
+ // Vérification que le calque de lianes est bien défini
+ if (!this.ladder_layer) {
+  
+  return;
+}
+
+      // Récupération des tuiles du calque liane sur lesquelles se trouve le joueur
+      const playerTileUp = this.ladder_layer.getTileAtWorldXY(this.player.x, this.player.getTopCenter().y + 1);
+      const playerTileDown = this.ladder_layer.getTileAtWorldXY(this.player.x, this.player.getBottomCenter().y - 1);
+    
+      // Si le joueur 1 touche une liane, annuler la gravité et activer le mode grimpe
+      if (playerTileUp || playerTileDown) {
+          this.player.onLadder = true;
+          this.player.body.setAllowGravity(false);          
+          this.player.setVelocityY(0);
+        
+      } else {
+        
+          this.player.onLadder = false;
+          this.player.body.setAllowGravity(true);
+          
+      }
+    // Vérification pour **player2**
+      const player2TileUp = this.ladder_layer.getTileAtWorldXY(this.player2.x, this.player2.getTopCenter().y + 1);
+    const player2TileDown = this.ladder_layer.getTileAtWorldXY(this.player2.x, this.player2.getBottomCenter().y - 1);
+
+    if (player2TileUp || player2TileDown) {
+        this.player2.onLadder = true;
+       this.player2.body.setAllowGravity(false);
+        this.player2.setVelocityY(0);
+    } else {
+         this.player2.onLadder = false;
+        this.player2.body.setAllowGravity(true);
+    }
+
+    }
+
+
   }
+
+
+
+

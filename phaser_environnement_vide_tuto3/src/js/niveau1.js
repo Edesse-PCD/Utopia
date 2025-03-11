@@ -289,14 +289,16 @@ this.time.delayedCall(500, () => {
 
    // Déplacements joueur 1 (flèches directionnelles)
 if (this.clavier.left.isDown) {
+  this.player.flipX=true;
   this.player.setVelocityX(-160);
-  this.player.anims.play("anim_tourne_gauche", true);
+  this.player.anims.play("animdino_marche", true);
 } else if (this.clavier.right.isDown) {
+  this.player.flipX=false;
   this.player.setVelocityX(160);
-  this.player.anims.play("anim_tourne_droite", true);
+  this.player.anims.play("animdino_marche", true);
 } else {
   this.player.setVelocityX(0);
-  this.player.anims.play("anim_face");
+  this.player.anims.play("animdino_face");
 }
 
 
