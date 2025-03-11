@@ -97,6 +97,8 @@ export default class niveau3 extends Phaser.Scene {
     this.physics.add.collider(this.player2, calque_plateformes);
     this.player.setScale(2);
     this.player2.setScale(2);
+
+    this.oiseau = this.add.image(6300, 300, "tileset_oiseau");
   
   
 
