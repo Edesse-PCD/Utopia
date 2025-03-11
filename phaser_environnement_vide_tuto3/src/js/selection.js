@@ -96,8 +96,8 @@ keyD = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.D);
       frameRate: 20
     });
 
-    this.player.setScale(2);
-    this.player2.setScale(2);
+    player.setScale(2);
+    player2.setScale(2);
    
   }
 
