@@ -13,11 +13,12 @@ export default class selection extends Phaser.Scene  {
   }
 
   preload() {
+  
     this.load.image("img_mountains", "src/assets/Mountains.png");
     this.load.image("img_plateforme", "src/assets/platform.png");
     this.load.spritesheet("img_dino", "src/assets/Dino.png", {
       frameWidth: 24,
-      frameHeight: 24
+      frameHeight: 20
     })
     this.load.spritesheet("img_perso", "src/assets/dude.png", {
       frameWidth: 32,
@@ -25,7 +26,7 @@ export default class selection extends Phaser.Scene  {
     })
     this.load.spritesheet("img_dino2", "src/assets/Dino2.png", {
       frameWidth: 24,
-      frameHeight: 24
+      frameHeight: 20
     })
     this.load.image("img_porte1", "src/assets/door1.png");
     this.load.image("img_porte2", "src/assets/door2.png");
