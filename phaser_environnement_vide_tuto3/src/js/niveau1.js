@@ -162,8 +162,12 @@ this.cameras.main.setBounds(0, 0, 6400, 640
 this.cameras.main.startFollow(this.player);
 
 // Détection de l'overlap entre les joueurs et les objets dangereux
+this.player.setScale(2);
+this.player2.setScale(2);
 
   }
+
+
  
 
   update() {
