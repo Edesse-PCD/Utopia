@@ -10,6 +10,7 @@ export default class niveau1 extends Phaser.Scene {
 preload() {
    // chargement tuiles de jeu
 // Chargement des tuiles de jeu
+this.load.image("image depart niveau 1", "src/assets/niveau1/image depart niveau 1.png");
 this.load.image("aset_deserts", "src/assets/niveau1/BG.png");
 this.load.image("Bush (1)", "src/assets/niveau1/Bush (1).png");
 this.load.image("Bush (2)", "src/assets/niveau1/Bush (2).png");
@@ -49,7 +50,14 @@ this.load.tilemapTiledJSON("map", "src/assets/niveau1/utopia niveau 1 map.tmj")
 
 
 
-  create() {// Chargement de la carte
+  create() {
+
+        // Afficher l'image d'introduction
+        this.image_depart_niveau_1 = this.add.image(400, 300, "image depart niveau 1").setDepth(10);
+
+         // Ajouter la gestion de la touche "Entrée"
+    this.enterKey = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.ENTER);
+    this.gameStarted = false;  // Initialiser la variable gameStarted à false
 
    
 // Position de départ (respawn du joueur)
@@ -57,7 +65,7 @@ this.startPosition = { x: 100, y: 450 };
 
 this.deathMessage = null;
 
-
+// Chargement de la carte
 const carteDuNiveau = this.add.tilemap("map");
 
 // Ajout de chaque tileset individuellement
@@ -180,6 +188,12 @@ this.player2.setScale(2);
 
   update() {
 
+      // Vérifier si la touche "Entrée" est pressée pour démarrer le jeu
+      if (!this.gameStarted && Phaser.Input.Keyboard.JustDown(this.enterKey)) {
+        this.image_depart_niveau_1.destroy();  // Supprimer l'image d'intro
+        this.gameStarted = true;
+      }
+
 // Supposons que vous avez un calque 'danger' et un personnage (player)
 let messageDisplayed = false; // Pour s'assurer que le message n'est affiché qu'une seule fois
 
@@ -275,14 +289,16 @@ this.time.delayedCall(500, () => {
 
    // Déplacements joueur 1 (flèches directionnelles)
 if (this.clavier.left.isDown) {
+  this.player.flipX=true;
   this.player.setVelocityX(-160);
-  this.player.anims.play("anim_tourne_gauche", true);
+  this.player.anims.play("animdino_marche", true);
 } else if (this.clavier.right.isDown) {
+  this.player.flipX=false;
   this.player.setVelocityX(160);
-  this.player.anims.play("anim_tourne_droite", true);
+  this.player.anims.play("animdino_marche", true);
 } else {
   this.player.setVelocityX(0);
-  this.player.anims.play("anim_face");
+  this.player.anims.play("animdino_face");
 }
 
 
