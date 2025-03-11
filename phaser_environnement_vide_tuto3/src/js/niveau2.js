@@ -63,29 +63,24 @@ export default class niveau2 extends Phaser.Scene {
     const piquants = carteDuNiveau.createLayer("piquants", tileset2);
     const animal = carteDuNiveau.createLayer("animal", tileset2);
 
-    this.physics.add.collider(this.player, calque_plateform);
-    this.physics.add.collider(this.player2, calque_plateform);
-    // redimentionnement du monde avec les dimensions calculées via tiled
-    this.physics.world.setBounds(0, 0, 3200, 640);
-    //  ajout du champs de la caméra de taille identique à celle du monde
-    this.cameras.main.setBounds(0, 0, 3200, 640);
-    // ancrage de la caméra sur le joueur
-    this.cameras.main.startFollow(this.player);
 
+   
     this.player = this.physics.add.sprite(100, 450, "img_perso");
     this.player.refreshBody();
     this.player.setBounce(0.2);
     this.player.setCollideWorldBounds(true);
+    this.cameras.main.startFollow(this.player);
+
     this.clavier = this.input.keyboard.createCursorKeys();
     this.keyQ = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.Q);
     this.keyZ = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.Z);
     this.keyD = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.D);
-    this.physics.add.collider(this.player, this.groupe_plateformes);
+    this.physics.add.collider(this.player, calque_plateform)
     this.player2 = this.physics.add.sprite(100, 450, "img_perso");
     this.player2.refreshBody();
     this.player2.setBounce(0.2);
     this.player2.setCollideWorldBounds(true);
-    this.physics.add.collider(this.player2, this.groupe_plateformes);
+    this.physics.add.collider(this.player2, calque_plateform);    
     this.physics.world.setBounds(0,0,6400,640);
     this.cameras.main.setBounds(0,0,6400,640);
   }
