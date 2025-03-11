@@ -131,6 +131,12 @@ const calque_feuillageSolide = carteDuNiveau.createLayer(
 );
 calque_feuillageSolide.setCollisionByProperty({ EstSolide: true })
 
+// Calque feuillageSolide : feuillageSolide)
+const danger = carteDuNiveau.createLayer(
+  "danger",
+  tilesets
+);
+
 
 // Création du calque des lianes
 this.ladder_layer = carteDuNiveau.createLayer("Lianes", tilesets);
