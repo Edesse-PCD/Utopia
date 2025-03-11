@@ -95,6 +95,9 @@ keyD = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.D);
       frames: [{ key: "img_dino2", frame: 0 }],
       frameRate: 20
     });
+
+    this.player.setScale(2);
+    this.player2.setScale(2);
    
   }
 

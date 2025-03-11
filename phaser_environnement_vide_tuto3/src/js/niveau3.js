@@ -56,7 +56,7 @@ export default class niveau3 extends Phaser.Scene {
     calque_plateformes.setScale(2);
     calque_background.setScale(2);
     calque_background_2.setScale(2);
-  
+    
     calque_plateformes.setCollisionByProperty({ estSolide: true });
 
    
@@ -95,28 +95,35 @@ export default class niveau3 extends Phaser.Scene {
     this.player2.setBounce(0.2);
     this.player2.setCollideWorldBounds(true);
     this.physics.add.collider(this.player2, calque_plateformes);
-
+    this.player.setScale(2);
+    this.player2.setScale(2);
+  
+  
 
   }
 
   update() {
     if (this.clavier.left.isDown) {
+      this.player.flipX=true;
       this.player.setVelocityX(-160);
-      this.player.anims.play("anim_tourne_gauche", true);
+      this.player.anims.play("animdino_marche", true);
     } else if (this.clavier.right.isDown) {
+      this.player.flipX=false;
       this.player.setVelocityX(160);
-      this.player.anims.play("anim_tourne_droite", true);
+      this.player.anims.play("animdino_marche", true);
     } else if (this.keyD.isDown) {
+      this.player2.flipX=false;
       this.player2.setVelocityX(160);
-      this.player2.anims.play("anim_tourne_droite", true);
+      this.player2.anims.play("animdino2_marche", true);
     } else if (this.keyQ.isDown) {
+      this.player2.flipX=true;
       this.player2.setVelocityX(-160);
-      this.player2.anims.play("anim_tourne_gauche", true);
+      this.player2.anims.play("animdino2_marche", true);
     } else {
       this.player.setVelocityX(0);
-      this.player.anims.play("anim_face");
+      this.player.anims.play("animdino_face");
       this.player2.setVelocityX(0);
-      this.player2.anims.play("anim_face");
+      this.player2.anims.play("animdino2_face");
     }
 
     if (this.clavier.up.isDown && this.player.body.blocked.down) {
