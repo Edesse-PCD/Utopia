@@ -9,7 +9,7 @@ export default class niveau2 extends Phaser.Scene {
   }
   preload() {
     this.load.image("Crate", "src/assets/niveau2/Object/Crate.png");
-    this.load.image("crystal", "src/assets/niveau2/Object/Crystal.png");
+    this.load.image("Crystal", "src/assets/niveau2/Object/Crystal.png");
     this.load.image("IceBox", "src/assets/niveau2/Object/IceBox.png");
     this.load.image("Igloo", "src/assets/niveau2/Object/Igloo.png");
     this.load.image("SnowMan", "src/assets/niveau2/Object/SnowMan.png");
@@ -32,7 +32,7 @@ export default class niveau2 extends Phaser.Scene {
   create() {
     const carteDuNiveau = this.add.tilemap("map2");
     const crate = carteDuNiveau.addTilesetImage("Crate", "Crate");
-    const crystal = carteDuNiveau.addTilesetImage("crystal", "crystal");
+    const Crystal = carteDuNiveau.addTilesetImage("Crystal", "Crystal");
     const iceBox = carteDuNiveau.addTilesetImage("IceBox", "IceBox");
     const snowMan = carteDuNiveau.addTilesetImage("SnowMan", "SnowMan");
     const tree1 = carteDuNiveau.addTilesetImage("Tree_1", "Tree_1");
@@ -50,7 +50,7 @@ export default class niveau2 extends Phaser.Scene {
 
     // Vous pouvez maintenant les combiner dans un seul tableau
     const tileset2 = [
-      crate, crystal, iceBox, snowMan, tree1, tree2,
+      crate, Crystal, iceBox, snowMan, tree1, tree2,
       tile1, tile2, tile3, tile7, tile14, tile15, tile16, tile17,
       polarBear, bg
     ];
