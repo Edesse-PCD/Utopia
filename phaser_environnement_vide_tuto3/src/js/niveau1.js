@@ -103,11 +103,11 @@ const calque_plateformes = carteDuNiveau.createLayer(
 calque_plateformes.setCollisionByProperty({ estSolide: true });
 
 // Calque 3 : Cactus et objets dangereux (collision et mort du joueur)
-const calque_dangers = carteDuNiveau.createLayer(
+this.calque_dangers = carteDuNiveau.createLayer(
     "Calque de Tuiles 3",
     tilesets
 );
-calque_dangers.setCollisionByProperty({ estSolide: true });
+// Transformer le calque de danger en objets physiques
 
 // Calque 5 : Objets traversables
 const calque_objetsTraversables = carteDuNiveau.createLayer(
@@ -154,14 +154,43 @@ const calque_elephant = carteDuNiveau.createLayer(
 this.physics.world.setBounds(0, 0, 6400, 640);
 
 // Définition de la caméra pour couvrir toute la map
-this.cameras.main.setBounds(0, 0, 6400, 640);
+this.cameras.main.setBounds(0, 0, 6400, 640
+
+);
 
 // Ancrage de la caméra sur le joueur
 this.cameras.main.startFollow(this.player);
 
+// Détection de l'overlap entre les joueurs et les objets dangereux
+
   }
+ 
 
   update() {
+
+// Supposons que vous avez un calque 'danger' et un personnage (player)
+let messageDisplayed = false; // Pour s'assurer que le message n'est affiché qu'une seule fois
+
+
+    // Obtenez la position du personnage en haut au centre
+    let playerTopCenter = this.player.getTopCenter();
+
+    let playerBottomCenter = this.player.getBottomCenter();
+  
+    // Vérifiez si le joueur interagit avec une tuile du calque danger
+    let dangerTile = this.calque_dangers.getTileAtWorldXY(playerTopCenter.x, playerTopCenter.y);
+    let dangerTile2 = this.calque_dangers.getTileAtWorldXY(playerBottomCenter.x, playerBottomCenter.y);
+
+    // Si une tuile de danger est trouvée et que le message n'a pas encore été affiché
+    if (dangerTile ||dangerTile2 ) {
+        this.add.text(400, 300, 'Désolé, vous êtes mort !', { font: '32px Arial', fill: '#fff', backgroundColor: '#000' });
+    }
+
+
+
+
+
+
    // Déplacements joueur 1 (flèches directionnelles)
 if (this.clavier.left.isDown) {
   this.player.setVelocityX(-160);
@@ -173,6 +202,7 @@ if (this.clavier.left.isDown) {
   this.player.setVelocityX(0);
   this.player.anims.play("anim_face");
 }
+
 
 // Déplacements joueur 2 (touches ZQSD)
 if (this.keyQ.isDown) {
@@ -192,7 +222,7 @@ if (this.clavier.up.isDown && this.player.body.blocked.down) {
 }
 
 // Saut joueur 2 (touche Z)
-if (this.keyZ.isDown && this.player2.body.blocked.down) {
+if (this.keyZ.isDown && this.player2.body.blocked.down) { 
   this.player2.setVelocityY(-330);
 }
 
@@ -202,5 +232,8 @@ if (Phaser.Input.Keyboard.JustDown(this.clavier.space)) {
       this.scene.start("selection");
   }
 }
+
   }
+
+
 }
