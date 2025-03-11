@@ -223,6 +223,51 @@ let messageDisplayed = false; // Pour s'assurer que le message n'est affiché qu
         
     }
 
+    // gestion de la mort et respawn du JOUEUR 2 
+
+    // Supposons que vous avez un calque 'danger' et un personnage (player)
+let message2Displayed = false; // Pour s'assurer que le message n'est affiché qu'une seule fois
+
+
+// Obtenez la position du personnage en haut au centre
+let player2TopCenter = this.player2.getTopCenter();
+
+let player2BottomCenter = this.player2.getBottomCenter();
+
+// Vérifiez si le joueur interagit avec une tuile du calque danger
+let dangerTile3 = this.calque_dangers.getTileAtWorldXY(player2TopCenter.x, player2TopCenter.y);
+let dangerTile4 = this.calque_dangers.getTileAtWorldXY(player2BottomCenter.x, player2BottomCenter.y);
+
+if (dangerTile3 || dangerTile4) {
+  if (!this.deathMessage) {
+      this.deathMessage = this.add.text(400, 300, 'Vous êtes mort !', { 
+          font: '32px Arial', 
+          fill: '#fff', 
+          backgroundColor: '#000' 
+      });
+  }
+
+
+        // Désactiver le corps physique du joueur temporairement
+this.player2.setVelocity(0, 0); // Stoppe les mouvements
+this.player2.body.enable = false; 
+
+// Attendre un court instant avant de le faire respawn (évite un bug de collision)
+this.time.delayedCall(500, () => {
+    this.player2.setPosition(this.startPosition.x, this.startPosition.y); // Respawn au point de départ
+    this.player2.body.enable = true; // Réactiver le corps du joueur
+    
+
+    // Supprimer le message de mort
+    if (this.deathMessage) {
+      this.deathMessage.destroy();
+      this.deathMessage = null;
+  }
+});
+
+    
+}
+
 
 
 
