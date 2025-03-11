@@ -9,9 +9,10 @@ export default class niveau3 extends Phaser.Scene {
     }
     preload() {
      // chargement tuiles de jeu
-this.load.image("Phaser_tuilesdejeu", "src/assets/Niveau_3/Assets.png");
-this.load.image("Phaser_tuilesdejeu", "src/assets/Niveau_3/Oiseau.png");
-this.load.image("Phaser_tuilesdejeu", "src/assets/Niveau_3/tuiles_de_jeu.png");
+     this.load.image("tileset_assets", "src/assets/Niveau_3/Assets.png");
+     this.load.image("tileset_oiseau", "src/assets/Niveau_3/Oiseau.png");
+     this.load.image("tileset_tuiles", "src/assets/Niveau_3/tuiles_de_jeu.png");
+     
 // chargement de la carte
 this.load.tilemapTiledJSON("carte", "src/assets/Niveau_3/map.json");  
     }
@@ -21,8 +22,9 @@ this.load.tilemapTiledJSON("carte", "src/assets/Niveau_3/map.json");
 // chargement du jeu de tuiles
 const carteDuNiveau = this.add.tilemap("carte");
 const tileset = carteDuNiveau.addTilesetImage(
-          "tuiles_de_jeu",
-          "Phaser_tuilesdejeu"
+  "tuiles_de_jeu",
+  "tileset_tuiles"
+
         );  
 
         const calque_background = carteDuNiveau.createLayer(
@@ -32,7 +34,7 @@ const tileset = carteDuNiveau.addTilesetImage(
 
 // chargement du calque calque_background_2
 const calque_background_2 = carteDuNiveau.createLayer(
-          "Background_2",
+          "Background 2",
           tileset
         );
 
@@ -43,13 +45,12 @@ const calque_plateformes = carteDuNiveau.createLayer(
         );  
 
         calque_plateformes.setCollisionByProperty({ estSolide: true }); 
-        this.physics.add.collider(player, plateforme); 
+    
  
         this.physics.world.setBounds(0, 0, 3200, 640);
   //  ajout du champs de la caméra de taille identique à celle du monde
   this.cameras.main.setBounds(0, 0, 3200, 640);
-  // ancrage de la caméra sur le joueur
-  this.cameras.main.startFollow(player); 
+
   
 
 
@@ -66,16 +67,17 @@ const calque_plateformes = carteDuNiveau.createLayer(
       this.player.setBounce(0.2);
       this.player.setCollideWorldBounds(true);
       this.clavier = this.input.keyboard.createCursorKeys();
+      this.cameras.main.startFollow(this.player);
+      this.clavier = this.input.keyboard.createCursorKeys();
       this.keyQ = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.Q);
       this.keyZ = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.Z);
       this.keyD = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.D);
-      this.physics.add.collider(this.player, this.groupe_plateformes);
       this.player2 = this.physics.add.sprite(100, 450, "img_perso");
       this.player2.refreshBody();
       this.player2.setBounce(0.2);
       this.player2.setCollideWorldBounds(true);
-      this.clavier = this.input.keyboard.createCursorKeys();
-      this.physics.add.collider(this.player2, this.groupe_plateformes);
+
+      
     }
   
     update() {
@@ -95,8 +97,8 @@ const calque_plateformes = carteDuNiveau.createLayer(
         this.player.setVelocityX(0);
         this.player.anims.play("anim_face");
       }
-      if (clavier.up.isDown && player.body.blocked.down) {
-        player.setVelocityY(-200);
+      if (this.clavier.up.isDown && this.player.body.blocked.down) {
+        this.player.setVelocityY(-200);
       
       }
       if (Phaser.Input.Keyboard.JustDown(this.clavier.space) == true) {
