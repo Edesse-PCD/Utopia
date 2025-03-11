@@ -19,9 +19,11 @@ export default class selection extends Phaser.Scene  {
       frameWidth: 32,
       frameHeight: 48
     })
+    
     this.load.image("img_porte1", "src/assets/door1.png");
     this.load.image("img_porte2", "src/assets/door2.png");
     this.load.image("img_porte3", "src/assets/door3.png"); 
+    this.load.image("img_star","src/assets/star.png");
   }
   create() {
 keyQ = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.Q);
@@ -37,6 +39,7 @@ keyD = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.D);
     this.porte1 = this.physics.add.staticSprite(600, 414, "img_porte1");
     this.porte2 = this.physics.add.staticSprite(50, 264, "img_porte2");
     this.porte3 = this.physics.add.staticSprite(750, 234, "img_porte3");
+    this.star=this.physics.add.staticSprite(300, 540, "img_star");
     player = this.physics.add.sprite(100, 450, 'img_perso');
     player2= this.physics.add.sprite(150,450, 'img_perso');
     player.setCollideWorldBounds(true);
@@ -76,29 +79,31 @@ keyD = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.D);
     player.setVelocityX(-160);
     player.anims.play('anim_tourne_gauche', true);
   } 
-  else if (keyD.isDown == true) {
-    player2.setVelocityX(160);
-    player2.anims.play('anim_tourne_droite', true);
-  }
-  else if (keyQ.isDown == true) {
+else if(clavier.up.isDown && player.body.touching.down) {
+    player.setVelocityY(-330);
+  } 
+  else {player.setVelocityX(0);
+    player.anims.play('anim_face', true);}
+  
+  if (keyQ.isDown == true) {
     player2.setVelocityX(-160);
     player2.anims.play('anim_tourne_gauche', true);
   } 
   else if (keyZ.isDown && player2.body.touching.down) {
     player2.setVelocityY(-330);}
-  
-  else if(clavier.up.isDown && player.body.touching.down) {
-    player.setVelocityY(-330);
-  } 
+  else if (keyD.isDown == true) {
+      player2.setVelocityX(160);
+      player2.anims.play('anim_tourne_droite', true);
+    }   
   else {
     player2.setVelocityX(0);
     player2.anims.play('anim_face', true);
-    player.setVelocityX(0);
-    player.anims.play('anim_face', true);
     }
+    
   if (Phaser.Input.Keyboard.JustDown(clavier.space) == true) {
     if (this.physics.overlap(player, this.porte1)) this.scene.start("niveau1");
     if (this.physics.overlap(player, this.porte2)) this.scene.start("niveau2");
     if (this.physics.overlap(player, this.porte3)) this.scene.start("niveau3");
+    if (this.physics.overlap(player, this.star)) this.scene.start("niveau4");
   } 
 }}
