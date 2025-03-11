@@ -7,7 +7,15 @@ export default class niveau4 extends Phaser.Scene {
         key: "niveau4" //  ici on précise le nom de la classe en tant qu'identifiant
       });
     }
-    preload() {}
+    preload() {
+  // chargement tuiles de jeu
+  this.load.image("crashed_plane_small", "src/assets/Niveau4/crashed_plane_small.png");
+  this.load.image("crashed_plane_small", "src/assets/Niveau4/crashed_plane_small.png");
+  this.load.image("crashed_plane_small", "src/assets/Niveau4/crashed_plane_small.png");
+  
+
+
+    }
   
     create() {
       this.add.image(400, 300, "img_ciel");
