@@ -59,18 +59,18 @@ export default class niveau2 extends Phaser.Scene {
     const calque_BG = carteDuNiveau.createLayer("calque_BG", tileset2);
     const deco = carteDuNiveau.createLayer("deco", tileset2);
     const calque_plateform = carteDuNiveau.createLayer("calque_plateform", tileset2);
+    calque_plateform.setCollisionByProperty({ estSolide: true });
     const piquants = carteDuNiveau.createLayer("piquants", tileset2);
     const animal = carteDuNiveau.createLayer("animal", tileset2);
 
-    calque_plateform.setCollisionByProperty({ estSolide: true });
-    this.physics.add.collider(player, calque_plateform);
-    this.physics.add.collider(player2, calque_plateform);
+    this.physics.add.collider(this.player, calque_plateform);
+    this.physics.add.collider(this.player2, calque_plateform);
     // redimentionnement du monde avec les dimensions calculées via tiled
     this.physics.world.setBounds(0, 0, 3200, 640);
     //  ajout du champs de la caméra de taille identique à celle du monde
     this.cameras.main.setBounds(0, 0, 3200, 640);
     // ancrage de la caméra sur le joueur
-    this.cameras.main.startFollow(player);
+    this.cameras.main.startFollow(this.player);
 
     this.player = this.physics.add.sprite(100, 450, "img_perso");
     this.player.refreshBody();
@@ -86,6 +86,8 @@ export default class niveau2 extends Phaser.Scene {
     this.player2.setBounce(0.2);
     this.player2.setCollideWorldBounds(true);
     this.physics.add.collider(this.player2, this.groupe_plateformes);
+    this.physics.world.setBounds(0,0,6400,640);
+    this.cameras.main.setBounds(0,0,6400,640);
   }
 
   update() {
