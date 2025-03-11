@@ -99,6 +99,8 @@ export default class niveau2 extends Phaser.Scene {
       this.player2.setVelocityX(160);
       this.player2.anims.play("animdino2_marche", true);
     } else if (this.keyQ.isDown) {
+      this.player2.flipX=true;
+
       this.player2.setVelocityX(-160);
       this.player2.anims.play("animdino2_marche", true);
     } else {
