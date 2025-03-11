@@ -161,7 +161,7 @@ gagner() {
     this.add.image(
       this.player.x, // Position X du joueur 2
       this.player.y - 100, // Position Y légèrement au-dessus du joueur 2
-      "victoire_image" // Clé de l'image à afficher
+      "tileset_image" // Clé de l'image à afficher
     ).setOrigin(0.5); // Centrer l'image
 
   // Désactive les mouvements du joueur
@@ -180,17 +180,11 @@ gagner() {
 
 gagner2() {
   // Affichage du message de victoire
-  this.texteVictoire = this.add.text(
-      this.player2.x - 100, // Position X légèrement décalée par rapport au joueur
-      this.player2.y - 100, // Position Y légèrement au-dessus du joueur
-      "Bravo, tu as gagné ! Appuie sur entrée pour revenir au menu", // Texte affiché
-      {
-          fontSize: "16px", // Taille du texte
-          fill: "#FFFFFF", // Couleur du texte (blanc)
-         
-          padding: { x: 10, y: 5 } // Ajout d'un petit espace autour du texte
-      }
-  );
+  this.add.image(
+    this.player2.x, // Position X du joueur 2
+    this.player2.y - 100, // Position Y légèrement au-dessus du joueur 2
+    "tileset_image" // Clé de l'image à afficher
+  ).setOrigin(0.5);
 
   // Désactive les mouvements du joueur
   this.player.setVelocity(0, 0); // Immobilise le joueur en arrêtant ses vitesses X et Y
