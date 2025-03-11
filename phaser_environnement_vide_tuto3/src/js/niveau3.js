@@ -62,7 +62,7 @@ const calque_plateformes = carteDuNiveau.createLayer(
         fontSize: "22pt"
       });
   
-      this.player = this.physics.add.sprite(100, 450, "img_perso");
+      this.player = this.physics.add.sprite(100, 450, "img_dino");
       this.player.refreshBody();
       this.player.setBounce(0.2);
       this.player.setCollideWorldBounds(true);
@@ -82,11 +82,13 @@ const calque_plateformes = carteDuNiveau.createLayer(
   
     update() {
       if (this.clavier.left.isDown) {
+        player.flipX=true;
         this.player.setVelocityX(-160);
-        this.player.anims.play("anim_tourne_gauche", true);
+        this.player.anims.play("animdino_marche", true);
       } else if (this.clavier.right.isDown) {
+        player.flipX=true;
         this.player.setVelocityX(160);
-        this.player.anims.play("anim_tourne_droite", true);
+        this.player.anims.play("animdino_marche", true);
       }  else if (this.keyD.isDown) {
         this.player2.setVelocityX(160);
         this.player2.anims.play("anim_tourne_droite", true);
@@ -95,7 +97,7 @@ const calque_plateformes = carteDuNiveau.createLayer(
         this.player2.anims.play("anim_tourne_gauche", true);
       } else {
         this.player.setVelocityX(0);
-        this.player.anims.play("anim_face");
+        this.player.anims.play("animdino_face");
       }
       if (this.clavier.up.isDown && this.player.body.blocked.down) {
         this.player.setVelocityY(-200);

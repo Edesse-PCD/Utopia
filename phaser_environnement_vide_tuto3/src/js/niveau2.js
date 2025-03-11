@@ -60,7 +60,7 @@ export default class niveau2 extends Phaser.Scene {
     const deco = carteDuNiveau.createLayer("deco", tileset2);
     const calque_plateform = carteDuNiveau.createLayer("calque_plateform", tileset2);
     calque_plateform.setCollisionByProperty({ estSolide: true });
-    const piquants = carteDuNiveau.createLayer("piquants", tileset2);
+    this.piquants = carteDuNiveau.createLayer("piquants", tileset2);
     const animal = carteDuNiveau.createLayer("animal", tileset2);
 
 
