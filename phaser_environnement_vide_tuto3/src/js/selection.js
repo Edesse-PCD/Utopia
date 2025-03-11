@@ -115,7 +115,7 @@ else if(clavier.up.isDown && player.body.touching.down) {
   } 
   else {player.setVelocityX(0);
     player.anims.play('animdino_face', true)
-    =;}
+    }
   
   if (keyQ.isDown == true) {
     player2.flipX=true;
