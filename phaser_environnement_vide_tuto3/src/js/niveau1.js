@@ -63,7 +63,7 @@ export default class niveau1 extends Phaser.Scene {
 
 
   create() {
-    var musique_de_fond;
+  
     musique_de_fond = this.sound.add('background'); 
     musique_de_fond.play();  
 
@@ -240,6 +240,7 @@ this.elephant.x = 400;
     
     // Rendre le bouton cliquable
     this.boutonMenu.on("pointerdown", () => {
+      this.musique_de_fond.stop();  
       this.scene.start("selection");
     });
 
@@ -380,12 +381,6 @@ this.elephant.x = 400;
       this.player2.setVelocityY(-330);
     }
 
-    // Interaction avec la porte (barre espace)
-    if (Phaser.Input.Keyboard.JustDown(this.clavier.space)) {
-      if (this.physics.overlap(this.player, this.porte_retour) || this.physics.overlap(this.player2, this.porte_retour)) {
-        this.scene.start("selection");
-      }
-    }
   
 
   }
@@ -433,6 +428,8 @@ let texteMenu = this.add.text(
 
 // Rendre le bouton cliquable
 boutonMenu.on("pointerdown", () => {
+  musique_de_fond.stop();
+  
   this.game.config.spawnX= 1270;
   this.game.config.spawnY=410;
   this.scene.start("selection");

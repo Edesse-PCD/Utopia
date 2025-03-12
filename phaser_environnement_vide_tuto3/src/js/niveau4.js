@@ -44,9 +44,9 @@ this.load.tilemapTiledJSON("CarteJungle", "src/assets/Niveau4/MapJungle.json");
   
     create() {
 
-      var musique_de_fond;
-      musique_de_fond = this.sound.add('background'); 
-      musique_de_fond.play();  
+      
+      this.musique_de_fond = this.sound.add('background'); 
+      this.musique_de_fond.play();  
 // Position de départ (respawn du joueur)
 this.startPosition = { x: 100, y: 450 };
 this.maxDistance = 700; // Distance maximale autorisée entre les joueurs
@@ -170,7 +170,6 @@ if (this.ladder_layer) {
     this.clavier = this.input.keyboard.createCursorKeys();
     this.keyQ = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.Q);
     this.keyZ = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.Z);
-    this.keyS = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.S);
     this.keyD = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.D);
     
     
@@ -246,6 +245,9 @@ this.texteMenu.setDepth(1001);
   
   // Rendre le bouton cliquable
   this.boutonMenu.on("pointerdown", () => {
+    this.musique_de_fond.stop();  
+
+
     this.scene.start("selection");
   });
 
@@ -386,7 +388,10 @@ this.time.delayedCall(500, () => {
         this.player.flipX=false;
         this.player.setVelocityX(160);
         this.player.anims.play("animdino_marche", true); // player 1 tourne a droite
-      } else if (this.keyD.isDown) {
+      } else {
+        this.player.setVelocityX(0);
+        this.player.anims.play("animdino_face");}
+      if (this.keyD.isDown) {
         this.player2.flipX=false;
         this.player2.setVelocityX(160);
         this.player2.anims.play("animdino2_marche", true); // player 2 tourne a droite
@@ -396,58 +401,51 @@ this.time.delayedCall(500, () => {
         this.player2.setVelocityX(-160);
         this.player2.anims.play("animdino2_marche", true);
       } else {
-        this.player.setVelocityX(0);
-        this.player.anims.play("animdino_face");
         this.player2.setVelocityX(0);
         this.player2.anims.play("animdino2_face");
       }
       
-        if (this.clavier.up.isDown && this.player.body.blocked.down) {
-          this.player.setVelocityY(-245);
+      if (this.clavier.up.isDown && this.player.body.blocked.down) {
+        this.player.setVelocityY(-245);
+    }
+  
+      // Saut joueur 2
+      if (this.keyZ.isDown && this.player2.body.blocked.down) {
+          this.player2.setVelocityY(-245);
       }
-    
-        // Saut joueur 2
-        if (this.keyZ.isDown && this.player2.body.blocked.down) {
-            this.player2.setVelocityY(-245);
-        }
-    
-        // Gestion des lianes pour **les deux joueurs**
-        this.handleLadderMovement(this.player, this.clavier.up, this.clavier.down);
-        this.handleLadderMovement(this.player2, this.keyZ, this.keyS);
-    
-        // Interaction avec la porte
-        if (Phaser.Input.Keyboard.JustDown(this.clavier.space)) {
-            if (this.physics.overlap(this.player, this.porte_retour) || this.physics.overlap(this.player2, this.porte_retour)) {
-                this.scene.start("selection");
-            }
-        }
+  
+      // Gestion des lianes pour **les deux joueurs**
+      this.handleLadderMovement(this.player, this.clavier.up, this.clavier.down);
+      this.handleLadderMovement(this.player2, this.keyZ, this.clavier.down);
+  
+      // Interaction avec la porte
+      if (Phaser.Input.Keyboard.JustDown(this.clavier.space)) {
+          if (this.physics.overlap(this.player, this.porte_retour) || this.physics.overlap(this.player2, this.porte_retour)) {
+          this.musique_de_fond.stop();  
+              this.scene.start("selection");
+          }
+      }
   }
   
   /**
    * Gère le mouvement d'un joueur sur les lianes.
    */
   handleLadderMovement(player, keyUp, keyDown) {
-    if (!keyUp || !keyDown) return; // Vérifier que les touches existent
-
-    if (player.onLadder) {
-        player.body.setAllowGravity(false); // Désactiver la gravité
-        console.log(`🧗‍♂️ Player ${player === this.player ? "1" : "2"} sur une liane !`);
-
-        // Déplacement vertical
-        if (keyUp.isDown) {
-            player.setVelocityY(-100); // Monter
-            console.log("⬆️ Monte !");
-        } else if (keyDown.isDown) {
-            player.setVelocityY(100); // Descendre
-            console.log("⬇️ Descend !");
-        } else {
-            player.setVelocityY(0); // Arrêt
-        }
-    } else {
-        player.body.setAllowGravity(true); // Réactiver la gravité si pas sur une liane
-    }
-
-    
+      if (player.onLadder) {
+          player.body.setAllowGravity(false); // Désactive la gravité
+  
+          // Déplacement vertical
+          if (keyUp.isDown) {
+              player.setVelocityY(-100); // Monter
+          } else if (keyDown.isDown) {
+              player.setVelocityY(100); // Descendre
+          } else {
+              player.setVelocityY(0); // Arrêt
+          }
+      } else {
+          player.body.setAllowGravity(true); // Réactive la gravité si pas sur une liane
+      }   
+      
 
     }
     checkLadder() {
@@ -534,6 +532,8 @@ let texteMenu = this.add.text(
 
 // Rendre le bouton cliquable
 boutonMenu.on("pointerdown", () => {
+
+  this.musique_de_fond.stop();
   this.scene.start("selection");
 });
 

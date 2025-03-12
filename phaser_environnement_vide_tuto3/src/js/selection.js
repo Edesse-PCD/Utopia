@@ -15,7 +15,7 @@ let keyZ
 
 export default class selection extends Phaser.Scene  {
   constructor() {
-  
+ 
      super({key : "selection"}); // mettre le meme nom que le nom de la classe
      this.spawnX = 150;
      this.spawnY = 400;
@@ -40,7 +40,7 @@ export default class selection extends Phaser.Scene  {
     })
     this.load.image("img_porte1", "src/assets/door1.png");
     this.load.image("img_porte2", "src/assets/door2.png");
-    this.load.image("img_porte3", "src/assets/door3.png"); 
+    this.load.image("img_porte3", "src/assets/door3.png");
     this.load.image("img_cloud3","src/assets/cloud3.png");
     this.load.image("img_Pyramide1","src/assets/Pyramide1.png");
     this.load.image("img_cabane4","src/assets/cabane4.png");
@@ -66,7 +66,7 @@ if (!this.introShown) {
     ).setOrigin(0.5)
     .setScrollFactor(0) // Rendre le bouton fixe par rapport à la caméra
     .setInteractive().setScale(0.20).setDepth(11);
-    
+   
     // Ajouter le texte "Menu" par-dessus le bouton
     this.texteCommencer = this.add.text(
       this.boutonCommencer.x, // Position X centrée sur le bouton
@@ -79,7 +79,7 @@ if (!this.introShown) {
       }
     ).setOrigin(0.5)
     .setScrollFactor(0).setDepth(12); // Rendre le texte fixe par rapport à la caméra
-    
+   
     // Rendre le bouton cliquable
     this.boutonCommencer.on("pointerdown", () => {
       this.boutonCommencer.destroy();
@@ -91,7 +91,7 @@ if (!this.introShown) {
 
     if (this.game.config.spawnX != undefined) this.spawnX = this.game.config.spawnX;
     if (this.game.config.spawnY != undefined) this.spawnY = this.game.config.spawnY;
-    
+   
 const carteDuNiveau = this.add.tilemap("mapdebut");
 const BGdebut = carteDuNiveau.addTilesetImage("BGdebut", "BGdebut");
 
@@ -105,8 +105,6 @@ BG.setScale(2);
 plateforms.setScale(2);
 decoration.setScale(2);
 
-
-
 keyQ = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.Q);
 keyZ = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.Z);
 keyD = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.D);
@@ -116,7 +114,11 @@ keyD = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.D);
       font: "32px Georgia",
       fill: "#fff",
   }).setOrigin(0.5);
-    cabane4 = this.physics.add.staticSprite(450, 270, "img_cabane4").setScale(0.3).refreshBody();
+    cabane4 = this.physics.add.staticSprite(2450, 270, "img_cabane4").setScale(0.3).refreshBody();
+    this.add.text(cabane4.x, cabane4.y + 80, "Niveau 4", {
+      font: "32px Georgia",
+      fill: "#fff",
+  }).setOrigin(0.5);
     Pyramide1 = this.physics.add.staticSprite(740, 490, "img_Pyramide1").setScale(0.3).refreshBody();
     this.add.text(Pyramide1.x, Pyramide1.y + 50, "Niveau 1", {
       font: "32px Georgia",
@@ -138,8 +140,8 @@ keyD = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.D);
     this.physics.world.setBounds(0,0,2560,640);
     this.cameras.main.setBounds(0,0,2560,640);
     clavier = this.input.keyboard.createCursorKeys();
-    
-    
+   
+   
 
     this.anims.create({
       key: "anim_tourne_gauche", // key est le nom de l'animation : doit etre unique poru la scene.
@@ -150,11 +152,11 @@ keyD = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.D);
     this.anims.create({
       key: "anim_tourne_droite", // key est le nom de l'animation : doit etre unique poru la scene.
       frames: this.anims.generateFrameNumbers("img_perso", { start: 5, end: 8 }), // on prend toutes les frames de img perso numerotées de 0 à 3
-      frameRate: 10, 
-      repeat: -1 
+      frameRate: 10,
+      repeat: -1
     });
     this.anims.create({
-      key: "anim_face", 
+      key: "anim_face",
       frames: [{ key: "img_perso", frame: 4 }],
       frameRate: 20
     });
@@ -165,7 +167,7 @@ keyD = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.D);
       repeat: -1 // nombre de répétitions de l'animation. -1 = infini
     });
     this.anims.create({
-      key: "animdino_face", 
+      key: "animdino_face",
       frames: [{ key: "img_dino", frame: 0 }],
       frameRate: 20
     });
@@ -176,18 +178,18 @@ keyD = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.D);
       repeat: -1 // nombre de répétitions de l'animation. -1 = infini
     });
     this.anims.create({
-      key: "animdino2_face", 
+      key: "animdino2_face",
       frames: [{ key: "img_dino2", frame: 0 }],
       frameRate: 20
     });
 
     player.setScale(2);
     player2.setScale(2);
-    
+   
   }
 
   update() {
-  
+ 
     if (clavier.right.isDown == true) {
     player.flipX=false;
     player.setVelocityX(160);
@@ -197,21 +199,21 @@ keyD = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.D);
     player.flipX=true;
     player.setVelocityX(-160);
     player.anims.play('animdino_marche', true);
-  } 
+  }
   else {player.setVelocityX(0);
     player.anims.play('animdino_face', true)
     }
-  
+ 
   if (keyQ.isDown == true) {
     player2.flipX=true;
     player2.setVelocityX(-160);
     player2.anims.play('animdino2_marche', true);
-  } 
+  }
   else if (keyD.isDown == true) {
     player2.flipX=false;
     player2.setVelocityX(160);
     player2.anims.play('animdino2_marche', true);
-    }   
+    }  
   else {
     player2.setVelocityX(0);
     player2.anims.play('animdino2_face', true);
@@ -220,7 +222,7 @@ keyD = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.D);
       player2.setVelocityY(-330);}
   if(clavier.up.isDown && player.body.onFloor()) {
         player.setVelocityY(-330);}
-    
+   
   if (Phaser.Input.Keyboard.JustDown(clavier.space) == true) {
     if (this.physics.overlap(player, Pyramide1)) this.scene.start("niveau1");
     if (this.physics.overlap(player, igloo2)) this.scene.start("niveau2");
@@ -230,5 +232,5 @@ keyD = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.D);
       if (this.physics.overlap(player2, igloo2)) this.scene.start("niveau2");
       if (this.physics.overlap(player2, cloud3)) this.scene.start("niveau3");
       if (this.physics.overlap(player2, cabane4)) this.scene.start("niveau4");
-  } 
+  }
 }}
