@@ -15,16 +15,18 @@ export default class niveau3 extends Phaser.Scene {
     this.load.image("tileset_image", "src/assets/victoire_image.png");
     this.load.image("tileset_bouton", "src/assets/bouton.png");
     this.load.image("bouton","src/assets/bouton.png")
+    this.load.audio('background', 'src/assets/Niveau_3/ciel.mp3');  
     this.load.image("imageNiveau3","src/assets/Niveau_3/imageNiveau3.png")
+  
 
-
-    
 
     // chargement de la carte
     this.load.tilemapTiledJSON("carte", "src/assets/Niveau_3/map.json");
   }
 
   create() {
+    this.musique_de_fond = this.sound.add('background'); 
+    this.musique_de_fond.play();  
     this.maxDistance = 700; // Distance maximale autorisée entre les joueurs
     this.imageNiveau3 = this.add.image(400, 350, "imageNiveau3").setDepth(10).setScale(0.5);
     this.boutonCommencer = this.add.image(
@@ -50,6 +52,11 @@ export default class niveau3 extends Phaser.Scene {
     
     // Rendre le bouton cliquable
     this.boutonCommencer.on("pointerdown", () => {
+
+
+
+
+
       this.boutonCommencer.destroy();
       this.imageNiveau3.destroy();
       this.texteCommencer.destroy();
@@ -127,7 +134,7 @@ export default class niveau3 extends Phaser.Scene {
     this.player2.setScale(2);
 
 
-    this.oiseau = this.physics.add.sprite(300, 300, "tileset_oiseau");
+    this.oiseau = this.physics.add.sprite(6300, 300, "tileset_oiseau");
   
   
 this.oiseau.setImmovable(true); // L'oiseau ne doit pas bouger s'il est touché
@@ -163,6 +170,7 @@ this.texteMenu = this.add.text(
 
 // Rendre le bouton cliquable
 this.boutonMenu.on("pointerdown", () => {
+  this.musique_de_fond.stop();  
   this.scene.start("selection");
 });
 
@@ -172,6 +180,10 @@ this.toucheEntree = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.EN
 this.startPosition = { x: 375, y: 450 };
 
 this.deathMessage = null; 
+
+var sij = this.scene.get("interfaceJeu");
+sij.debloquerAnimal(0); // Garde l'éléphant
+sij.debloquerAnimal(1); // Débloque l'ours
 
   }
 
@@ -317,6 +329,8 @@ let texteMenu = this.add.text(
 
 // Rendre le bouton cliquable
 boutonMenu.on("pointerdown", () => {
+
+  this.musique_de_fond.stop();  
   this.game.config.spawnX= 2450;
     this.game.config.spawnY=270;
   this.scene.start("selection");

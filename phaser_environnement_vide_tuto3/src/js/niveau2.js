@@ -34,9 +34,9 @@ export default class niveau2 extends Phaser.Scene {
 
 
   create() {
-    var musique_de_fond;
-    musique_de_fond = this.sound.add('background'); 
-    musique_de_fond.play();  
+   
+    this.musique_de_fond = this.sound.add('background'); 
+    this.musique_de_fond.play();  
     this.imageNiveau2 = this.add.image(400, 350, "imageNiveau2").setDepth(10).setScale(0.5);
     this.boutonCommencer = this.add.image(
       this.cameras.main.width - 250, // Position X en haut à droite
@@ -152,6 +152,7 @@ this.texteMenu = this.add.text(
 
 // Rendre le bouton cliquable
 this.boutonMenu.on("pointerdown", () => {
+  this.musique_de_fond.stop();  
   this.scene.start("selection");
 });
 
@@ -161,7 +162,7 @@ this.toucheEntree = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.EN
 
 var sij = this.scene.get("interfaceJeu");
 sij.debloquerAnimal(0); // Garde l'éléphant
-sij.debloquerAnimal(1); // Débloque l'ours
+
 
 
   }
@@ -377,6 +378,7 @@ this.time.delayedCall(1000, () => {
   
   // Rendre le bouton cliquable
   boutonMenu.on("pointerdown", () => {
+    this.musique_de_fond.stop();
     this.game.config.spawnX= 2050;
     this.game.config.spawnY=300;
     this.scene.start("selection");

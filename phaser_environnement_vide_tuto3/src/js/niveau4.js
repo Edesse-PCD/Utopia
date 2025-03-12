@@ -200,7 +200,6 @@ if (this.ladder_layer) {
     this.clavier = this.input.keyboard.createCursorKeys();
     this.keyQ = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.Q);
     this.keyZ = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.Z);
-    this.keyS = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.S);
     this.keyD = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.D);
     
     
@@ -276,11 +275,18 @@ this.texteMenu.setDepth(1001);
   
   // Rendre le bouton cliquable
   this.boutonMenu.on("pointerdown", () => {
+   
+
+    this.musique_de_fond.stop();
     this.scene.start("selection");
   });
 
-    
+  var sij = this.scene.get("interfaceJeu");
+  sij.debloquerAnimal(0); // Garde l'éléphant
+  sij.debloquerAnimal(1); // Débloque l'ours
+  sij.debloquerAnimal(2); // Débloque l'oiseau
     } 
+
   
     update() {
     this.checkLadder();    
@@ -429,52 +435,48 @@ this.time.delayedCall(500, () => {
         this.player2.anims.play("animdino2_face");
       }
       
-        if (this.clavier.up.isDown && this.player.body.blocked.down) {
-          this.player.setVelocityY(-245);
+      if (this.clavier.up.isDown && this.player.body.blocked.down) {
+        this.player.setVelocityY(-245);
+    }
+  
+      // Saut joueur 2
+      if (this.keyZ.isDown && this.player2.body.blocked.down) {
+          this.player2.setVelocityY(-245);
       }
-    
-        // Saut joueur 2
-        if (this.keyZ.isDown && this.player2.body.blocked.down) {
-            this.player2.setVelocityY(-245);
-        }
-    
-        // Gestion des lianes pour **les deux joueurs**
-        this.handleLadderMovement(this.player, this.clavier.up, this.clavier.down);
-        this.handleLadderMovement(this.player2, this.keyZ, this.keyS);
-    
-        // Interaction avec la porte
-        if (Phaser.Input.Keyboard.JustDown(this.clavier.space)) {
-            if (this.physics.overlap(this.player, this.porte_retour) || this.physics.overlap(this.player2, this.porte_retour)) {
-                this.scene.start("selection");
-            }
-        }
+  
+      // Gestion des lianes pour **les deux joueurs**
+      this.handleLadderMovement(this.player, this.clavier.up, this.clavier.down);
+      this.handleLadderMovement(this.player2, this.keyZ, this.clavier.down);
+  
+      // Interaction avec la porte
+      if (Phaser.Input.Keyboard.JustDown(this.clavier.space)) {
+          if (this.physics.overlap(this.player, this.porte_retour) || this.physics.overlap(this.player2, this.porte_retour)) {
+         
+
+              this.scene.start("selection");
+          }
+      }
   }
   
   /**
    * Gère le mouvement d'un joueur sur les lianes.
    */
   handleLadderMovement(player, keyUp, keyDown) {
-    if (!keyUp || !keyDown) return; // Vérifier que les touches existent
-
-    if (player.onLadder) {
-        player.body.setAllowGravity(false); // Désactiver la gravité
-        console.log(`🧗‍♂️ Player ${player === this.player ? "1" : "2"} sur une liane !`);
-
-        // Déplacement vertical
-        if (keyUp.isDown) {
-            player.setVelocityY(-100); // Monter
-            console.log("⬆️ Monte !");
-        } else if (keyDown.isDown) {
-            player.setVelocityY(100); // Descendre
-            console.log("⬇️ Descend !");
-        } else {
-            player.setVelocityY(0); // Arrêt
-        }
-    } else {
-        player.body.setAllowGravity(true); // Réactiver la gravité si pas sur une liane
-    }
-
-    
+      if (player.onLadder) {
+          player.body.setAllowGravity(false); // Désactive la gravité
+  
+          // Déplacement vertical
+          if (keyUp.isDown) {
+              player.setVelocityY(-100); // Monter
+          } else if (keyDown.isDown) {
+              player.setVelocityY(100); // Descendre
+          } else {
+              player.setVelocityY(0); // Arrêt
+          }
+      } else {
+          player.body.setAllowGravity(true); // Réactive la gravité si pas sur une liane
+      }   
+      
 
     }
     checkLadder() {
@@ -561,11 +563,14 @@ let texteMenu = this.add.text(
 
 // Rendre le bouton cliquable
 boutonMenu.on("pointerdown", () => {
+
+  this.musique_de_fond.stop();
   this.scene.start("selection");
 });
 
 
 }
+
 
 }
 

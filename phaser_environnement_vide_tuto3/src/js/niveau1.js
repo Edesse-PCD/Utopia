@@ -194,8 +194,7 @@ this.elephant.x = 400;
     );
     this.scene.bringToTop("interfaceJeu");
 
-    var sij = this.scene.get("interfaceJeu");
-    sij.debloquerAnimal(0);
+  
 
 
 
@@ -274,6 +273,7 @@ if (distance > this.maxDistance) {
     
     // Rendre le bouton cliquable
     this.boutonMenu.on("pointerdown", () => {
+      this.musique_de_fond.stop();  
       this.scene.start("selection");
     });
 
@@ -414,12 +414,6 @@ if (distance > this.maxDistance) {
       this.player2.setVelocityY(-330);
     }
 
-    // Interaction avec la porte (barre espace)
-    if (Phaser.Input.Keyboard.JustDown(this.clavier.space)) {
-      if (this.physics.overlap(this.player, this.porte_retour) || this.physics.overlap(this.player2, this.porte_retour)) {
-        this.scene.start("selection");
-      }
-    }
   
 
   }
@@ -467,6 +461,8 @@ let texteMenu = this.add.text(
 
 // Rendre le bouton cliquable
 boutonMenu.on("pointerdown", () => {
+  this.musique_de_fond.stop();
+  
   this.game.config.spawnX= 1270;
   this.game.config.spawnY=410;
   this.scene.start("selection");
