@@ -59,6 +59,9 @@ export default class niveau1 extends Phaser.Scene {
 
 
   create() {
+    var musique_de_fond;
+    musique_de_fond = this.sound.add('background'); 
+    musique_de_fond.play();  
 
     // Afficher l'image d'introduction
     this.image_2_depart_niveau_1 = this.add.image(400, 300, "imagedepart").setDepth(10).setScale(0.8);
