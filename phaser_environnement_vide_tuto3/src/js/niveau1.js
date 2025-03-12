@@ -16,8 +16,10 @@ export default class niveau1 extends Phaser.Scene {
     this.load.image("ours", "src/assets/niveau2/ours.png");
     this.load.image("tileset_oiseau", "src/assets/Niveau_3/Oiseau.png");
     this.load.image("Panda", "src/assets/Niveau4/Panda.png");
+
     this.load.image("tileset_image", "src/assets/victoire_image.png");
     this.load.image("bouton","src/assets/bouton.png")
+
     this.load.image("aset_deserts", "src/assets/niveau1/BG.png");
     this.load.image("Bush (1)", "src/assets/niveau1/Bush (1).png");
     this.load.image("Bush (2)", "src/assets/niveau1/Bush (2).png");
@@ -58,6 +60,11 @@ export default class niveau1 extends Phaser.Scene {
 
 
   create() {
+
+
+    this.scene.launch("interface"); // Lancer l'interface
+this.scene.bringToTop("interface"); // Mettre l'interface au premier plan
+
 
     // Afficher l'image d'introduction
     this.image_2_depart_niveau_1 = this.add.image(400, 300, "imagedepart").setDepth(10).setScale(0.8);
@@ -181,13 +188,7 @@ this.elephant.body.allowGravity = false; // Il ne doit pas tomber
     );
 
 
-this.animalIcons = [];
 
-for (let i = 0; i < 4; i++) {
-  let iconKey = gameState.capturedAnimals[i] ? "elephantcute1" : "elephantcute1";
-  let icon = this.add.image(50 + i * 100, 50, iconKey).setScrollFactor(0).setScale(0.5);
-  this.animalIcons.push(icon);
-}
 
   }
 
@@ -380,10 +381,7 @@ for (let i = 0; i < 4; i++) {
         this.scene.start("selection");
       }
     }
-    for (let i = 0; i < this.animalIcons.length; i++) {
-      let iconKey = gameState.capturedAnimals[i] ? "elephantcute1" : "elephantcute1";
-      this.animalIcons[i].setTexture(iconKey);
-    }
+  
 
   }
 
@@ -396,7 +394,7 @@ for (let i = 0; i < 4; i++) {
         // Mettre à jour l'affichage
         this.animalsIcons[0].setTexture("animal1_acquis");
 
-        
+
     // Affichage du message de victoire
       // Affichage de l'image de victoire
       this.add.image(
