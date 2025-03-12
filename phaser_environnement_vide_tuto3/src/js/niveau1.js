@@ -246,7 +246,7 @@ this.elephant.body.allowGravity = false; // Il ne doit pas tomber
           font: '32px Arial',
           fill: '#fff',
           backgroundColor: '#000'
-        });
+        }).setOrigin(0.5).setScrollFactor(0);
       }
 
 
@@ -291,7 +291,7 @@ this.elephant.body.allowGravity = false; // Il ne doit pas tomber
           font: '32px Arial',
           fill: '#fff',
           backgroundColor: '#000'
-        });
+        }).setOrigin(0.5).setScrollFactor(0);
       }
 
 
