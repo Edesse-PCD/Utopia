@@ -49,6 +49,7 @@ export default class niveau1 extends Phaser.Scene {
     this.load.image("14", "src/assets/niveau1/14.png");
     this.load.image("15", "src/assets/niveau1/15.png");
     this.load.image("16", "src/assets/niveau1/16.png");
+    this.load.image("imageNiveau1","src/assets/niveau1/imageNiveau1.png")
     this.load.image("0017", "src/assets/niveau1/0017.png");
     this.load.audio('background', 'src/assets/niveau1/western.mp3'); 
 
@@ -67,14 +68,39 @@ export default class niveau1 extends Phaser.Scene {
     musique_de_fond = this.sound.add('background'); 
     musique_de_fond.play();  
     this.maxDistance = 700; // Distance maximale autorisée entre les joueurs
+    this.imageNiveau1 = this.add.image(400, 350, "imageNiveau1").setDepth(10).setScale(0.5);
+    this.boutonCommencer = this.add.image(
+      this.cameras.main.width - 250, // Position X en haut à droite
+      410, // Position Y en haut
+      "bouton" // Clé de ton image de bouton
+    ).setOrigin(0.5)
+    .setScrollFactor(0) // Rendre le bouton fixe par rapport à la caméra
+    .setInteractive().setScale(0.20).setDepth(11);
+    
+    // Ajouter le texte "Menu" par-dessus le bouton
+    this.texteCommencer = this.add.text(
+      this.boutonCommencer.x, // Position X centrée sur le bouton
+      this.boutonCommencer.y, // Position Y centrée sur le bouton
+      "Commencer",
+      {
+          font: "20px Arial",
+          fill: "#000",   // Texte en noir
+          align: "center"
+      }
+    ).setOrigin(0.5)
+    .setScrollFactor(0).setDepth(12); // Rendre le texte fixe par rapport à la caméra
+    
+    // Rendre le bouton cliquable
+    this.boutonCommencer.on("pointerdown", () => {
+      this.boutonCommencer.destroy();
+      this.imageNiveau1.destroy();
+      this.texteCommencer.destroy();
+        });
 
 
 
 
-
-    // Afficher l'image d'introduction
-    this.image_2_depart_niveau_1 = this.add.image(400, 300, "imagedepart").setDepth(10).setScale(0.8);
-
+    
 
 
     // Ajouter la gestion de la touche "Entrée"
@@ -277,12 +303,6 @@ if (distance > this.maxDistance) {
       this.scene.start("selection");
     });
 
-
-    // Vérifier si la touche "Entrée" est pressée pour démarrer le jeu
-    if (!this.gameStarted && Phaser.Input.Keyboard.JustDown(this.enterKey)) {
-      this.image_2_depart_niveau_1.destroy();  // Supprimer l'image d'intro
-      this.gameStarted = true;
-    }
 
     // Supposons que vous avez un calque 'danger' et un personnage (player)
     let messageDisplayed = false; // Pour s'assurer que le message n'est affiché qu'une seule fois
