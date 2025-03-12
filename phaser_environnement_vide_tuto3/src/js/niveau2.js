@@ -280,7 +280,7 @@ this.player.body.enable = false;
 
 // Attendre un court instant avant de le faire respawn (évite un bug de collision)
 this.time.delayedCall(1000, () => {
-    this.player2.setPosition(this.startPosition.x, this.startPosition.y);
+    this.player2.setPosition(this.startPosition.x+50, this.startPosition.y);
     this.player.setPosition(this.startPosition.x, this.startPosition.y); // Respawn au point de départ
     // Respawn au point de départ
     this.player2.body.enable = true; // Réactiver le corps du joueur
