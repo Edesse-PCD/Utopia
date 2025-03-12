@@ -31,7 +31,7 @@ export default class niveau4 extends Phaser.Scene {
   this.load.image("shack2", "src/assets/Niveau4/shack2.png");
   this.load.image("shack3", "src/assets/Niveau4/shack3.png");
   this.load.image("Tree_2", "src/assets/Niveau4/Tree_2.png");
-  
+  this.load.audio('background', 'src/assets/Niveau4/indiana_johns.mp3');   
   // chargement de la carte
 this.load.tilemapTiledJSON("CarteJungle", "src/assets/Niveau4/MapJungle.json"); 
  
@@ -42,6 +42,9 @@ this.load.tilemapTiledJSON("CarteJungle", "src/assets/Niveau4/MapJungle.json");
   
     create() {
 
+      var musique_de_fond;
+      musique_de_fond = this.sound.add('background'); 
+      musique_de_fond.play();  
 // Position de départ (respawn du joueur)
 this.startPosition = { x: 100, y: 450 };
 
