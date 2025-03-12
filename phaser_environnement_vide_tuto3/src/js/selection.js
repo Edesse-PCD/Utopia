@@ -105,8 +105,6 @@ BG.setScale(2);
 plateforms.setScale(2);
 decoration.setScale(2);
 
-
-
 keyQ = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.Q);
 keyZ = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.Z);
 keyD = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.D);
