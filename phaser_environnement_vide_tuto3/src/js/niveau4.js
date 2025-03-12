@@ -482,7 +482,7 @@ let boutonMenu = this.add.image(
 let texteMenu = this.add.text(
   boutonMenu.x, // Position X centrée sur le bouton
   boutonMenu.y, // Position Y centrée sur le bouton
-  "Menu",
+  "Niveau\nsuivant",
   {
       font: "20px Arial",
       fill: "#000",   // Texte en noir
