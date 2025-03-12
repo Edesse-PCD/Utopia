@@ -26,12 +26,19 @@ export default class niveau2 extends Phaser.Scene {
     this.load.image("BG", "src/assets/niveau2/BG.png");
     this.load.image("ours", "src/assets/niveau2/ourspolaire.png");
     this.load.image("tileset_image", "src/assets/victoire_image.png");
-    this.load.image("bouton","src/assets/bouton.png")
+    this.load.image("tileset_bouton","src/assets/bouton.png")
     this.load.tilemapTiledJSON("map2", "src/assets/niveau2/mapBanquise.json");
+    this.load.audio('background', 'src/assets/niveau2/aglagla.mp3');   
   }
 
 
   create() {
+    var musique_de_fond;
+    musique_de_fond = this.sound.add('background'); 
+    musique_de_fond.play();  
+    let IJ = this.scene.get("interface");
+    IJ.ApparaitreElephant();
+
     this.maxDistance = 700; // Distance maximale autorisée entre les joueurs
     this.startPosition = { x: 100, y: 450 };
     this.deathMessage = null;
@@ -99,7 +106,7 @@ this.physics.add.overlap(this.player, this.ours, () => {
  this.boutonMenu = this.add.image(
   this.cameras.main.width - 50, // Position X en haut à droite
   25, // Position Y en haut
-  "bouton" // Clé de ton image de bouton
+  "tileset_bouton" // Clé de ton image de bouton
 ).setOrigin(0.5)
 .setScrollFactor(0) // Rendre le bouton fixe par rapport à la caméra
 .setInteractive().setScale(0.10);
@@ -126,7 +133,10 @@ this.boutonMenu.on("pointerdown", () => {
 // Ajout d'une touche pour redémarrer au niveau 
 this.toucheEntree = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.ENTER);
 
+
+
   }
+
 
   update() {
     let messageDisplayed = false; // Pour s'assurer que le message n'est affiché qu'une seule fois
