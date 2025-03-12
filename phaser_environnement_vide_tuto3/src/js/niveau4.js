@@ -33,7 +33,7 @@ export default class niveau4 extends Phaser.Scene {
   this.load.image("Arbre", "src/assets/Niveau4/Arbre.png");
   this.load.image("bouton","src/assets/bouton.png")
   this.load.image("tileset_image", "src/assets/victoire_image.png");
-  this.load.audio('background', 'src/assets/Niveau4/indiana_johns.mp3'); 
+  this.load.audio('background4', 'src/assets/Niveau4/indiana_johns.mp3'); 
   // chargement de la carte
 this.load.tilemapTiledJSON("CarteJungle", "src/assets/Niveau4/MapJungle.json"); 
  
@@ -45,8 +45,8 @@ this.load.tilemapTiledJSON("CarteJungle", "src/assets/Niveau4/MapJungle.json");
     create() {
 
       
-      this.musique_de_fond = this.sound.add('background'); 
-      this.musique_de_fond.play();  
+      this.musique_de_fond4 = this.sound.add('background4<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<'); 
+      this.musique_de_fond4.play();  
 // Position de départ (respawn du joueur)
 this.startPosition = { x: 100, y: 450 };
 this.maxDistance = 700; // Distance maximale autorisée entre les joueurs
@@ -247,7 +247,7 @@ this.texteMenu.setDepth(1001);
   this.boutonMenu.on("pointerdown", () => {
    
 
-    this.musique_de_fond.stop();
+    this.musique_de_fond4.stop();
     this.scene.start("selection");
   });
 
@@ -534,7 +534,7 @@ let texteMenu = this.add.text(
 // Rendre le bouton cliquable
 boutonMenu.on("pointerdown", () => {
 
-  this.musique_de_fond.stop();
+  this.musique_de_fond4.stop();
   this.scene.start("selection");
 });
 

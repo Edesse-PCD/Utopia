@@ -50,7 +50,7 @@ export default class niveau1 extends Phaser.Scene {
     this.load.image("15", "src/assets/niveau1/15.png");
     this.load.image("16", "src/assets/niveau1/16.png");
     this.load.image("0017", "src/assets/niveau1/0017.png");
-    this.load.audio('background', 'src/assets/niveau1/western.mp3'); 
+    this.load.audio('background1', 'src/assets/niveau1/western.mp3'); 
 
 
 
@@ -64,8 +64,8 @@ export default class niveau1 extends Phaser.Scene {
 
   create() {
   
-    this.musique_de_fond = this.sound.add('background'); 
-    this.musique_de_fond.play();  
+    this.musique_de_fond1 = this.sound.add('background1'); 
+    this.musique_de_fond1.play();  
 
 
 
@@ -240,7 +240,7 @@ this.elephant.x = 400;
     
     // Rendre le bouton cliquable
     this.boutonMenu.on("pointerdown", () => {
-      this.musique_de_fond.stop();  
+      this.musique_de_fond1.stop();  
       this.scene.start("selection");
     });
 
@@ -428,7 +428,7 @@ let texteMenu = this.add.text(
 
 // Rendre le bouton cliquable
 boutonMenu.on("pointerdown", () => {
-  this.musique_de_fond.stop();
+  this.musique_de_fond1.stop();
   
   this.game.config.spawnX= 1270;
   this.game.config.spawnY=410;
