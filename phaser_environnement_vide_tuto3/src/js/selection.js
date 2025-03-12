@@ -15,6 +15,8 @@ export default class selection extends Phaser.Scene  {
   constructor() {
   
      super({key : "selection"}); // mettre le meme nom que le nom de la classe
+     this.spawnX = 150;
+     this.spawnY = 400;
   }
 
   preload() {
@@ -46,6 +48,7 @@ export default class selection extends Phaser.Scene  {
 
   }
   create() {
+   
 const carteDuNiveau = this.add.tilemap("mapdebut");
 const BGdebut = carteDuNiveau.addTilesetImage("BGdebut", "BGdebut");
 
@@ -70,9 +73,9 @@ keyD = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.D);
     Pyramide1 = this.physics.add.staticSprite(740, 490, "img_Pyramide1").setScale(0.3).refreshBody();
     igloo2 = this.physics.add.staticSprite(1270, 410, "img_igloo2").setScale(0.1).refreshBody();
 
-    player = this.physics.add.sprite(100, 400, 'img_dino');
+    player = this.physics.add.sprite(this.spawnX, this.spawnY, 'img_dino');
     this.cameras.main.startFollow(player);
-    player2= this.physics.add.sprite(150,400, 'img_dino2');
+    player2= this.physics.add.sprite(this.spawnX,this.spawnY, 'img_dino2');
     player.setCollideWorldBounds(true);
     player2.setCollideWorldBounds(true);
     this.physics.add.collider(player, plateforms);

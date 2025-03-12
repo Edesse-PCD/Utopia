@@ -298,7 +298,9 @@ let texteMenu = this.add.text(
 
 // Rendre le bouton cliquable
 boutonMenu.on("pointerdown", () => {
+  
   this.scene.start("selection");
+
 });
 
   }
