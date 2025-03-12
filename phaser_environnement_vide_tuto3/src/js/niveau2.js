@@ -83,7 +83,7 @@ export default class niveau2 extends Phaser.Scene {
     this.physics.add.collider(this.player2, calque_plateform);    
     this.physics.world.setBounds(0,0,6400,640);
     this.cameras.main.setBounds(0,0,6400,640);
-    this.ours = this.physics.add.sprite(6350, 340, "ours");
+    this.ours = this.physics.add.sprite(350, 340, "ours");
     this.ours.setImmovable(true); // L'oiseau ne doit pas bouger s'il est touché
 this.ours.body.allowGravity = false; // Il ne doit pas tomber
 
@@ -145,7 +145,7 @@ this.toucheEntree = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.EN
               font: '32px Arial', 
               fill: '#fff', 
               backgroundColor: '#000' 
-          });
+          }).setOrigin(0.5).setScrollFactor(0);
       }
   
 
@@ -190,7 +190,8 @@ if (dangerTile3 || dangerTile4) {
           font: '32px Arial', 
           fill: '#fff', 
           backgroundColor: '#000' 
-      });
+      }).setOrigin(0.5).setScrollFactor(0); // Rendre le texte fixe par rapport à la caméra
+      
   }
 
 
@@ -221,7 +222,10 @@ this.time.delayedCall(500, () => {
       this.player.flipX=false;
       this.player.setVelocityX(160);
       this.player.anims.play("animdino_marche", true);
-    } else if (this.keyD.isDown) {
+    } else {
+      this.player.setVelocityX(0);
+      this.player.anims.play("animdino_face");}
+    if (this.keyD.isDown) {
       this.player2.flipX=false;
       this.player2.setVelocityX(160);
       this.player2.anims.play("animdino2_marche", true);
@@ -230,8 +234,6 @@ this.time.delayedCall(500, () => {
       this.player2.setVelocityX(-160);
       this.player2.anims.play("animdino2_marche", true);
     } else {
-      this.player.setVelocityX(0);
-      this.player.anims.play("animdino_face");
       this.player2.setVelocityX(0);
       this.player2.anims.play("animdino2_face");
     }
@@ -270,29 +272,6 @@ this.time.delayedCall(500, () => {
     this.physics.world.pause(); // Met en pause la physique du monde (plus rien ne bouge)
   
   // Afficher l'asset de bouton
-let boutonMenu = this.add.image(
-  this.cameras.main.worldView.x + this.cameras.main.width / 2, // Position X centrée
-  this.cameras.main.worldView.y + this.cameras.main.height / 2 + 240, // Position Y sous l'image
-  "bouton" // Clé de ton image de bouton
-).setOrigin(0.5)
-.setInteractive().setScale(0.15);
-
-// Ajouter le texte "Menu" par-dessus le bouton
-let texteMenu = this.add.text(
-  boutonMenu.x, // Position X centrée sur le bouton
-  boutonMenu.y, // Position Y centrée sur le bouton
-  "Menu",
-  {
-      font: "20px Arial",
-      fill: "#000",   // Texte en noir
-      align: "center"
-  }
-).setOrigin(0.5);
-
-// Rendre le bouton cliquable
-boutonMenu.on("pointerdown", () => {
-  this.scene.start("selection");
-});
 
   }
 }

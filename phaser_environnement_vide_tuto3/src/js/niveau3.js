@@ -172,7 +172,7 @@ if (this.player.y >= this.cameras.main.height && !this.deathMessage) {
     font: '32px Arial', 
     fill: '#fff', 
     backgroundColor: '#000' 
-  });
+  }).setOrigin(0.5).setScrollFactor(0);
   
   // Désactiver le corps physique du joueur 1
   this.player.setVelocity(0, 0);
@@ -191,7 +191,7 @@ if (this.player2.y >= this.cameras.main.height && !this.deathMessage) {
     font: '32px Arial', 
     fill: '#fff', 
     backgroundColor: '#000' 
-  });
+  }).setOrigin(0.5).setScrollFactor(0);
   
   // Désactiver le corps physique du joueur 2
   this.player2.setVelocity(0, 0);
