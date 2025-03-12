@@ -213,7 +213,7 @@ export default class niveau1 extends Phaser.Scene {
           font: '32px Arial',
           fill: '#fff',
           backgroundColor: '#000'
-        });
+        }).setOrigin(0.5).setScrollFactor(0);
       }
 
 
@@ -258,7 +258,7 @@ export default class niveau1 extends Phaser.Scene {
           font: '32px Arial',
           fill: '#fff',
           backgroundColor: '#000'
-        });
+        }).setOrigin(0.5).setScrollFactor(0);
       }
 
 
