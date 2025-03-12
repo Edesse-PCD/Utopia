@@ -30,7 +30,7 @@ export default class niveau4 extends Phaser.Scene {
   this.load.image("shack1_bg", "src/assets/Niveau4/shack1_bg.png");
   this.load.image("shack2", "src/assets/Niveau4/shack2.png");
   this.load.image("shack3", "src/assets/Niveau4/shack3.png");
-  this.load.image("Tree_2", "src/assets/Niveau4/Tree_2.png");
+  this.load.image("Arbre", "src/assets/Niveau4/Arbre.png");
   this.load.image("bouton","src/assets/bouton.png")
   this.load.image("tileset_image", "src/assets/victoire_image.png");
   this.load.audio('background', 'src/assets/Niveau4/indiana_johns.mp3'); 
@@ -49,7 +49,7 @@ this.load.tilemapTiledJSON("CarteJungle", "src/assets/Niveau4/MapJungle.json");
       musique_de_fond.play();  
 // Position de départ (respawn du joueur)
 this.startPosition = { x: 100, y: 450 };
-
+this.maxDistance = 700; // Distance maximale autorisée entre les joueurs
 this.deathMessage = null;
 
       // Chargement de la carte
@@ -77,7 +77,7 @@ const tilesets = [
     carteDuNiveau.addTilesetImage("shack1_bg", "shack1_bg"),
     carteDuNiveau.addTilesetImage("shack2", "shack2"),
     carteDuNiveau.addTilesetImage("shack3", "shack3"),
-    carteDuNiveau.addTilesetImage("Tree_2", "Tree_2"),
+    carteDuNiveau.addTilesetImage("Arbre", "Arbre"),
     
     
 ];
@@ -155,8 +155,9 @@ if (this.ladder_layer) {
 
 
 
-    this.porte_retour = this.physics.add.staticSprite(100, 550, "img_porte1"); 
-
+    this.porte_retour = this.physics.add.staticSprite(150, 590, "img_porte1")
+        .setDepth(-1); // Met la porte derrière tous les autres éléments 
+    
 
     this.player = this.physics.add.sprite(100, 450, "img_dino");
     this.physics.add.collider(this.player, calque_feuillageSolide);
@@ -169,6 +170,7 @@ if (this.ladder_layer) {
     this.clavier = this.input.keyboard.createCursorKeys();
     this.keyQ = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.Q);
     this.keyZ = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.Z);
+    this.keyS = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.S);
     this.keyD = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.D);
     
     
@@ -179,7 +181,7 @@ if (this.ladder_layer) {
     this.player2.setCollideWorldBounds(true);
     this.clavier = this.input.keyboard.createCursorKeys();
 
-    this.Panda = this.physics.add.sprite(500, 620, "Panda");
+    this.Panda = this.physics.add.sprite(100, 560, "Panda");
     this.Panda.setImmovable(true); // le panda ne doit pas bouger s'il est touché
     this.Panda.body.allowGravity = false; // Il ne doit pas tomber
     
@@ -265,7 +267,36 @@ this.texteMenu.setDepth(1001);
     console.log(this.danger);
     let dangerTile = this.danger.getTileAtWorldXY(playerTopCenter.x, playerTopCenter.y);
     let dangerTile2 = this.danger.getTileAtWorldXY(playerBottomCenter.x, playerBottomCenter.y);
+    const distance = Phaser.Math.Distance.Between(this.player.x, this.player.y, this.player2.x, this.player2.y);
 
+    if (distance > this.maxDistance) {
+        // Afficher le message de mort pour les deux joueurs
+        if (!this.deathMessage) {
+          this.deathMessage = this.add.text(400, 300, 'Vous êtes trop éloignés! Restez coopératifs', { 
+              font: '32px Georgia', 
+              fill: '#fff',
+          }).setOrigin(0.5).setScrollFactor(0); // Centrer par rapport à la caméra
+      }
+        // Désactiver les mouvements des deux joueurs
+        this.player.setVelocity(0, 0);
+        this.player2.setVelocity(0, 0);
+        this.player.body.enable = false;
+        this.player2.body.enable = false;
+    
+        // Attendre un court instant avant de les respawn
+        this.time.delayedCall(2000, () => {
+            this.player.setPosition(this.startPosition.x, this.startPosition.y);
+            this.player2.setPosition(this.startPosition.x+50, this.startPosition.y);
+            this.player.body.enable = true;
+            this.player2.body.enable = true;
+    
+            // Supprimer le message de mort
+            if (this.deathMessage) {
+                this.deathMessage.destroy();
+                this.deathMessage = null;
+            }
+        });
+    }
     if (dangerTile || dangerTile2) {
       if (!this.deathMessage) {
           this.deathMessage = this.add.text(400, 300, 'Vous êtes mort !', { 
@@ -344,11 +375,11 @@ this.time.delayedCall(500, () => {
       // Déplacement joueur 1
       if (this.clavier.left.isDown) {
         this.player.flipX=true;
-        this.player.setVelocityX(-160);
+        this.player.setVelocityX(-1600);
         this.player.anims.play("animdino_marche", true); // player 1 tourne a gauche
       } else if (this.clavier.right.isDown) {
         this.player.flipX=false;
-        this.player.setVelocityX(160);
+        this.player.setVelocityX(1600);
         this.player.anims.play("animdino_marche", true); // player 1 tourne a droite
       } else if (this.keyD.isDown) {
         this.player2.flipX=false;
@@ -366,46 +397,52 @@ this.time.delayedCall(500, () => {
         this.player2.anims.play("animdino2_face");
       }
       
-      if (this.clavier.up.isDown && this.player.body.blocked.down) {
-        this.player.setVelocityY(-330);
-    }
-  
-      // Saut joueur 2
-      if (this.keyZ.isDown && this.player2.body.blocked.down) {
-          this.player2.setVelocityY(-330);
+        if (this.clavier.up.isDown && this.player.body.blocked.down) {
+          this.player.setVelocityY(-2450);
       }
-  
-      // Gestion des lianes pour **les deux joueurs**
-      this.handleLadderMovement(this.player, this.clavier.up, this.clavier.down);
-      this.handleLadderMovement(this.player2, this.keyZ, this.clavier.down);
-  
-      // Interaction avec la porte
-      if (Phaser.Input.Keyboard.JustDown(this.clavier.space)) {
-          if (this.physics.overlap(this.player, this.porte_retour) || this.physics.overlap(this.player2, this.porte_retour)) {
-              this.scene.start("selection");
-          }
-      }
+    
+        // Saut joueur 2
+        if (this.keyZ.isDown && this.player2.body.blocked.down) {
+            this.player2.setVelocityY(-245);
+        }
+    
+        // Gestion des lianes pour **les deux joueurs**
+        this.handleLadderMovement(this.player, this.clavier.up, this.clavier.down);
+        this.handleLadderMovement(this.player2, this.keyZ, this.keyS);
+    
+        // Interaction avec la porte
+        if (Phaser.Input.Keyboard.JustDown(this.clavier.space)) {
+            if (this.physics.overlap(this.player, this.porte_retour) || this.physics.overlap(this.player2, this.porte_retour)) {
+                this.scene.start("selection");
+            }
+        }
   }
   
   /**
    * Gère le mouvement d'un joueur sur les lianes.
    */
   handleLadderMovement(player, keyUp, keyDown) {
-      if (player.onLadder) {
-          player.body.setAllowGravity(false); // Désactive la gravité
-  
-          // Déplacement vertical
-          if (keyUp.isDown) {
-              player.setVelocityY(-100); // Monter
-          } else if (keyDown.isDown) {
-              player.setVelocityY(100); // Descendre
-          } else {
-              player.setVelocityY(0); // Arrêt
-          }
-      } else {
-          player.body.setAllowGravity(true); // Réactive la gravité si pas sur une liane
-      }   
-      
+    if (!keyUp || !keyDown) return; // Vérifier que les touches existent
+
+    if (player.onLadder) {
+        player.body.setAllowGravity(false); // Désactiver la gravité
+        console.log(`🧗‍♂️ Player ${player === this.player ? "1" : "2"} sur une liane !`);
+
+        // Déplacement vertical
+        if (keyUp.isDown) {
+            player.setVelocityY(-100); // Monter
+            console.log("⬆️ Monte !");
+        } else if (keyDown.isDown) {
+            player.setVelocityY(100); // Descendre
+            console.log("⬇️ Descend !");
+        } else {
+            player.setVelocityY(0); // Arrêt
+        }
+    } else {
+        player.body.setAllowGravity(true); // Réactiver la gravité si pas sur une liane
+    }
+
+    
 
     }
     checkLadder() {
@@ -499,3 +536,5 @@ boutonMenu.on("pointerdown", () => {
 }
 
 }
+
+//ajout inutile
