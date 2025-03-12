@@ -4,6 +4,7 @@ var clavier
 var player2
 var Pyramide1
 var cabane4
+var cloud3
 var igloo2
 let keyQ
 let keyD
@@ -36,6 +37,7 @@ export default class selection extends Phaser.Scene  {
     this.load.image("img_porte1", "src/assets/door1.png");
     this.load.image("img_porte2", "src/assets/door2.png");
     this.load.image("img_porte3", "src/assets/door3.png"); 
+    this.load.image("img_cloud3","src/assets/cloud3.png");
     this.load.image("img_Pyramide1","src/assets/Pyramide1.png");
     this.load.image("img_cabane4","src/assets/cabane4.png");
     this.load.image("img_igloo2","src/assets/igloo2.png");
@@ -63,8 +65,8 @@ keyQ = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.Q);
 keyZ = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.Z);
 keyD = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.D);
 
-    this.porte3 = this.physics.add.staticSprite(2100, 460, "img_porte3");
-    cabane4 = this.physics.add.staticSprite(2450, 270, "img_cabane4").setScale(0.3).refreshBody();
+    cloud3 = this.physics.add.staticSprite(2050, 460, "img_cloud3").setScale(0.2).refreshBody();
+    cabane4 = this.physics.add.staticSprite(450, 270, "img_cabane4").setScale(0.3).refreshBody();
     Pyramide1 = this.physics.add.staticSprite(740, 490, "img_Pyramide1").setScale(0.3).refreshBody();
     igloo2 = this.physics.add.staticSprite(1270, 410, "img_igloo2").setScale(0.1).refreshBody();
 
@@ -161,11 +163,11 @@ keyD = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.D);
   if (Phaser.Input.Keyboard.JustDown(clavier.space) == true) {
     if (this.physics.overlap(player, Pyramide1)) this.scene.start("niveau1");
     if (this.physics.overlap(player, igloo2)) this.scene.start("niveau2");
-    if (this.physics.overlap(player, this.porte3)) this.scene.start("niveau3");
+    if (this.physics.overlap(player, cloud3)) this.scene.start("niveau3");
     if (this.physics.overlap(player, cabane4)) this.scene.start("niveau4");
       if (this.physics.overlap(player2, Pyramide1)) this.scene.start("niveau1");
       if (this.physics.overlap(player2, igloo2)) this.scene.start("niveau2");
-      if (this.physics.overlap(player2, this.porte3)) this.scene.start("niveau3");
+      if (this.physics.overlap(player2, cloud3)) this.scene.start("niveau3");
       if (this.physics.overlap(player2, cabane4)) this.scene.start("niveau4");
   } 
 }}
