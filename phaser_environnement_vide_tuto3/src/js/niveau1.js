@@ -436,6 +436,8 @@ let texteMenu = this.add.text(
 
 // Rendre le bouton cliquable
 boutonMenu.on("pointerdown", () => {
+  
+  
   this.game.config.spawnX= 1270;
   this.game.config.spawnY=410;
   this.scene.start("selection");
