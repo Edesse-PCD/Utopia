@@ -45,7 +45,7 @@ this.load.tilemapTiledJSON("CarteJungle", "src/assets/Niveau4/MapJungle.json");
     create() {
 
       
-      this.musique_de_fond4 = this.sound.add('background4<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<'); 
+      this.musique_de_fond4 = this.sound.add('background4'); 
       this.musique_de_fond4.play();  
 // Position de départ (respawn du joueur)
 this.startPosition = { x: 100, y: 450 };
