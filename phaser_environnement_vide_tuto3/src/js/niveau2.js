@@ -1,4 +1,4 @@
-// chargement des librairies
+   // chargement des librairies
 
 export default class niveau2 extends Phaser.Scene {
   // constructeur de la classe
