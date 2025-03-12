@@ -32,6 +32,9 @@ export default class niveau2 extends Phaser.Scene {
 
 
   create() {
+    let IJ = this.scene.get("interface");
+    IJ.ApparaitreElephant();
+
     this.maxDistance = 700; // Distance maximale autorisée entre les joueurs
     this.startPosition = { x: 100, y: 450 };
     this.deathMessage = null;
