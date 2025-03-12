@@ -6,9 +6,11 @@ var Pyramide1
 var cabane4
 var cloud3
 var igloo2
+var introShown
 let keyQ
 let keyD
 let keyZ
+
 
 
 export default class selection extends Phaser.Scene  {
@@ -44,12 +46,45 @@ export default class selection extends Phaser.Scene  {
     this.load.image("img_cabane4","src/assets/cabane4.png");
     this.load.image("img_igloo2","src/assets/igloo2.png");
     this.load.tilemapTiledJSON("mapdebut", "src/assets/mapdebut.json");
+    introShown = false;
+
 
 
   }
   create() {
+
+if (!this.introShown) {
+    // Image d'intro (affichée une seule fois)
+    this.img_bienvenue = this.add.image(400, 300, "img_bienvenue").setDepth(10).setScale(0.5);
+    this.boutonCommencer = this.add.image(
+      this.cameras.main.width - 400, // Position X en haut à droite
+      400, // Position Y en haut
+      "bouton" // Clé de ton image de bouton
+    ).setOrigin(0.5)
+    .setScrollFactor(0) // Rendre le bouton fixe par rapport à la caméra
+    .setInteractive().setScale(0.20).setDepth(11);
     
-   
+    // Ajouter le texte "Menu" par-dessus le bouton
+    this.texteCommencer = this.add.text(
+      this.boutonCommencer.x, // Position X centrée sur le bouton
+      this.boutonCommencer.y, // Position Y centrée sur le bouton
+      "Commencer",
+      {
+          font: "20px Arial",
+          fill: "#000",   // Texte en noir
+          align: "center"
+      }
+    ).setOrigin(0.5)
+    .setScrollFactor(0).setDepth(12); // Rendre le texte fixe par rapport à la caméra
+    
+    // Rendre le bouton cliquable
+    this.boutonCommencer.on("pointerdown", () => {
+      this.boutonCommencer.destroy();
+      this.img_bienvenue.destroy();
+      this.texteCommencer.destroy();
+        });
+    this.introShown = true; // Marque l'intro comme affichée
+}
 
     if (this.game.config.spawnX != undefined) this.spawnX = this.game.config.spawnX;
     if (this.game.config.spawnY != undefined) this.spawnY = this.game.config.spawnY;
@@ -78,7 +113,11 @@ keyD = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.D);
       font: "32px Georgia",
       fill: "#fff",
   }).setOrigin(0.5);
-    cabane4 = this.physics.add.staticSprite(450, 270, "img_cabane4").setScale(0.3).refreshBody();
+    cabane4 = this.physics.add.staticSprite(2450, 270, "img_cabane4").setScale(0.3).refreshBody();
+    this.add.text(cabane4.x, cabane4.y + 80, "Niveau 4", {
+      font: "32px Georgia",
+      fill: "#fff",
+  }).setOrigin(0.5);
     Pyramide1 = this.physics.add.staticSprite(740, 490, "img_Pyramide1").setScale(0.3).refreshBody();
     this.add.text(Pyramide1.x, Pyramide1.y + 50, "Niveau 1", {
       font: "32px Georgia",
@@ -100,6 +139,9 @@ keyD = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.D);
     this.physics.world.setBounds(0,0,2560,640);
     this.cameras.main.setBounds(0,0,2560,640);
     clavier = this.input.keyboard.createCursorKeys();
+    
+    
+
     this.anims.create({
       key: "anim_tourne_gauche", // key est le nom de l'animation : doit etre unique poru la scene.
       frames: this.anims.generateFrameNumbers("img_perso", { start: 0, end: 3 }), // on prend toutes les frames de img perso numerotées de 0 à 3
@@ -142,7 +184,7 @@ keyD = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.D);
 
     player.setScale(2);
     player2.setScale(2);
-   
+    
   }
 
   update() {

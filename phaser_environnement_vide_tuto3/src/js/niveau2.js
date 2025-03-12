@@ -27,6 +27,7 @@ export default class niveau2 extends Phaser.Scene {
     this.load.image("ours", "src/assets/niveau2/ourspolaire.png");
     this.load.image("tileset_image", "src/assets/victoire_image.png");
     this.load.image("tileset_bouton","src/assets/bouton.png")
+    this.load.image("imageNiveau2","src/assets/niveau2/imageNiveau2.png")
     this.load.tilemapTiledJSON("map2", "src/assets/niveau2/mapBanquise.json");
     this.load.audio('background', 'src/assets/niveau2/aglagla.mp3');   
   }
@@ -36,9 +37,34 @@ export default class niveau2 extends Phaser.Scene {
    
     musique_de_fond = this.sound.add('background'); 
     musique_de_fond.play();  
-    let IJ = this.scene.get("interface");
-    IJ.ApparaitreElephant();
-
+    this.imageNiveau2 = this.add.image(400, 350, "imageNiveau2").setDepth(10).setScale(0.5);
+    this.boutonCommencer = this.add.image(
+      this.cameras.main.width - 250, // Position X en haut à droite
+      410, // Position Y en haut
+      "bouton" // Clé de ton image de bouton
+    ).setOrigin(0.5)
+    .setScrollFactor(0) // Rendre le bouton fixe par rapport à la caméra
+    .setInteractive().setScale(0.20).setDepth(11);
+    
+    // Ajouter le texte "Menu" par-dessus le bouton
+    this.texteCommencer = this.add.text(
+      this.boutonCommencer.x, // Position X centrée sur le bouton
+      this.boutonCommencer.y, // Position Y centrée sur le bouton
+      "Commencer",
+      {
+          font: "20px Arial",
+          fill: "#000",   // Texte en noir
+          align: "center"
+      }
+    ).setOrigin(0.5)
+    .setScrollFactor(0).setDepth(12); // Rendre le texte fixe par rapport à la caméra
+    
+    // Rendre le bouton cliquable
+    this.boutonCommencer.on("pointerdown", () => {
+      this.boutonCommencer.destroy();
+      this.imageNiveau2.destroy();
+      this.texteCommencer.destroy();
+        });
     this.maxDistance = 700; // Distance maximale autorisée entre les joueurs
     this.startPosition = { x: 100, y: 450 };
     this.deathMessage = null;
@@ -92,7 +118,7 @@ export default class niveau2 extends Phaser.Scene {
     this.physics.add.collider(this.player2, calque_plateform);    
     this.physics.world.setBounds(0,0,6400,640);
     this.cameras.main.setBounds(0,0,6400,640);
-    this.ours = this.physics.add.sprite(350, 340, "ours").setScale(0.5);
+    this.ours = this.physics.add.sprite(6350, 340, "ours").setScale(0.5);
     this.ours.setImmovable(true); // L'oiseau ne doit pas bouger s'il est touché
 this.ours.body.allowGravity = false; // Il ne doit pas tomber
 
@@ -133,6 +159,9 @@ this.boutonMenu.on("pointerdown", () => {
 // Ajout d'une touche pour redémarrer au niveau 
 this.toucheEntree = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.ENTER);
 
+var sij = this.scene.get("interfaceJeu");
+sij.debloquerAnimal(0); // Garde l'éléphant
+sij.debloquerAnimal(1); // Débloque l'ours
 
 
   }

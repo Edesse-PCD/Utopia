@@ -26,7 +26,34 @@ export default class niveau3 extends Phaser.Scene {
     this.musique_de_fond = this.sound.add('background'); 
     this.musique_de_fond.play();  
     this.maxDistance = 700; // Distance maximale autorisée entre les joueurs
-
+    this.imageNiveau3 = this.add.image(400, 350, "imageNiveau3").setDepth(10).setScale(0.5);
+    this.boutonCommencer = this.add.image(
+      this.cameras.main.width - 250, // Position X en haut à droite
+      410, // Position Y en haut
+      "tileset_bouton" // Clé de ton image de bouton
+    ).setOrigin(0.5)
+    .setScrollFactor(0) // Rendre le bouton fixe par rapport à la caméra
+    .setInteractive().setScale(0.20).setDepth(11);
+    
+    // Ajouter le texte "Menu" par-dessus le bouton
+    this.texteCommencer = this.add.text(
+      this.boutonCommencer.x, // Position X centrée sur le bouton
+      this.boutonCommencer.y, // Position Y centrée sur le bouton
+      "Commencer",
+      {
+          font: "20px Arial",
+          fill: "#000",   // Texte en noir
+          align: "center"
+      }
+    ).setOrigin(0.5)
+    .setScrollFactor(0).setDepth(12); // Rendre le texte fixe par rapport à la caméra
+    
+    // Rendre le bouton cliquable
+    this.boutonCommencer.on("pointerdown", () => {
+      this.boutonCommencer.destroy();
+      this.imageNiveau3.destroy();
+      this.texteCommencer.destroy();
+        });
     // chargement du jeu de tuiles
     const carteDuNiveau = this.add.tilemap("carte");
     const tileset = carteDuNiveau.addTilesetImage(
@@ -75,10 +102,7 @@ export default class niveau3 extends Phaser.Scene {
 
 
     // ajout d'un texte distintcif  du niveau
-    this.add.text(400, 100, "Vous êtes dans le niveau 3", {
-      fontFamily: 'Georgia, "Goudy Bookletter 1911", Times, serif',
-      fontSize: "22pt"
-    });
+
 
     this.player = this.physics.add.sprite(350, 450, "img_dino");
     this.player.setBounce(0.2);
