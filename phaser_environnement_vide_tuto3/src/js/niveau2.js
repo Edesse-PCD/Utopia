@@ -32,9 +32,7 @@ export default class niveau2 extends Phaser.Scene {
 
 
   create() {
-    let IJ = this.scene.get("interface");
-    IJ.ApparaitreElephant();
-
+    
     this.maxDistance = 700; // Distance maximale autorisée entre les joueurs
     this.startPosition = { x: 100, y: 450 };
     this.deathMessage = null;
@@ -129,7 +127,10 @@ this.boutonMenu.on("pointerdown", () => {
 // Ajout d'une touche pour redémarrer au niveau 
 this.toucheEntree = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.ENTER);
 
+
+
   }
+
 
   update() {
     let messageDisplayed = false; // Pour s'assurer que le message n'est affiché qu'une seule fois
