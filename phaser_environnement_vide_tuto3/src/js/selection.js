@@ -116,7 +116,11 @@ keyD = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.D);
       font: "32px Georgia",
       fill: "#fff",
   }).setOrigin(0.5);
-    cabane4 = this.physics.add.staticSprite(450, 270, "img_cabane4").setScale(0.3).refreshBody();
+    cabane4 = this.physics.add.staticSprite(2450, 270, "img_cabane4").setScale(0.3).refreshBody();
+    this.add.text(cabane4.x, cabane4.y + 80, "Niveau 4", {
+      font: "32px Georgia",
+      fill: "#fff",
+  }).setOrigin(0.5);
     Pyramide1 = this.physics.add.staticSprite(740, 490, "img_Pyramide1").setScale(0.3).refreshBody();
     this.add.text(Pyramide1.x, Pyramide1.y + 50, "Niveau 1", {
       font: "32px Georgia",

@@ -26,10 +26,10 @@ export default class niveau3 extends Phaser.Scene {
 
   create() {
     this.maxDistance = 700; // Distance maximale autorisée entre les joueurs
-    this.imageNiveau3 = this.add.image(400, 300, "imageNiveau3").setDepth(10).setScale(0.5);
+    this.imageNiveau3 = this.add.image(400, 350, "imageNiveau3").setDepth(10).setScale(0.5);
     this.boutonCommencer = this.add.image(
       this.cameras.main.width - 250, // Position X en haut à droite
-      360, // Position Y en haut
+      410, // Position Y en haut
       "tileset_bouton" // Clé de ton image de bouton
     ).setOrigin(0.5)
     .setScrollFactor(0) // Rendre le bouton fixe par rapport à la caméra
