@@ -282,7 +282,7 @@ this.texteMenu.setDepth(1001);
           this.deathMessage = this.add.text(400, 300, 'Vous êtes trop éloignés! Restez coopératifs', { 
               font: '32px Georgia', 
               fill: '#fff',
-          }).setOrigin(0.5).setScrollFactor(0); // Centrer par rapport à la caméra
+          }).setOrigin(0.5).setScrollFactor(0).setDepth(22); // Centrer par rapport à la caméra
       }
         // Désactiver les mouvements des deux joueurs
         this.player.setVelocity(0, 0);
@@ -540,6 +540,7 @@ boutonMenu.on("pointerdown", () => {
 
 
 }
+
 
 }
 
