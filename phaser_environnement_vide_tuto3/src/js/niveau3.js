@@ -14,6 +14,8 @@ export default class niveau3 extends Phaser.Scene {
     this.load.image("tileset_tuiles", "src/assets/Niveau_3/tuiles_de_jeu.png");
     this.load.image("tileset_image", "src/assets/victoire_image.png");
     this.load.image("tileset_bouton", "src/assets/bouton.png");
+    this.load.image("bouton","src/assets/bouton.png")
+
     
 
     // chargement de la carte
@@ -21,6 +23,7 @@ export default class niveau3 extends Phaser.Scene {
   }
 
   create() {
+    this.maxDistance = 700; // Distance maximale autorisée entre les joueurs
 
     // chargement du jeu de tuiles
     const carteDuNiveau = this.add.tilemap("carte");
@@ -69,10 +72,6 @@ export default class niveau3 extends Phaser.Scene {
     this.cameras.main.setBounds(0, 0, 6400, 640);
 
 
-
-
-
-    this.porte_retour = this.physics.add.staticSprite(100, 550, "img_porte3");
     // ajout d'un texte distintcif  du niveau
     this.add.text(400, 100, "Vous êtes dans le niveau 3", {
       fontFamily: 'Georgia, "Goudy Bookletter 1911", Times, serif',
@@ -109,8 +108,37 @@ this.oiseau.setImmovable(true); // L'oiseau ne doit pas bouger s'il est touché
 this.oiseau.body.allowGravity = false; // Il ne doit pas tomber
 
 // Détection de collision entre le joueur et l'oiseau
-this.physics.add.overlap(this.player, this.oiseau, this.gagner, null, this);
-this.physics.add.overlap(this.player2, this.oiseau, this.gagner2, null, this);
+this.physics.add.overlap(this.player, this.oiseau, () => {
+  if (this.physics.overlap(this.player2, this.oiseau)) {
+      this.gagner();
+  }
+}, null, this);
+ // Création du bouton en haut à droite
+this.boutonMenu = this.add.image(
+this.cameras.main.width - 50, // Position X en haut à droite
+  25, // Position Y en haut
+  "bouton" // Clé de ton image de bouton
+).setOrigin(0.5)
+.setScrollFactor(0) // Rendre le bouton fixe par rapport à la caméra
+.setInteractive().setScale(0.10);
+
+// Ajouter le texte "Menu" par-dessus le bouton
+this.texteMenu = this.add.text(
+  this.boutonMenu.x, // Position X centrée sur le bouton
+  this.boutonMenu.y, // Position Y centrée sur le bouton
+  "Menu",
+  {
+      font: "20px Arial",
+      fill: "#000",   // Texte en noir
+      align: "center"
+  }
+).setOrigin(0.5)
+.setScrollFactor(0); // Rendre le texte fixe par rapport à la caméra
+
+// Rendre le bouton cliquable
+this.boutonMenu.on("pointerdown", () => {
+  this.scene.start("selection");
+});
 
 // Ajout d'une touche pour redémarrer au niveau 1
 this.toucheEntree = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.ENTER);
@@ -122,6 +150,37 @@ this.deathMessage = null;
   }
 
   update() {
+    const distance = Phaser.Math.Distance.Between(this.player.x, this.player.y, this.player2.x, this.player2.y);
+
+if (distance > this.maxDistance) {
+    // Afficher le message de mort pour les deux joueurs
+    if (!this.deathMessage) {
+        this.deathMessage = this.add.text(400, 300, 'Vous êtes trop éloignés! Restez coopératifs', { 
+            font: '32px Georgia', 
+            fill: '#fff', 
+        }).setOrigin(0.5).setScrollFactor(0); // Centrer par rapport à la caméra
+    }
+
+    // Désactiver les mouvements des deux joueurs
+    this.player.setVelocity(0, 0);
+    this.player2.setVelocity(0, 0);
+    this.player.body.enable = false;
+    this.player2.body.enable = false;
+
+    // Attendre un court instant avant de les respawn
+    this.time.delayedCall(1000, () => {
+        this.player.setPosition(this.startPosition.x, this.startPosition.y);
+        this.player2.setPosition(this.startPosition.x, this.startPosition.y);
+        this.player.body.enable = true;
+        this.player2.body.enable = true;
+
+        // Supprimer le message de mort
+        if (this.deathMessage) {
+            this.deathMessage.destroy();
+            this.deathMessage = null;
+        }
+    });
+}
     if (this.clavier.left.isDown) {
       this.player.flipX=true;
       this.player.setVelocityX(-160);
@@ -153,25 +212,15 @@ this.deathMessage = null;
     if (this.keyZ.isDown && this.player2.body.blocked.down) {
       this.player2.setVelocityY(-330);
     }
-    if (Phaser.Input.Keyboard.JustDown(this.clavier.space) == true) {
-      if (this.physics.overlap(this.player, this.porte_retour) || this.physics.overlap(this.player2, this.porte_retour)) {
-        this.scene.start("selection");
-      }
-    }
     
-
-
-
-
 
 
   // Mort joueur 1
 if (this.player.y >= this.cameras.main.height && !this.deathMessage) {
   // Afficher le message de mort s'il n'existe pas déjà
   this.deathMessage = this.add.text(400, 300, 'Vous êtes mort !', { 
-    font: '32px Arial', 
+    font: '32px Georgia', 
     fill: '#fff', 
-    backgroundColor: '#000' 
   }).setOrigin(0.5).setScrollFactor(0);
   
   // Désactiver le corps physique du joueur 1
@@ -179,7 +228,7 @@ if (this.player.y >= this.cameras.main.height && !this.deathMessage) {
   this.player.body.enable = false;
 
   // Redémarrer la scène après 500 ms
-  this.time.delayedCall(500, () => {
+  this.time.delayedCall(1000, () => {
     this.scene.restart();
   });
 }
@@ -188,9 +237,8 @@ if (this.player.y >= this.cameras.main.height && !this.deathMessage) {
 if (this.player2.y >= this.cameras.main.height && !this.deathMessage) {
   // Afficher le message de mort s'il n'existe pas déjà
   this.deathMessage = this.add.text(400, 300, 'Vous êtes mort !', { 
-    font: '32px Arial', 
+    font: '32px Georgia', 
     fill: '#fff', 
-    backgroundColor: '#000' 
   }).setOrigin(0.5).setScrollFactor(0);
   
   // Désactiver le corps physique du joueur 2
@@ -198,7 +246,7 @@ if (this.player2.y >= this.cameras.main.height && !this.deathMessage) {
   this.player2.body.enable = false;
 
   // Redémarrer la scène après 500 ms
-  this.time.delayedCall(500, () => {
+  this.time.delayedCall(1000, () => {
     this.scene.restart();
   });
 }
@@ -243,7 +291,10 @@ let texteMenu = this.add.text(
 
 // Rendre le bouton cliquable
 boutonMenu.on("pointerdown", () => {
+  this.game.config.spawnX= 2450;
+    this.game.config.spawnY=270;
   this.scene.start("selection");
+
 });
 
   }

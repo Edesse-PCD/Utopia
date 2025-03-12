@@ -29,3 +29,10 @@ var config = {
 var game = new Phaser.Game(config);
 game.scene.start("selection");
 
+const gameState = {
+  capturedAnimals: [false, false, false, false] // Un tableau pour suivre les animaux capturés par niveau
+};
+
+export default gameState;
+window.progressionAnimaux = [false, false, false, false]; // Tous non capturés au début
+

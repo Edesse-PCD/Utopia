@@ -24,9 +24,9 @@ export default class niveau2 extends Phaser.Scene {
     this.load.image("16", "src/assets/niveau2/Tiles/16.png");
     this.load.image("17", "src/assets/niveau2/Tiles/17.png");
     this.load.image("BG", "src/assets/niveau2/BG.png");
-    this.load.image("ours", "src/assets/niveau2/ours.png");
+    this.load.image("ours", "src/assets/niveau2/ourspolaire.png");
     this.load.image("tileset_image", "src/assets/victoire_image.png");
-    this.load.image("bouton","src/assets/bouton.png")
+    this.load.image("tileset_bouton","src/assets/bouton.png")
     this.load.tilemapTiledJSON("map2", "src/assets/niveau2/mapBanquise.json");
   }
 
@@ -66,12 +66,14 @@ export default class niveau2 extends Phaser.Scene {
     calque_plateform.setCollisionByProperty({ estSolide: true });
     this.piquants = carteDuNiveau.createLayer("piquants", tileset2);
     const animal = carteDuNiveau.createLayer("animal", tileset2);
+    const glace = carteDuNiveau.createLayer("glace", tileset2);
 
 
    
     this.player = this.physics.add.sprite(100, 450, "img_dino");
     this.player.refreshBody();
     this.player.setCollideWorldBounds(true);
+    this.cameras.main.startFollow(this.player);
     this.clavier = this.input.keyboard.createCursorKeys();
     this.keyQ = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.Q);
     this.keyZ = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.Z);
@@ -83,7 +85,7 @@ export default class niveau2 extends Phaser.Scene {
     this.physics.add.collider(this.player2, calque_plateform);    
     this.physics.world.setBounds(0,0,6400,640);
     this.cameras.main.setBounds(0,0,6400,640);
-    this.ours = this.physics.add.sprite(6350, 340, "ours");
+    this.ours = this.physics.add.sprite(350, 340, "ours").setScale(0.5);
     this.ours.setImmovable(true); // L'oiseau ne doit pas bouger s'il est touché
 this.ours.body.allowGravity = false; // Il ne doit pas tomber
 
@@ -135,16 +137,11 @@ const distance = Phaser.Math.Distance.Between(this.player.x, this.player.y, this
 if (distance > this.maxDistance) {
     // Afficher le message de mort pour les deux joueurs
     if (!this.deathMessage) {
-        const camera = this.cameras.main;
-        const centerX = camera.midPoint.x;
-        const centerY = camera.midPoint.y;
-
-        this.deathMessage = this.add.text(centerX, centerY, 'Vous êtes trop éloignés! Restez coopératifs', { 
-            font: '32px Georgia', 
-            fill: '#fff', 
-        }).setOrigin(0.5).setScrollFactor(0); // Centrer par rapport à la caméra
-    }
-
+      this.deathMessage = this.add.text(400, 300, 'Vous êtes trop éloignés! Restez coopératifs', { 
+          font: '32px Georgia', 
+          fill: '#fff',
+      }).setOrigin(0.5).setScrollFactor(0); // Centrer par rapport à la caméra
+  }
     // Désactiver les mouvements des deux joueurs
     this.player.setVelocity(0, 0);
     this.player2.setVelocity(0, 0);
@@ -152,9 +149,9 @@ if (distance > this.maxDistance) {
     this.player2.body.enable = false;
 
     // Attendre un court instant avant de les respawn
-    this.time.delayedCall(1000, () => {
+    this.time.delayedCall(2000, () => {
         this.player.setPosition(this.startPosition.x, this.startPosition.y);
-        this.player2.setPosition(this.startPosition.x, this.startPosition.y);
+        this.player2.setPosition(this.startPosition.x+50, this.startPosition.y);
         this.player.body.enable = true;
         this.player2.body.enable = true;
 
@@ -178,9 +175,8 @@ if (distance > this.maxDistance) {
     if (dangerTile || dangerTile2) {
       if (!this.deathMessage) {
           this.deathMessage = this.add.text(400, 300, 'Vous êtes mort !', { 
-              font: '32px Arial', 
+              font: '32px Georgia', 
               fill: '#fff', 
-              backgroundColor: '#000' 
           }).setOrigin(0.5).setScrollFactor(0);
       }
   
@@ -192,8 +188,8 @@ if (distance > this.maxDistance) {
     this.player2.body.enable = false;
 
     // Attendre un court instant avant de le faire respawn (évite un bug de collision)
-    this.time.delayedCall(500, () => {
-        this.player.setPosition(this.startPosition.x, this.startPosition.y); 
+    this.time.delayedCall(1000, () => {
+        this.player.setPosition(this.startPosition.x+50, this.startPosition.y); 
         this.player2.setPosition(this.startPosition.x, this.startPosition.y); // Respawn au point de départ
         // Respawn au point de départ
         this.player.body.enable = true; // Réactiver le corps du joueur
@@ -228,9 +224,8 @@ let dangerTile4 = this.piquants.getTileAtWorldXY(player2BottomCenter.x, player2B
 if (dangerTile3 || dangerTile4) {
   if (!this.deathMessage) {
       this.deathMessage = this.add.text(400, 300, 'Vous êtes mort !', { 
-          font: '32px Arial', 
+          font: '32px Georgia', 
           fill: '#fff', 
-          backgroundColor: '#000' 
       }).setOrigin(0.5).setScrollFactor(0); // Rendre le texte fixe par rapport à la caméra
       
   }
@@ -244,7 +239,7 @@ this.player.body.enable = false;
 
 
 // Attendre un court instant avant de le faire respawn (évite un bug de collision)
-this.time.delayedCall(500, () => {
+this.time.delayedCall(1000, () => {
     this.player2.setPosition(this.startPosition.x, this.startPosition.y);
     this.player.setPosition(this.startPosition.x, this.startPosition.y); // Respawn au point de départ
     // Respawn au point de départ
@@ -299,11 +294,8 @@ this.time.delayedCall(500, () => {
         this.scene.start("selection");
       }
     }
-const centerX = (this.player.x + this.player2.x) / 2;
-const centerY = (this.player.y + this.player2.y) / 2;
-this.cameras.main.centerOn(centerX, centerY);
 
-
+    
   }
 
 
@@ -322,8 +314,37 @@ this.cameras.main.centerOn(centerX, centerY);
     this.player2.setVelocity(0, 0); // Immobilise le joueur en arrêtant ses vitesses X et Y
     this.player2.anims.stop();  // Stoppe l'animation du joueur
     this.physics.world.pause(); // Met en pause la physique du monde (plus rien ne bouge)
+    
   
   // Afficher l'asset de bouton
+  let boutonMenu = this.add.image(
+    this.cameras.main.worldView.x + this.cameras.main.width / 2, // Position X centrée
+    this.cameras.main.worldView.y + this.cameras.main.height / 2 + 240, // Position Y sous l'image
+    "tileset_bouton" // Clé de ton image de bouton
+  ).setOrigin(0.5)
+  .setInteractive().setScale(0.25);
+  
+  // Ajouter le texte "Menu" par-dessus le bouton
+  let texteMenu = this.add.text(
+    boutonMenu.x, // Position X centrée sur le bouton
+    boutonMenu.y, // Position Y centrée sur le bouton
+    "Niveau \nSuivant",
+    {
+        font: "20px Arial",
+        fill: "#000",   // Texte en noir
+        align: "center"
+    }
+  ).setOrigin(0.5);
+  
+  // Rendre le bouton cliquable
+  boutonMenu.on("pointerdown", () => {
+    this.game.config.spawnX= 2050;
+    this.game.config.spawnY=300;
+    this.scene.start("selection");
+  
+  });
+  
+    
 
   }
 }
