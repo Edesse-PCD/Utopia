@@ -190,10 +190,6 @@ this.cameras.main.setBounds(0, 0, 6400, 640);
 // Ancrage de la caméra sur le joueur
 this.cameras.main.startFollow(this.player);
 
-this.player.setScale(2);
-this.player2.setScale(2);
-
-
 
 // Ajout d'un booléen pour savoir si le joueur est sur une liane
 this.player.onLadder = false;
@@ -201,7 +197,8 @@ this.player.onLadder = false;
 
 this.player.setDepth(20); // Met le joueur devant
 this.player2.setDepth(20); // Met aussi le 2e joueur devant
-
+this.player.setScale(2);
+this.player2.setScale(2);
 
 
     
@@ -216,32 +213,32 @@ this.player2.setDepth(20); // Met aussi le 2e joueur devant
 
       // Déplacement joueur 1
       if (this.clavier.left.isDown) {
-          this.player.setVelocityX(-160);
-          this.player.anims.play("anim_tourne_gauche", true);
+        this.player.flipX=true;
+        this.player.setVelocityX(-160);
+        this.player.anims.play("animdino_marche", true);
       } else if (this.clavier.right.isDown) {
-          this.player.setVelocityX(160);
-          this.player.anims.play("anim_tourne_droite", true);
-      } else {
-          this.player.setVelocityX(0);
-          this.player.anims.play("anim_face");
-      }
-  
-      // Saut joueur 1
-      if (this.clavier.up.isDown && this.player.body.blocked.down) {
-          this.player.setVelocityY(-330);
-      }
-  
-      // Déplacement joueur 2
-      if (this.keyQ.isDown) {
-          this.player2.setVelocityX(-160);
-          this.player2.anims.play("anim_tourne_gauche", true);
+        this.player.flipX=false;
+        this.player.setVelocityX(160);
+        this.player.anims.play("animdino_marche", true);
       } else if (this.keyD.isDown) {
-          this.player2.setVelocityX(160);
-          this.player2.anims.play("anim_tourne_droite", true);
+        this.player2.flipX=false;
+        this.player2.setVelocityX(160);
+        this.player2.anims.play("animdino2_marche", true);
+      } else if (this.keyQ.isDown) {
+        this.player2.flipX=true;
+
+        this.player2.setVelocityX(-160);
+        this.player2.anims.play("animdino2_marche", true);
       } else {
-          this.player2.setVelocityX(0);
-          this.player2.anims.play("anim_face");
+        this.player.setVelocityX(0);
+        this.player.anims.play("animdino_face");
+        this.player2.setVelocityX(0);
+        this.player2.anims.play("animdino2_face");
       }
+      
+      if (this.clavier.up.isDown && this.player.body.blocked.down) {
+        this.player.setVelocityY(-330);
+    }
   
       // Saut joueur 2
       if (this.keyZ.isDown && this.player2.body.blocked.down) {
