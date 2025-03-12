@@ -192,8 +192,7 @@ this.elephant.x = 400;
     );
     this.scene.bringToTop("interfaceJeu");
 
-    var sij = this.scene.get("interfaceJeu");
-    sij.debloquerAnimal(0);
+  
 
 
 
