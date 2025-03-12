@@ -180,7 +180,7 @@ if (this.ladder_layer) {
     this.player2.setCollideWorldBounds(true);
     this.clavier = this.input.keyboard.createCursorKeys();
 
-    this.Panda = this.physics.add.sprite(500, 620, "Panda");
+    this.Panda = this.physics.add.sprite(100, 560, "Panda");
     this.Panda.setImmovable(true); // le panda ne doit pas bouger s'il est touché
     this.Panda.body.allowGravity = false; // Il ne doit pas tomber
     
@@ -346,11 +346,11 @@ this.time.delayedCall(500, () => {
       // Déplacement joueur 1
       if (this.clavier.left.isDown) {
         this.player.flipX=true;
-        this.player.setVelocityX(-160);
+        this.player.setVelocityX(-1600);
         this.player.anims.play("animdino_marche", true); // player 1 tourne a gauche
       } else if (this.clavier.right.isDown) {
         this.player.flipX=false;
-        this.player.setVelocityX(160);
+        this.player.setVelocityX(1600);
         this.player.anims.play("animdino_marche", true); // player 1 tourne a droite
       } else if (this.keyD.isDown) {
         this.player2.flipX=false;
@@ -503,3 +503,5 @@ boutonMenu.on("pointerdown", () => {
 }
 
 }
+
+//ajout inutile
