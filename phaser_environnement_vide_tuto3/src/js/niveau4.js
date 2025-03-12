@@ -249,8 +249,12 @@ this.texteMenu.setDepth(1001);
     this.scene.start("selection");
   });
 
-    
+  var sij = this.scene.get("interfaceJeu");
+  sij.debloquerAnimal(0); // Garde l'éléphant
+  sij.debloquerAnimal(1); // Débloque l'ours
+  sij.debloquerAnimal(2); // Débloque l'oiseau
     } 
+
   
     update() {
     this.checkLadder();    

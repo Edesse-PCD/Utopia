@@ -161,7 +161,7 @@ this.toucheEntree = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.EN
 
 var sij = this.scene.get("interfaceJeu");
 sij.debloquerAnimal(0); // Garde l'éléphant
-sij.debloquerAnimal(1); // Débloque l'ours
+
 
 
   }
