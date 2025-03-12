@@ -376,11 +376,11 @@ this.time.delayedCall(500, () => {
       // Déplacement joueur 1
       if (this.clavier.left.isDown) {
         this.player.flipX=true;
-        this.player.setVelocityX(-1600);
+        this.player.setVelocityX(-160);
         this.player.anims.play("animdino_marche", true); // player 1 tourne a gauche
       } else if (this.clavier.right.isDown) {
         this.player.flipX=false;
-        this.player.setVelocityX(1600);
+        this.player.setVelocityX(160);
         this.player.anims.play("animdino_marche", true); // player 1 tourne a droite
       } else if (this.keyD.isDown) {
         this.player2.flipX=false;
@@ -399,7 +399,7 @@ this.time.delayedCall(500, () => {
       }
       
         if (this.clavier.up.isDown && this.player.body.blocked.down) {
-          this.player.setVelocityY(-2450);
+          this.player.setVelocityY(-245);
       }
     
         // Saut joueur 2
