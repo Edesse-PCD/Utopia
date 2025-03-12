@@ -28,10 +28,14 @@ export default class niveau2 extends Phaser.Scene {
     this.load.image("tileset_image", "src/assets/victoire_image.png");
     this.load.image("tileset_bouton","src/assets/bouton.png")
     this.load.tilemapTiledJSON("map2", "src/assets/niveau2/mapBanquise.json");
+    this.load.audio('background', 'src/assets/niveau2/aglagla.mp3');   
   }
 
 
   create() {
+    var musique_de_fond;
+    musique_de_fond = this.sound.add('background'); 
+    musique_de_fond.play();  
     let IJ = this.scene.get("interface");
     IJ.ApparaitreElephant();
 
