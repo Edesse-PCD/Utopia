@@ -209,6 +209,9 @@ this.player2.setDepth(20); // Met aussi le 2e joueur devant
     } 
   
     update() {
+
+  
+        
       this.checkLadder();
 
       // Déplacement joueur 1
@@ -256,6 +259,7 @@ this.player2.setDepth(20); // Met aussi le 2e joueur devant
           }
       }
   }
+  
   
   /**
    * Gère le mouvement d'un joueur sur les lianes.
