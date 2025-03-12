@@ -30,7 +30,7 @@ export default class niveau4 extends Phaser.Scene {
   this.load.image("shack1_bg", "src/assets/Niveau4/shack1_bg.png");
   this.load.image("shack2", "src/assets/Niveau4/shack2.png");
   this.load.image("shack3", "src/assets/Niveau4/shack3.png");
-  this.load.image("Tree_2", "src/assets/Niveau4/Tree_2.png");
+  this.load.image("Arbre", "src/assets/Niveau4/Arbre.png");
   this.load.image("bouton","src/assets/bouton.png")
   this.load.image("tileset_image", "src/assets/victoire_image.png");
   this.load.audio('background', 'src/assets/Niveau4/indiana_johns.mp3'); 
@@ -77,7 +77,7 @@ const tilesets = [
     carteDuNiveau.addTilesetImage("shack1_bg", "shack1_bg"),
     carteDuNiveau.addTilesetImage("shack2", "shack2"),
     carteDuNiveau.addTilesetImage("shack3", "shack3"),
-    carteDuNiveau.addTilesetImage("Tree_2", "Tree_2"),
+    carteDuNiveau.addTilesetImage("Arbre", "Arbre"),
     
     
 ];
@@ -155,8 +155,9 @@ if (this.ladder_layer) {
 
 
 
-    this.porte_retour = this.physics.add.staticSprite(100, 550, "img_porte1"); 
-
+    this.porte_retour = this.physics.add.staticSprite(150, 590, "img_porte1")
+        .setDepth(-1); // Met la porte derrière tous les autres éléments 
+    
 
     this.player = this.physics.add.sprite(100, 450, "img_dino");
     this.physics.add.collider(this.player, calque_feuillageSolide);
@@ -367,12 +368,12 @@ this.time.delayedCall(500, () => {
       }
       
       if (this.clavier.up.isDown && this.player.body.blocked.down) {
-        this.player.setVelocityY(-330);
+        this.player.setVelocityY(-245);
     }
   
       // Saut joueur 2
       if (this.keyZ.isDown && this.player2.body.blocked.down) {
-          this.player2.setVelocityY(-330);
+          this.player2.setVelocityY(-245);
       }
   
       // Gestion des lianes pour **les deux joueurs**

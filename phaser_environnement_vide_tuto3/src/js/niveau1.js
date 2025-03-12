@@ -221,7 +221,7 @@ this.elephant.body.allowGravity = false; // Il ne doit pas tomber
       "bouton" // Clé de ton image de bouton
     ).setOrigin(0.5)
     .setScrollFactor(0) // Rendre le bouton fixe par rapport à la caméra
-    .setInteractive().setScale(0.25);
+    .setInteractive().setScale(0.10);
     
     // Ajouter le texte "Menu" par-dessus le bouton
     this.texteMenu = this.add.text(
@@ -420,7 +420,7 @@ let boutonMenu = this.add.image(
   this.cameras.main.worldView.y + this.cameras.main.height / 2 + 240, // Position Y sous l'image
   "bouton" // Clé de ton image de bouton
 ).setOrigin(0.5)
-.setInteractive().setScale(0.15);
+.setInteractive().setScale(0.25);
 
 // Ajouter le texte "Menu" par-dessus le bouton
 let texteMenu = this.add.text(
