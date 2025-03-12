@@ -24,7 +24,7 @@ export default class niveau2 extends Phaser.Scene {
     this.load.image("16", "src/assets/niveau2/Tiles/16.png");
     this.load.image("17", "src/assets/niveau2/Tiles/17.png");
     this.load.image("BG", "src/assets/niveau2/BG.png");
-    this.load.image("ours", "src/assets/niveau2/ours.png");
+    this.load.image("ours", "src/assets/niveau2/ourspolaire.png");
     this.load.image("tileset_image", "src/assets/victoire_image.png");
     this.load.image("tileset_bouton","src/assets/bouton.png")
     this.load.tilemapTiledJSON("map2", "src/assets/niveau2/mapBanquise.json");
@@ -66,6 +66,7 @@ export default class niveau2 extends Phaser.Scene {
     calque_plateform.setCollisionByProperty({ estSolide: true });
     this.piquants = carteDuNiveau.createLayer("piquants", tileset2);
     const animal = carteDuNiveau.createLayer("animal", tileset2);
+    const glace = carteDuNiveau.createLayer("glace", tileset2);
 
 
    
@@ -84,7 +85,7 @@ export default class niveau2 extends Phaser.Scene {
     this.physics.add.collider(this.player2, calque_plateform);    
     this.physics.world.setBounds(0,0,6400,640);
     this.cameras.main.setBounds(0,0,6400,640);
-    this.ours = this.physics.add.sprite(350, 340, "ours");
+    this.ours = this.physics.add.sprite(350, 340, "ours").setScale(0.5);
     this.ours.setImmovable(true); // L'oiseau ne doit pas bouger s'il est touché
 this.ours.body.allowGravity = false; // Il ne doit pas tomber
 
@@ -294,7 +295,7 @@ this.time.delayedCall(1000, () => {
       }
     }
 
-
+    
   }
 
 
