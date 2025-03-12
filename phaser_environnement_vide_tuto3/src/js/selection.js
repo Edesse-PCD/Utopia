@@ -43,12 +43,17 @@ export default class selection extends Phaser.Scene  {
     this.load.image("img_Pyramide1","src/assets/Pyramide1.png");
     this.load.image("img_cabane4","src/assets/cabane4.png");
     this.load.image("img_igloo2","src/assets/igloo2.png");
+    this.load.image("img_bienvenue","src/assets/BienvenueUtopia.png");
+    this.load.image("bouton","src/assets/bouton.png");
+
     this.load.tilemapTiledJSON("mapdebut", "src/assets/mapdebut.json");
+    
 
 
   }
   create() {
-   
+this.img_bienvenue = this.add.image(400, 300, "img_bienvenue").setDepth(10).setScale(0.5);
+    // Création du bouton "Commencer"
 
     if (this.game.config.spawnX != undefined) this.spawnX = this.game.config.spawnX;
     if (this.game.config.spawnY != undefined) this.spawnY = this.game.config.spawnY;
@@ -99,6 +104,35 @@ keyD = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.D);
     this.physics.world.setBounds(0,0,2560,640);
     this.cameras.main.setBounds(0,0,2560,640);
     clavier = this.input.keyboard.createCursorKeys();
+    
+    this.boutonCommencer = this.add.image(
+      this.cameras.main.width - 400, // Position X en haut à droite
+      400, // Position Y en haut
+      "bouton" // Clé de ton image de bouton
+    ).setOrigin(0.5)
+    .setScrollFactor(0) // Rendre le bouton fixe par rapport à la caméra
+    .setInteractive().setScale(0.20).setDepth(11);
+    
+    // Ajouter le texte "Menu" par-dessus le bouton
+    this.texteCommencer = this.add.text(
+      this.boutonCommencer.x, // Position X centrée sur le bouton
+      this.boutonCommencer.y, // Position Y centrée sur le bouton
+      "Commencer",
+      {
+          font: "20px Arial",
+          fill: "#000",   // Texte en noir
+          align: "center"
+      }
+    ).setOrigin(0.5)
+    .setScrollFactor(0).setDepth(12); // Rendre le texte fixe par rapport à la caméra
+    
+    // Rendre le bouton cliquable
+    this.boutonCommencer.on("pointerdown", () => {
+      this.boutonCommencer.destroy();
+      this.img_bienvenue.destroy();
+      this.texteCommencer.destroy();
+        });
+
     this.anims.create({
       key: "anim_tourne_gauche", // key est le nom de l'animation : doit etre unique poru la scene.
       frames: this.anims.generateFrameNumbers("img_perso", { start: 0, end: 3 }), // on prend toutes les frames de img perso numerotées de 0 à 3
