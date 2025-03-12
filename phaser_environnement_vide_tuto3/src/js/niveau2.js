@@ -136,16 +136,11 @@ const distance = Phaser.Math.Distance.Between(this.player.x, this.player.y, this
 if (distance > this.maxDistance) {
     // Afficher le message de mort pour les deux joueurs
     if (!this.deathMessage) {
-        const camera = this.cameras.main;
-        const centerX = camera.midPoint.x;
-        const centerY = camera.midPoint.y;
-
-        this.deathMessage = this.add.text(centerX, centerY, 'Vous êtes trop éloignés! Restez coopératifs', { 
-            font: '32px Georgia', 
-            fill: '#fff', 
-        }).setOrigin(0.5).setScrollFactor(0); // Centrer par rapport à la caméra
-    }
-
+      this.deathMessage = this.add.text(400, 300, 'Vous êtes trop éloignés! Restez coopératifs', { 
+          font: '32px Georgia', 
+          fill: '#fff',
+      }).setOrigin(0.5).setScrollFactor(0); // Centrer par rapport à la caméra
+  }
     // Désactiver les mouvements des deux joueurs
     this.player.setVelocity(0, 0);
     this.player2.setVelocity(0, 0);
@@ -153,9 +148,9 @@ if (distance > this.maxDistance) {
     this.player2.body.enable = false;
 
     // Attendre un court instant avant de les respawn
-    this.time.delayedCall(1000, () => {
+    this.time.delayedCall(2000, () => {
         this.player.setPosition(this.startPosition.x, this.startPosition.y);
-        this.player2.setPosition(this.startPosition.x, this.startPosition.y);
+        this.player2.setPosition(this.startPosition.x+50, this.startPosition.y);
         this.player.body.enable = true;
         this.player2.body.enable = true;
 
@@ -179,9 +174,8 @@ if (distance > this.maxDistance) {
     if (dangerTile || dangerTile2) {
       if (!this.deathMessage) {
           this.deathMessage = this.add.text(400, 300, 'Vous êtes mort !', { 
-              font: '32px Arial', 
+              font: '32px Georgia', 
               fill: '#fff', 
-              backgroundColor: '#000' 
           }).setOrigin(0.5).setScrollFactor(0);
       }
   
@@ -193,8 +187,8 @@ if (distance > this.maxDistance) {
     this.player2.body.enable = false;
 
     // Attendre un court instant avant de le faire respawn (évite un bug de collision)
-    this.time.delayedCall(500, () => {
-        this.player.setPosition(this.startPosition.x, this.startPosition.y); 
+    this.time.delayedCall(1000, () => {
+        this.player.setPosition(this.startPosition.x+50, this.startPosition.y); 
         this.player2.setPosition(this.startPosition.x, this.startPosition.y); // Respawn au point de départ
         // Respawn au point de départ
         this.player.body.enable = true; // Réactiver le corps du joueur
@@ -229,9 +223,8 @@ let dangerTile4 = this.piquants.getTileAtWorldXY(player2BottomCenter.x, player2B
 if (dangerTile3 || dangerTile4) {
   if (!this.deathMessage) {
       this.deathMessage = this.add.text(400, 300, 'Vous êtes mort !', { 
-          font: '32px Arial', 
+          font: '32px Georgia', 
           fill: '#fff', 
-          backgroundColor: '#000' 
       }).setOrigin(0.5).setScrollFactor(0); // Rendre le texte fixe par rapport à la caméra
       
   }
@@ -245,7 +238,7 @@ this.player.body.enable = false;
 
 
 // Attendre un court instant avant de le faire respawn (évite un bug de collision)
-this.time.delayedCall(500, () => {
+this.time.delayedCall(1000, () => {
     this.player2.setPosition(this.startPosition.x, this.startPosition.y);
     this.player.setPosition(this.startPosition.x, this.startPosition.y); // Respawn au point de départ
     // Respawn au point de départ

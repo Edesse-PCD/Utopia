@@ -155,11 +155,7 @@ this.deathMessage = null;
 if (distance > this.maxDistance) {
     // Afficher le message de mort pour les deux joueurs
     if (!this.deathMessage) {
-        const camera = this.cameras.main;
-        const centerX = camera.midPoint.x;
-        const centerY = camera.midPoint.y;
-
-        this.deathMessage = this.add.text(centerX, centerY, 'Vous êtes trop éloignés! Restez coopératifs', { 
+        this.deathMessage = this.add.text(400, 300, 'Vous êtes trop éloignés! Restez coopératifs', { 
             font: '32px Georgia', 
             fill: '#fff', 
         }).setOrigin(0.5).setScrollFactor(0); // Centrer par rapport à la caméra
@@ -230,9 +226,8 @@ if (distance > this.maxDistance) {
 if (this.player.y >= this.cameras.main.height && !this.deathMessage) {
   // Afficher le message de mort s'il n'existe pas déjà
   this.deathMessage = this.add.text(400, 300, 'Vous êtes mort !', { 
-    font: '32px Arial', 
+    font: '32px Georgia', 
     fill: '#fff', 
-    backgroundColor: '#000' 
   }).setOrigin(0.5).setScrollFactor(0);
   
   // Désactiver le corps physique du joueur 1
@@ -249,9 +244,8 @@ if (this.player.y >= this.cameras.main.height && !this.deathMessage) {
 if (this.player2.y >= this.cameras.main.height && !this.deathMessage) {
   // Afficher le message de mort s'il n'existe pas déjà
   this.deathMessage = this.add.text(400, 300, 'Vous êtes mort !', { 
-    font: '32px Arial', 
+    font: '32px Georgia', 
     fill: '#fff', 
-    backgroundColor: '#000' 
   }).setOrigin(0.5).setScrollFactor(0);
   
   // Désactiver le corps physique du joueur 2
