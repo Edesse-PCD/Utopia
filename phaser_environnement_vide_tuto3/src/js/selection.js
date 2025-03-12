@@ -49,6 +49,10 @@ export default class selection extends Phaser.Scene  {
   }
   create() {
    
+
+    if (this.game.config.spawnX != undefined) this.spawnX = this.game.config.spawnX;
+    if (this.game.config.spawnY != undefined) this.spawnY = this.game.config.spawnY;
+    
 const carteDuNiveau = this.add.tilemap("mapdebut");
 const BGdebut = carteDuNiveau.addTilesetImage("BGdebut", "BGdebut");
 

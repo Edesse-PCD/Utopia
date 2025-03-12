@@ -337,8 +337,8 @@ this.time.delayedCall(1000, () => {
   
   // Rendre le bouton cliquable
   boutonMenu.on("pointerdown", () => {
-    this.game.config.spawnX= 2100;
-    this.game.config.spawnY=640;
+    this.game.config.spawnX= 2050;
+    this.game.config.spawnY=300;
     this.scene.start("selection");
   
   });
