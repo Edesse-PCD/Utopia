@@ -206,6 +206,9 @@ this.player2.setScale(2);
     } 
   
     update() {
+
+  
+        
       this.checkLadder();
 
       // Déplacement joueur 1
@@ -253,6 +256,7 @@ this.player2.setScale(2);
           }
       }
   }
+  
   
   /**
    * Gère le mouvement d'un joueur sur les lianes.
