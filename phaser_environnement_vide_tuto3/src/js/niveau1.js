@@ -175,6 +175,12 @@ this.elephant.body.allowGravity = false; // Il ne doit pas tomber
 
     );
 
+  }
+
+
+
+
+  update() {
     // tracking du joueur
     this.cameras.main.startFollow(this.player);
 
@@ -214,12 +220,6 @@ this.elephant.body.allowGravity = false; // Il ne doit pas tomber
       this.scene.start("selection");
     });
 
-  }
-
-
-
-
-  update() {
 
     // Vérifier si la touche "Entrée" est pressée pour démarrer le jeu
     if (!this.gameStarted && Phaser.Input.Keyboard.JustDown(this.enterKey)) {
@@ -266,8 +266,6 @@ this.elephant.body.allowGravity = false; // Il ne doit pas tomber
           this.deathMessage = null;
         }
       });
-
-
     }
 
     // gestion de la mort et respawn du JOUEUR 2 

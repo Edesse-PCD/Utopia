@@ -72,6 +72,7 @@ export default class niveau2 extends Phaser.Scene {
     this.player = this.physics.add.sprite(100, 450, "img_dino");
     this.player.refreshBody();
     this.player.setCollideWorldBounds(true);
+    this.cameras.main.startFollow(this.player);
     this.clavier = this.input.keyboard.createCursorKeys();
     this.keyQ = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.Q);
     this.keyZ = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.Z);
@@ -83,7 +84,7 @@ export default class niveau2 extends Phaser.Scene {
     this.physics.add.collider(this.player2, calque_plateform);    
     this.physics.world.setBounds(0,0,6400,640);
     this.cameras.main.setBounds(0,0,6400,640);
-    this.ours = this.physics.add.sprite(6350, 340, "ours");
+    this.ours = this.physics.add.sprite(350, 340, "ours");
     this.ours.setImmovable(true); // L'oiseau ne doit pas bouger s'il est touché
 this.ours.body.allowGravity = false; // Il ne doit pas tomber
 
@@ -299,9 +300,6 @@ this.time.delayedCall(500, () => {
         this.scene.start("selection");
       }
     }
-const centerX = (this.player.x + this.player2.x) / 2;
-const centerY = (this.player.y + this.player2.y) / 2;
-this.cameras.main.centerOn(centerX, centerY);
 
 
   }
