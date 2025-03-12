@@ -384,7 +384,10 @@ this.time.delayedCall(500, () => {
         this.player.flipX=false;
         this.player.setVelocityX(160);
         this.player.anims.play("animdino_marche", true); // player 1 tourne a droite
-      } else if (this.keyD.isDown) {
+      } else {
+        this.player.setVelocityX(0);
+        this.player.anims.play("animdino_face");}
+      if (this.keyD.isDown) {
         this.player2.flipX=false;
         this.player2.setVelocityX(160);
         this.player2.anims.play("animdino2_marche", true); // player 2 tourne a droite
@@ -394,8 +397,6 @@ this.time.delayedCall(500, () => {
         this.player2.setVelocityX(-160);
         this.player2.anims.play("animdino2_marche", true);
       } else {
-        this.player.setVelocityX(0);
-        this.player.anims.play("animdino_face");
         this.player2.setVelocityX(0);
         this.player2.anims.play("animdino2_face");
       }
