@@ -33,7 +33,7 @@ export default class niveau2 extends Phaser.Scene {
 
 
   create() {
-    var musique_de_fond;
+   
     musique_de_fond = this.sound.add('background'); 
     musique_de_fond.play();  
     let IJ = this.scene.get("interface");
@@ -348,6 +348,7 @@ this.time.delayedCall(1000, () => {
   
   // Rendre le bouton cliquable
   boutonMenu.on("pointerdown", () => {
+    musique_de_fond.stop();
     this.game.config.spawnX= 2050;
     this.game.config.spawnY=300;
     this.scene.start("selection");

@@ -44,9 +44,9 @@ this.load.tilemapTiledJSON("CarteJungle", "src/assets/Niveau4/MapJungle.json");
   
     create() {
 
-      var musique_de_fond;
-      musique_de_fond = this.sound.add('background'); 
-      musique_de_fond.play();  
+      
+      this.musique_de_fond = this.sound.add('background'); 
+      this.musique_de_fond.play();  
 // Position de départ (respawn du joueur)
 this.startPosition = { x: 100, y: 450 };
 
@@ -244,7 +244,8 @@ this.texteMenu.setDepth(1001);
   
   // Rendre le bouton cliquable
   this.boutonMenu.on("pointerdown", () => {
-    musique_de_fond.stop();  
+   
+
     this.scene.start("selection");
   });
 
@@ -384,7 +385,7 @@ this.time.delayedCall(500, () => {
       // Interaction avec la porte
       if (Phaser.Input.Keyboard.JustDown(this.clavier.space)) {
           if (this.physics.overlap(this.player, this.porte_retour) || this.physics.overlap(this.player2, this.porte_retour)) {
-            musique_de_fond.stop();  
+          
               this.scene.start("selection");
           }
       }
@@ -495,7 +496,8 @@ let texteMenu = this.add.text(
 
 // Rendre le bouton cliquable
 boutonMenu.on("pointerdown", () => {
-  musique_de_fond.stop();  
+
+  this.musique_de_fond.stop();
   this.scene.start("selection");
 });
 

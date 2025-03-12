@@ -15,7 +15,7 @@ export default class niveau3 extends Phaser.Scene {
     this.load.image("tileset_image", "src/assets/victoire_image.png");
     this.load.image("tileset_bouton", "src/assets/bouton.png");
     this.load.image("bouton","src/assets/bouton.png")
-
+    this.load.audio('background', 'src/assets/Niveau_3/ciel.mp3');  
     
 
     // chargement de la carte
@@ -23,6 +23,8 @@ export default class niveau3 extends Phaser.Scene {
   }
 
   create() {
+    this.musique_de_fond = this.sound.add('background'); 
+    this.musique_de_fond.play();  
     this.maxDistance = 700; // Distance maximale autorisée entre les joueurs
 
     // chargement du jeu de tuiles
@@ -101,7 +103,7 @@ export default class niveau3 extends Phaser.Scene {
     this.player2.setScale(2);
 
 
-    this.oiseau = this.physics.add.sprite(300, 300, "tileset_oiseau");
+    this.oiseau = this.physics.add.sprite(6300, 300, "tileset_oiseau");
   
   
 this.oiseau.setImmovable(true); // L'oiseau ne doit pas bouger s'il est touché
@@ -291,7 +293,8 @@ let texteMenu = this.add.text(
 
 // Rendre le bouton cliquable
 boutonMenu.on("pointerdown", () => {
-  
+
+  this.musique_de_fond.stop();  
   this.game.config.spawnX= 2450;
     this.game.config.spawnY=270;
   this.scene.start("selection");

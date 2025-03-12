@@ -61,7 +61,7 @@ export default class niveau1 extends Phaser.Scene {
 
 
   create() {
-    var musique_de_fond;
+  
     musique_de_fond = this.sound.add('background'); 
     musique_de_fond.play();  
 
@@ -436,7 +436,7 @@ let texteMenu = this.add.text(
 
 // Rendre le bouton cliquable
 boutonMenu.on("pointerdown", () => {
-  
+  musique_de_fond.stop();
   
   this.game.config.spawnX= 1270;
   this.game.config.spawnY=410;
