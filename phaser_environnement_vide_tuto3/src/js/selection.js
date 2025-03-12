@@ -66,9 +66,21 @@ keyZ = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.Z);
 keyD = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.D);
 
     cloud3 = this.physics.add.staticSprite(2050, 460, "img_cloud3").setScale(0.2).refreshBody();
+    this.add.text(cloud3.x, cloud3.y + 50, "Niveau 3", {
+      font: "32px Georgia",
+      fill: "#fff",
+  }).setOrigin(0.5);
     cabane4 = this.physics.add.staticSprite(450, 270, "img_cabane4").setScale(0.3).refreshBody();
     Pyramide1 = this.physics.add.staticSprite(740, 490, "img_Pyramide1").setScale(0.3).refreshBody();
+    this.add.text(Pyramide1.x, Pyramide1.y + 50, "Niveau 1", {
+      font: "32px Georgia",
+      fill: "#fff",
+  }).setOrigin(0.5);
     igloo2 = this.physics.add.staticSprite(1270, 410, "img_igloo2").setScale(0.1).refreshBody();
+    this.add.text(igloo2.x-20, igloo2.y + 70, "Niveau 2", {
+      font: "32px Georgia",
+      fill: "#fff",
+  }).setOrigin(0.5);
 
     player = this.physics.add.sprite(100, 400, 'img_dino');
     this.cameras.main.startFollow(player);
