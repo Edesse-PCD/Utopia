@@ -26,8 +26,8 @@ export default class niveau2 extends Phaser.Scene {
     this.load.image("BG", "src/assets/niveau2/BG.png");
     this.load.image("ours", "src/assets/niveau2/ourspolaire.png");
     this.load.image("tileset_image", "src/assets/victoire_image.png");
-    this.load.image("bouton","src/assets/bouton.png")
-    this.load.tilemapTiledJSON("map2", "src/assets/niveau2/mapBanquise1.json");
+    this.load.image("tileset_bouton","src/assets/bouton.png")
+    this.load.tilemapTiledJSON("map2", "src/assets/niveau2/mapBanquise.json");
   }
 
 
@@ -314,9 +314,37 @@ this.time.delayedCall(1000, () => {
     this.player2.setVelocity(0, 0); // Immobilise le joueur en arrêtant ses vitesses X et Y
     this.player2.anims.stop();  // Stoppe l'animation du joueur
     this.physics.world.pause(); // Met en pause la physique du monde (plus rien ne bouge)
+    
   
   // Afficher l'asset de bouton
+  let boutonMenu = this.add.image(
+    this.cameras.main.worldView.x + this.cameras.main.width / 2, // Position X centrée
+    this.cameras.main.worldView.y + this.cameras.main.height / 2 + 240, // Position Y sous l'image
+    "tileset_bouton" // Clé de ton image de bouton
+  ).setOrigin(0.5)
+  .setInteractive().setScale(0.25);
+  
+  // Ajouter le texte "Menu" par-dessus le bouton
+  let texteMenu = this.add.text(
+    boutonMenu.x, // Position X centrée sur le bouton
+    boutonMenu.y, // Position Y centrée sur le bouton
+    "Niveau \nSuivant",
+    {
+        font: "20px Arial",
+        fill: "#000",   // Texte en noir
+        align: "center"
+    }
+  ).setOrigin(0.5);
+  
+  // Rendre le bouton cliquable
+  boutonMenu.on("pointerdown", () => {
+    this.game.config.spawnX= 2050;
+    this.game.config.spawnY=300;
+    this.scene.start("selection");
+  
+  });
+  
+    
 
   }
-  
 }

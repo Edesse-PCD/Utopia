@@ -1,4 +1,5 @@
 // chargement des librairies
+import gameState from "../index.js";
 
 export default class niveau1 extends Phaser.Scene {
   // constructeur de la classe
@@ -12,6 +13,9 @@ export default class niveau1 extends Phaser.Scene {
     // Chargement des tuiles de jeu
     this.load.image("imagedepart", "src/assets/niveau1/imagedepart.png");
     this.load.image("elephantcute1", "src/assets/elephantcute1.png");
+    this.load.image("ours", "src/assets/niveau2/ours.png");
+    this.load.image("tileset_oiseau", "src/assets/Niveau_3/Oiseau.png");
+    this.load.image("Panda", "src/assets/Niveau4/Panda.png");
     this.load.image("tileset_image", "src/assets/victoire_image.png");
     this.load.image("bouton","src/assets/bouton.png")
     this.load.image("aset_deserts", "src/assets/niveau1/BG.png");
@@ -164,7 +168,7 @@ export default class niveau1 extends Phaser.Scene {
     this.player2.setCollideWorldBounds(true);
     this.clavier = this.input.keyboard.createCursorKeys();
     this.physics.add.collider(this.player2, this.groupe_plateformes);
-    this.elephant = this.physics.add.sprite(5550, 110, "elephantcute1");
+    this.elephant = this.physics.add.sprite(300, 110, "elephantcute1");
     this.elephant.setImmovable(true); // L'oiseau ne doit pas bouger s'il est touché
 this.elephant.body.allowGravity = false; // Il ne doit pas tomber
 
@@ -175,6 +179,15 @@ this.elephant.body.allowGravity = false; // Il ne doit pas tomber
     this.cameras.main.setBounds(0, 0, 6400, 640
 
     );
+
+
+this.animalIcons = [];
+
+for (let i = 0; i < 4; i++) {
+  let iconKey = gameState.capturedAnimals[i] ? "elephantcute1" : "elephantcute1";
+  let icon = this.add.image(50 + i * 100, 50, iconKey).setScrollFactor(0).setScale(0.5);
+  this.animalIcons.push(icon);
+}
 
   }
 
@@ -203,7 +216,7 @@ this.elephant.body.allowGravity = false; // Il ne doit pas tomber
       "bouton" // Clé de ton image de bouton
     ).setOrigin(0.5)
     .setScrollFactor(0) // Rendre le bouton fixe par rapport à la caméra
-    .setInteractive().setScale(0.10);
+    .setInteractive().setScale(0.25);
     
     // Ajouter le texte "Menu" par-dessus le bouton
     this.texteMenu = this.add.text(
@@ -367,11 +380,23 @@ this.elephant.body.allowGravity = false; // Il ne doit pas tomber
         this.scene.start("selection");
       }
     }
+    for (let i = 0; i < this.animalIcons.length; i++) {
+      let iconKey = gameState.capturedAnimals[i] ? "elephantcute1" : "elephantcute1";
+      this.animalIcons[i].setTexture(iconKey);
+    }
 
   }
 
 
   gagner() {
+
+        // Marquer le premier animal comme acquis
+        this.capturedAnimals[0] = true; 
+
+        // Mettre à jour l'affichage
+        this.animalsIcons[0].setTexture("animal1_acquis");
+
+        
     // Affichage du message de victoire
       // Affichage de l'image de victoire
       this.add.image(
@@ -399,7 +424,7 @@ let boutonMenu = this.add.image(
 let texteMenu = this.add.text(
   boutonMenu.x, // Position X centrée sur le bouton
   boutonMenu.y, // Position Y centrée sur le bouton
-  "Menu",
+  "Niveau\nSuivant",
   {
       font: "20px Arial",
       fill: "#000",   // Texte en noir
@@ -409,6 +434,8 @@ let texteMenu = this.add.text(
 
 // Rendre le bouton cliquable
 boutonMenu.on("pointerdown", () => {
+  this.game.config.spawnX= 1270;
+  this.game.config.spawnY=410;
   this.scene.start("selection");
 });
 

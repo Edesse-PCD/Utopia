@@ -15,6 +15,8 @@ export default class selection extends Phaser.Scene  {
   constructor() {
   
      super({key : "selection"}); // mettre le meme nom que le nom de la classe
+     this.spawnX = 150;
+     this.spawnY = 400;
   }
 
   preload() {
@@ -46,6 +48,11 @@ export default class selection extends Phaser.Scene  {
 
   }
   create() {
+   
+
+    if (this.game.config.spawnX != undefined) this.spawnX = this.game.config.spawnX;
+    if (this.game.config.spawnY != undefined) this.spawnY = this.game.config.spawnY;
+    
 const carteDuNiveau = this.add.tilemap("mapdebut");
 const BGdebut = carteDuNiveau.addTilesetImage("BGdebut", "BGdebut");
 
@@ -82,9 +89,9 @@ keyD = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.D);
       fill: "#fff",
   }).setOrigin(0.5);
 
-    player = this.physics.add.sprite(100, 400, 'img_dino');
+    player = this.physics.add.sprite(this.spawnX, this.spawnY, 'img_dino');
     this.cameras.main.startFollow(player);
-    player2= this.physics.add.sprite(150,400, 'img_dino2');
+    player2= this.physics.add.sprite(this.spawnX,this.spawnY, 'img_dino2');
     player.setCollideWorldBounds(true);
     player2.setCollideWorldBounds(true);
     this.physics.add.collider(player, plateforms);
