@@ -10,7 +10,10 @@ export default class niveau1 extends Phaser.Scene {
   preload() {
     // chargement tuiles de jeu
     // Chargement des tuiles de jeu
-    this.load.image("image depart niveau 1", "src/assets/niveau1/image depart niveau 1.png");
+    this.load.image("imagedepart", "src/assets/niveau1/imagedepart.png");
+    this.load.image("elephantcute1", "src/assets/elephantcute1.png");
+    this.load.image("tileset_image", "src/assets/victoire_image.png");
+    this.load.image("bouton","src/assets/bouton.png")
     this.load.image("aset_deserts", "src/assets/niveau1/BG.png");
     this.load.image("Bush (1)", "src/assets/niveau1/Bush (1).png");
     this.load.image("Bush (2)", "src/assets/niveau1/Bush (2).png");
@@ -53,7 +56,9 @@ export default class niveau1 extends Phaser.Scene {
   create() {
 
     // Afficher l'image d'introduction
-    this.image_depart_niveau_1 = this.add.image(400, 300, "image depart niveau 1").setDepth(10);
+    this.image_2_depart_niveau_1 = this.add.image(400, 300, "imagedepart").setDepth(10).setScale(0.8);
+
+
 
     // Ajouter la gestion de la touche "Entrée"
     this.enterKey = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.ENTER);
@@ -131,11 +136,7 @@ export default class niveau1 extends Phaser.Scene {
       tilesets
     );
 
-    // Calque Elephant : Objets ramassables (l'éléphant)
-    const calque_elephant = carteDuNiveau.createLayer(
-      "Calque de Tuiles elephant",
-      tilesets
-    );
+
 
 
 
@@ -163,7 +164,7 @@ export default class niveau1 extends Phaser.Scene {
     this.player2.setCollideWorldBounds(true);
     this.clavier = this.input.keyboard.createCursorKeys();
     this.physics.add.collider(this.player2, this.groupe_plateformes);
-    this.elephant = this.physics.add.sprite(6350, 340, "Calque de Tuiles elephant");
+    this.elephant = this.physics.add.sprite(5550, 110, "elephantcute1");
     this.elephant.setImmovable(true); // L'oiseau ne doit pas bouger s'il est touché
 this.elephant.body.allowGravity = false; // Il ne doit pas tomber
 
@@ -187,6 +188,8 @@ this.elephant.body.allowGravity = false; // Il ne doit pas tomber
     // Détection de l'overlap entre les joueurs et les objets dangereux
     this.player.setScale(2);
     this.player2.setScale(2);
+
+    //gagner interagie avec l'elephant
 
     this.physics.add.overlap(this.player, this.elephant, () => {
       if (this.physics.overlap(this.player2, this.elephant)) {
@@ -223,7 +226,7 @@ this.elephant.body.allowGravity = false; // Il ne doit pas tomber
 
     // Vérifier si la touche "Entrée" est pressée pour démarrer le jeu
     if (!this.gameStarted && Phaser.Input.Keyboard.JustDown(this.enterKey)) {
-      this.image_depart_niveau_1.destroy();  // Supprimer l'image d'intro
+      this.image_2_depart_niveau_1.destroy();  // Supprimer l'image d'intro
       this.gameStarted = true;
     }
 
@@ -334,16 +337,19 @@ this.elephant.body.allowGravity = false; // Il ne doit pas tomber
 
 
     // Déplacements joueur 2 (touches ZQSD)
-    if (this.keyQ.isDown) {
-      this.player2.setVelocityX(-160);
-      this.player2.anims.play("animdino2_tourne_gauche", true);
-    } else if (this.keyD.isDown) {
+    if (this.keyD.isDown) {
+      this.player2.flipX=false;
       this.player2.setVelocityX(160);
-      this.player2.anims.play("animdino2_tourne_droite", true);
+      this.player2.anims.play("animdino2_marche", true);
+    } else if (this.keyQ.isDown) {
+      this.player2.flipX=true;
+      this.player2.setVelocityX(-160);
+      this.player2.anims.play("animdino2_marche", true);
     } else {
       this.player2.setVelocityX(0);
       this.player2.anims.play("animdino2_face");
     }
+    
 
     // Saut joueur 1 (flèche haut)
     if (this.clavier.up.isDown && this.player.body.blocked.down) {

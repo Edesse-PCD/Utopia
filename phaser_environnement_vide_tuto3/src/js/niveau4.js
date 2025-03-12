@@ -42,9 +42,14 @@ this.load.tilemapTiledJSON("CarteJungle", "src/assets/Niveau4/MapJungle.json");
   
     create() {
 
+// Position de départ (respawn du joueur)
+this.startPosition = { x: 100, y: 450 };
+
+this.deathMessage = null;
+
       // Chargement de la carte
 const carteDuNiveau = this.add.tilemap("CarteJungle");
-
+this.map = this.make.tilemap({ key: "CarteJungle" });
 
 
 // Ajout de chaque tileset individuellement
@@ -124,6 +129,11 @@ const calque_Animal = carteDuNiveau.createLayer(
   tilesets
 );
 
+// Crée le calque "danger" à partir du Tilemap
+this.danger = this.map.createLayer("danger", this.tileset, 0, 0);
+this.danger = carteDuNiveau.createLayer("danger", tilesets);
+
+
 // Calque feuillageSolide : feuillageSolide)
 const calque_feuillageSolide = carteDuNiveau.createLayer(
   "feuillageSolide",
@@ -131,19 +141,13 @@ const calque_feuillageSolide = carteDuNiveau.createLayer(
 );
 calque_feuillageSolide.setCollisionByProperty({ EstSolide: true })
 
-// Calque feuillageSolide : feuillageSolide)
-const danger = carteDuNiveau.createLayer(
-  "danger",
-  tilesets
-);
-
 
 // Création du calque des lianes
 this.ladder_layer = carteDuNiveau.createLayer("Lianes", tilesets);
 
 if (this.ladder_layer) {
   this.ladder_layer.setDepth(10); // Assure que le joueur n'est pas caché
-  console.log("✅ Calque 'Lianes' chargé avec succès !");
+  
 } else {
   console.error("⚠️ Erreur : Le calque 'Lianes' est NULL ! Vérifie son nom dans Tiled.");
 }
@@ -206,10 +210,96 @@ this.player2.setScale(2);
     } 
   
     update() {
-
+    this.checkLadder();    
   
+            
+    let messageDisplayed = false; // Pour s'assurer que le message n'est affiché qu'une seule fois
+
+
+    // Obtenez la position du personnage en haut au centre
+    let playerTopCenter = this.player.getTopCenter();
+
+    let playerBottomCenter = this.player.getBottomCenter();
+  
+    // Vérifiez si le joueur interagit avec une tuile du calque danger
+    console.log(this.danger);
+    let dangerTile = this.danger.getTileAtWorldXY(playerTopCenter.x, playerTopCenter.y);
+    let dangerTile2 = this.danger.getTileAtWorldXY(playerBottomCenter.x, playerBottomCenter.y);
+
+    if (dangerTile || dangerTile2) {
+      if (!this.deathMessage) {
+          this.deathMessage = this.add.text(400, 300, 'Vous êtes mort !', { 
+              font: '32px Arial', 
+              fill: '#fff', 
+              backgroundColor: '#000' 
+          }).setOrigin(0.5).setScrollFactor(0);
+      }
+  
+
+            // Désactiver le corps physique du joueur temporairement
+    this.player.setVelocity(0, 0); // Stoppe les mouvements
+    this.player.body.enable = false; 
+
+    // Attendre un court instant avant de le faire respawn (évite un bug de collision)
+    this.time.delayedCall(500, () => {
+        this.player.setPosition(this.startPosition.x, this.startPosition.y); // Respawn au point de départ
+        this.player.body.enable = true; // Réactiver le corps du joueur
         
-      this.checkLadder();
+
+        // Supprimer le message de mort
+        if (this.deathMessage) {
+          this.deathMessage.destroy();
+          this.deathMessage = null;
+      }
+    });
+    
+        
+    }
+
+    // gestion de la mort et respawn du JOUEUR 2 
+
+    // Supposons que vous avez un calque 'danger' et un personnage (player)
+let message2Displayed = false; // Pour s'assurer que le message n'est affiché qu'une seule fois
+
+
+// Obtenez la position du personnage en haut au centre
+let player2TopCenter = this.player2.getTopCenter();
+
+let player2BottomCenter = this.player2.getBottomCenter();
+
+// Vérifiez si le joueur interagit avec une tuile du calque danger
+let dangerTile3 = this.danger.getTileAtWorldXY(player2TopCenter.x, player2TopCenter.y);
+let dangerTile4 = this.danger.getTileAtWorldXY(player2BottomCenter.x, player2BottomCenter.y);
+
+if (dangerTile3 || dangerTile4) {
+  if (!this.deathMessage) {
+      this.deathMessage = this.add.text(400, 300, 'Vous êtes mort !', { 
+          font: '32px Arial', 
+          fill: '#fff', 
+          backgroundColor: '#000' 
+      }).setOrigin(0.5).setScrollFactor(0); // Rendre le texte fixe par rapport à la caméra
+      
+  }
+
+
+        // Désactiver le corps physique du joueur temporairement
+this.player2.setVelocity(0, 0); // Stoppe les mouvements
+this.player2.body.enable = false; 
+
+// Attendre un court instant avant de le faire respawn (évite un bug de collision)
+this.time.delayedCall(500, () => {
+    this.player2.setPosition(this.startPosition.x, this.startPosition.y); // Respawn au point de départ
+    this.player2.body.enable = true; // Réactiver le corps du joueur
+    
+
+    // Supprimer le message de mort
+    if (this.deathMessage) {
+      this.deathMessage.destroy();
+      this.deathMessage = null;
+  }
+});}
+
+      
 
       // Déplacement joueur 1
       if (this.clavier.left.isDown) {
