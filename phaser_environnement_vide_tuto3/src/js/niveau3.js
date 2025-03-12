@@ -214,13 +214,6 @@ if (distance > this.maxDistance) {
     }
     
 
-    
-    
-
-
-
-
-
 
   // Mort joueur 1
 if (this.player.y >= this.cameras.main.height && !this.deathMessage) {
@@ -235,7 +228,7 @@ if (this.player.y >= this.cameras.main.height && !this.deathMessage) {
   this.player.body.enable = false;
 
   // Redémarrer la scène après 500 ms
-  this.time.delayedCall(500, () => {
+  this.time.delayedCall(1000, () => {
     this.scene.restart();
   });
 }
@@ -253,7 +246,7 @@ if (this.player2.y >= this.cameras.main.height && !this.deathMessage) {
   this.player2.body.enable = false;
 
   // Redémarrer la scène après 500 ms
-  this.time.delayedCall(500, () => {
+  this.time.delayedCall(1000, () => {
     this.scene.restart();
   });
 }
