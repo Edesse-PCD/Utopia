@@ -48,6 +48,7 @@ export default class niveau1 extends Phaser.Scene {
     this.load.image("15", "src/assets/niveau1/15.png");
     this.load.image("16", "src/assets/niveau1/16.png");
     this.load.image("0017", "src/assets/niveau1/0017.png");
+    this.load.audio('background', 'src/assets/niveau1/western.mp3'); 
 
 
 
@@ -175,7 +176,7 @@ this.scene.bringToTop("interface"); // Mettre l'interface au premier plan
     this.player2.setCollideWorldBounds(true);
     this.clavier = this.input.keyboard.createCursorKeys();
     this.physics.add.collider(this.player2, this.groupe_plateformes);
-    this.elephant = this.physics.add.sprite(5550, 110, "elephantcute1");
+    this.elephant = this.physics.add.sprite(300, 110, "elephantcute1");
     this.elephant.setImmovable(true); // L'oiseau ne doit pas bouger s'il est touché
 this.elephant.body.allowGravity = false; // Il ne doit pas tomber
 
@@ -217,7 +218,7 @@ this.elephant.body.allowGravity = false; // Il ne doit pas tomber
       "bouton" // Clé de ton image de bouton
     ).setOrigin(0.5)
     .setScrollFactor(0) // Rendre le bouton fixe par rapport à la caméra
-    .setInteractive().setScale(0.10);
+    .setInteractive().setScale(0.25);
     
     // Ajouter le texte "Menu" par-dessus le bouton
     this.texteMenu = this.add.text(
@@ -422,7 +423,7 @@ let boutonMenu = this.add.image(
 let texteMenu = this.add.text(
   boutonMenu.x, // Position X centrée sur le bouton
   boutonMenu.y, // Position Y centrée sur le bouton
-  "Menu",
+  "Niveau\nSuivant",
   {
       font: "20px Arial",
       fill: "#000",   // Texte en noir
@@ -432,6 +433,8 @@ let texteMenu = this.add.text(
 
 // Rendre le bouton cliquable
 boutonMenu.on("pointerdown", () => {
+  this.game.config.spawnX= 1270;
+  this.game.config.spawnY=410;
   this.scene.start("selection");
 });
 
