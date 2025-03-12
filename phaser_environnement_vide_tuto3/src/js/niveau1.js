@@ -46,6 +46,7 @@ export default class niveau1 extends Phaser.Scene {
     this.load.image("15", "src/assets/niveau1/15.png");
     this.load.image("16", "src/assets/niveau1/16.png");
     this.load.image("0017", "src/assets/niveau1/0017.png");
+    this.load.audio('background', 'src/assets/niveau1/western.mp3'); 
 
 
 
