@@ -151,7 +151,6 @@ export default class niveau1 extends Phaser.Scene {
     this.player = this.physics.add.sprite(100, 450, "img_dino");
     this.physics.add.collider(this.player, calque_plateformes);
     this.player.refreshBody();
-    this.player.setBounce(0.2);
     this.player.setCollideWorldBounds(true);
     this.clavier = this.input.keyboard.createCursorKeys();
     this.keyQ = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.Q);
@@ -161,10 +160,12 @@ export default class niveau1 extends Phaser.Scene {
     this.player2 = this.physics.add.sprite(100, 450, "img_dino2");
     this.physics.add.collider(this.player2, calque_plateformes);
     this.player2.refreshBody();
-    this.player2.setBounce(0.2);
     this.player2.setCollideWorldBounds(true);
     this.clavier = this.input.keyboard.createCursorKeys();
     this.physics.add.collider(this.player2, this.groupe_plateformes);
+    this.elephant = this.physics.add.sprite(6350, 340, "Calque de Tuiles elephant");
+    this.elephant.setImmovable(true); // L'oiseau ne doit pas bouger s'il est touché
+this.elephant.body.allowGravity = false; // Il ne doit pas tomber
 
     // Redimensionnement du monde avec les dimensions calculées via Tiled
     this.physics.world.setBounds(0, 0, 6400, 640);
@@ -180,6 +181,38 @@ export default class niveau1 extends Phaser.Scene {
     // Détection de l'overlap entre les joueurs et les objets dangereux
     this.player.setScale(2);
     this.player2.setScale(2);
+
+    this.physics.add.overlap(this.player, this.elephant, () => {
+      if (this.physics.overlap(this.player2, this.elephant)) {
+          this.gagner();
+      }
+    }, null, this);
+     // Création du bouton en haut à droite
+     this.boutonMenu = this.add.image(
+      this.cameras.main.width - 50, // Position X en haut à droite
+      25, // Position Y en haut
+      "bouton" // Clé de ton image de bouton
+    ).setOrigin(0.5)
+    .setScrollFactor(0) // Rendre le bouton fixe par rapport à la caméra
+    .setInteractive().setScale(0.10);
+    
+    // Ajouter le texte "Menu" par-dessus le bouton
+    this.texteMenu = this.add.text(
+      this.boutonMenu.x, // Position X centrée sur le bouton
+      this.boutonMenu.y, // Position Y centrée sur le bouton
+      "Menu",
+      {
+          font: "20px Arial",
+          fill: "#000",   // Texte en noir
+          align: "center"
+      }
+    ).setOrigin(0.5)
+    .setScrollFactor(0); // Rendre le texte fixe par rapport à la caméra
+    
+    // Rendre le bouton cliquable
+    this.boutonMenu.on("pointerdown", () => {
+      this.scene.start("selection");
+    });
 
   }
 
@@ -338,10 +371,10 @@ export default class niveau1 extends Phaser.Scene {
     // Affichage du message de victoire
       // Affichage de l'image de victoire
       this.add.image(
-        this.player.x-400, // Position X du joueur 2
-        this.player.y+500, // Position Y du joueur 2
+        this.cameras.main.worldView.x + this.cameras.main.width / 2, // Position X centrée
+        this.cameras.main.worldView.y + this.cameras.main.height / 2, // Position Y centrée
         "tileset_image" // Clé de l'image à afficher
-      ).setOrigin(0.5); // Centrer l'image
+    ).setOrigin(0.5);
   
     // Désactive les mouvements du joueur
     this.player.setVelocity(0, 0); // Immobilise le joueur en arrêtant ses vitesses X et Y
@@ -350,10 +383,31 @@ export default class niveau1 extends Phaser.Scene {
     this.player2.anims.stop();  // Stoppe l'animation du joueur
     this.physics.world.pause(); // Met en pause la physique du monde (plus rien ne bouge)
   
-    // Ajout d'un écouteur d'événement sur la touche "Entrée"
-    this.input.keyboard.on("keydown-ENTER", () => {
-        this.scene.start("selection"); // Charge la scène du niveau 1 quand on appuie sur Entrée
-    });
+  // Afficher l'asset de bouton
+let boutonMenu = this.add.image(
+  this.cameras.main.worldView.x + this.cameras.main.width / 2, // Position X centrée
+  this.cameras.main.worldView.y + this.cameras.main.height / 2 + 240, // Position Y sous l'image
+  "bouton" // Clé de ton image de bouton
+).setOrigin(0.5)
+.setInteractive().setScale(0.15);
+
+// Ajouter le texte "Menu" par-dessus le bouton
+let texteMenu = this.add.text(
+  boutonMenu.x, // Position X centrée sur le bouton
+  boutonMenu.y, // Position Y centrée sur le bouton
+  "Menu",
+  {
+      font: "20px Arial",
+      fill: "#000",   // Texte en noir
+      align: "center"
+  }
+).setOrigin(0.5);
+
+// Rendre le bouton cliquable
+boutonMenu.on("pointerdown", () => {
+  this.scene.start("selection");
+});
+
   }
 }
 

@@ -159,7 +159,7 @@ if (this.ladder_layer) {
       fontSize: "22pt"
       });
 
-    this.player = this.physics.add.sprite(100, 450, "img_perso");
+    this.player = this.physics.add.sprite(100, 450, "img_dino");
     this.physics.add.collider(this.player, calque_feuillageSolide);
     this.physics.add.collider(this.player, this.calque_cabane);
     this.physics.add.collider(this.player, this.calque_ajoutCabane);
@@ -173,7 +173,7 @@ if (this.ladder_layer) {
     this.keyD = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.D);
     
     
-    this.player2 = this.physics.add.sprite(100, 450, "img_perso");
+    this.player2 = this.physics.add.sprite(100, 450, "img_dino2");
     this.physics.add.collider(this.player2, calque_feuillageSolide);
     this.player2.refreshBody();
     this.player2.setBounce(0.2);
