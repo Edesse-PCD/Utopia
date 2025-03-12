@@ -16,7 +16,9 @@ export default class niveau3 extends Phaser.Scene {
     this.load.image("tileset_bouton", "src/assets/bouton.png");
     this.load.image("bouton","src/assets/bouton.png")
     this.load.audio('background', 'src/assets/Niveau_3/ciel.mp3');  
-    
+    this.load.image("imageNiveau3","src/assets/Niveau_3/imageNiveau3.png")
+  
+
 
     // chargement de la carte
     this.load.tilemapTiledJSON("carte", "src/assets/Niveau_3/map.json");
@@ -50,6 +52,11 @@ export default class niveau3 extends Phaser.Scene {
     
     // Rendre le bouton cliquable
     this.boutonCommencer.on("pointerdown", () => {
+
+
+
+
+
       this.boutonCommencer.destroy();
       this.imageNiveau3.destroy();
       this.texteCommencer.destroy();
@@ -163,6 +170,7 @@ this.texteMenu = this.add.text(
 
 // Rendre le bouton cliquable
 this.boutonMenu.on("pointerdown", () => {
+  this.musique_de_fond.stop();  
   this.scene.start("selection");
 });
 

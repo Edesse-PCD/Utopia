@@ -152,6 +152,7 @@ this.texteMenu = this.add.text(
 
 // Rendre le bouton cliquable
 this.boutonMenu.on("pointerdown", () => {
+  this.musique_de_fond.stop();  
   this.scene.start("selection");
 });
 

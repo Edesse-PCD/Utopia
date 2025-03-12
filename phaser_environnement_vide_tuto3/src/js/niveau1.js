@@ -241,6 +241,7 @@ this.elephant.x = 400;
     
     // Rendre le bouton cliquable
     this.boutonMenu.on("pointerdown", () => {
+      this.musique_de_fond.stop();  
       this.scene.start("selection");
     });
 
@@ -381,12 +382,6 @@ this.elephant.x = 400;
       this.player2.setVelocityY(-330);
     }
 
-    // Interaction avec la porte (barre espace)
-    if (Phaser.Input.Keyboard.JustDown(this.clavier.space)) {
-      if (this.physics.overlap(this.player, this.porte_retour) || this.physics.overlap(this.player2, this.porte_retour)) {
-        this.scene.start("selection");
-      }
-    }
   
 
   }

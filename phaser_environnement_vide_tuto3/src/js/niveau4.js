@@ -245,7 +245,8 @@ this.texteMenu.setDepth(1001);
   
   // Rendre le bouton cliquable
   this.boutonMenu.on("pointerdown", () => {
-   
+    this.musique_de_fond.stop();  
+
 
     this.scene.start("selection");
   });
@@ -415,7 +416,7 @@ this.time.delayedCall(500, () => {
       // Interaction avec la porte
       if (Phaser.Input.Keyboard.JustDown(this.clavier.space)) {
           if (this.physics.overlap(this.player, this.porte_retour) || this.physics.overlap(this.player2, this.porte_retour)) {
-          
+          this.musique_de_fond.stop();  
               this.scene.start("selection");
           }
       }
