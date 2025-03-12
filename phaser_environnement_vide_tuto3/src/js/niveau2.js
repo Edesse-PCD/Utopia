@@ -29,14 +29,14 @@ export default class niveau2 extends Phaser.Scene {
     this.load.image("tileset_bouton","src/assets/bouton.png")
     this.load.image("imageNiveau2","src/assets/niveau2/imageNiveau2.png")
     this.load.tilemapTiledJSON("map2", "src/assets/niveau2/mapBanquise.json");
-    this.load.audio('background', 'src/assets/niveau2/aglagla.mp3');   
+    this.load.audio('background2', 'src/assets/niveau2/aglagla.mp3');   
   }
 
 
   create() {
    
-    this.musique_de_fond = this.sound.add('background'); 
-    this.musique_de_fond.play();  
+    this.musique_de_fond2 = this.sound.add('background2'); 
+    this.musique_de_fond2.play();  
     this.imageNiveau2 = this.add.image(400, 350, "imageNiveau2").setDepth(10).setScale(0.5);
     this.boutonCommencer = this.add.image(
       this.cameras.main.width - 250, // Position X en haut à droite
@@ -152,7 +152,7 @@ this.texteMenu = this.add.text(
 
 // Rendre le bouton cliquable
 this.boutonMenu.on("pointerdown", () => {
-  this.musique_de_fond.stop();  
+  this.musique_de_fond2.stop();  
   this.scene.start("selection");
 });
 
@@ -378,7 +378,7 @@ this.time.delayedCall(1000, () => {
   
   // Rendre le bouton cliquable
   boutonMenu.on("pointerdown", () => {
-    this.musique_de_fond.stop();
+    this.musique_de_fond2.stop();
     this.game.config.spawnX= 2050;
     this.game.config.spawnY=300;
     this.scene.start("selection");
