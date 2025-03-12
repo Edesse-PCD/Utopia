@@ -32,6 +32,7 @@ export default class niveau2 extends Phaser.Scene {
 
 
   create() {
+    this.maxDistance = 700; // Distance maximale autorisée entre les joueurs
     this.startPosition = { x: 100, y: 450 };
     this.deathMessage = null;
 
@@ -71,7 +72,6 @@ export default class niveau2 extends Phaser.Scene {
     this.player = this.physics.add.sprite(100, 450, "img_dino");
     this.player.refreshBody();
     this.player.setCollideWorldBounds(true);
-    this.cameras.main.startFollow(this.player);
     this.clavier = this.input.keyboard.createCursorKeys();
     this.keyQ = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.Q);
     this.keyZ = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.Z);
@@ -83,7 +83,7 @@ export default class niveau2 extends Phaser.Scene {
     this.physics.add.collider(this.player2, calque_plateform);    
     this.physics.world.setBounds(0,0,6400,640);
     this.cameras.main.setBounds(0,0,6400,640);
-    this.ours = this.physics.add.sprite(350, 340, "ours");
+    this.ours = this.physics.add.sprite(6350, 340, "ours");
     this.ours.setImmovable(true); // L'oiseau ne doit pas bouger s'il est touché
 this.ours.body.allowGravity = false; // Il ne doit pas tomber
 
@@ -129,6 +129,42 @@ this.toucheEntree = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.EN
   update() {
     let messageDisplayed = false; // Pour s'assurer que le message n'est affiché qu'une seule fois
 
+// Calcul de la distance entre les deux joueurs
+const distance = Phaser.Math.Distance.Between(this.player.x, this.player.y, this.player2.x, this.player2.y);
+
+if (distance > this.maxDistance) {
+    // Afficher le message de mort pour les deux joueurs
+    if (!this.deathMessage) {
+        const camera = this.cameras.main;
+        const centerX = camera.midPoint.x;
+        const centerY = camera.midPoint.y;
+
+        this.deathMessage = this.add.text(centerX, centerY, 'Vous êtes trop éloignés! Restez coopératifs', { 
+            font: '32px Georgia', 
+            fill: '#fff', 
+        }).setOrigin(0.5).setScrollFactor(0); // Centrer par rapport à la caméra
+    }
+
+    // Désactiver les mouvements des deux joueurs
+    this.player.setVelocity(0, 0);
+    this.player2.setVelocity(0, 0);
+    this.player.body.enable = false;
+    this.player2.body.enable = false;
+
+    // Attendre un court instant avant de les respawn
+    this.time.delayedCall(1000, () => {
+        this.player.setPosition(this.startPosition.x, this.startPosition.y);
+        this.player2.setPosition(this.startPosition.x, this.startPosition.y);
+        this.player.body.enable = true;
+        this.player2.body.enable = true;
+
+        // Supprimer le message de mort
+        if (this.deathMessage) {
+            this.deathMessage.destroy();
+            this.deathMessage = null;
+        }
+    });
+}
 
     // Obtenez la position du personnage en haut au centre
     let playerTopCenter = this.player.getTopCenter();
@@ -152,12 +188,17 @@ this.toucheEntree = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.EN
             // Désactiver le corps physique du joueur temporairement
     this.player.setVelocity(0, 0); // Stoppe les mouvements
     this.player.body.enable = false; 
+    this.player2.setVelocity(0, 0); // Stoppe les mouvements
+    this.player2.body.enable = false;
 
     // Attendre un court instant avant de le faire respawn (évite un bug de collision)
     this.time.delayedCall(500, () => {
-        this.player.setPosition(this.startPosition.x, this.startPosition.y); // Respawn au point de départ
+        this.player.setPosition(this.startPosition.x, this.startPosition.y); 
+        this.player2.setPosition(this.startPosition.x, this.startPosition.y); // Respawn au point de départ
+        // Respawn au point de départ
         this.player.body.enable = true; // Réactiver le corps du joueur
-        
+        this.player2.body.enable = true;
+
 
         // Supprimer le message de mort
         if (this.deathMessage) {
@@ -198,12 +239,18 @@ if (dangerTile3 || dangerTile4) {
         // Désactiver le corps physique du joueur temporairement
 this.player2.setVelocity(0, 0); // Stoppe les mouvements
 this.player2.body.enable = false; 
+this.player.setVelocity(0, 0); // Stoppe les mouvements
+this.player.body.enable = false;
+
 
 // Attendre un court instant avant de le faire respawn (évite un bug de collision)
 this.time.delayedCall(500, () => {
-    this.player2.setPosition(this.startPosition.x, this.startPosition.y); // Respawn au point de départ
+    this.player2.setPosition(this.startPosition.x, this.startPosition.y);
+    this.player.setPosition(this.startPosition.x, this.startPosition.y); // Respawn au point de départ
+    // Respawn au point de départ
     this.player2.body.enable = true; // Réactiver le corps du joueur
-    
+    this.player.body.enable = true; // Réactiver le corps du joueur
+
 
     // Supprimer le message de mort
     if (this.deathMessage) {
@@ -252,6 +299,11 @@ this.time.delayedCall(500, () => {
         this.scene.start("selection");
       }
     }
+const centerX = (this.player.x + this.player2.x) / 2;
+const centerY = (this.player.y + this.player2.y) / 2;
+this.cameras.main.centerOn(centerX, centerY);
+
+
   }
 
 

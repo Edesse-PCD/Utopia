@@ -12,7 +12,8 @@ export default class niveau3 extends Phaser.Scene {
     this.load.image("tileset_assets", "src/assets/Niveau_3/Assets.png");
     this.load.image("tileset_oiseau", "src/assets/Niveau_3/Oiseau.png");
     this.load.image("tileset_tuiles", "src/assets/Niveau_3/tuiles_de_jeu.png");
-    this.load.image("tileset_image", "src/assets/ victoire_image.png");
+    this.load.image("tileset_image", "src/assets/victoire_image.png");
+    this.load.image("tileset_bouton", "src/assets/bouton.png");
     
 
     // chargement de la carte
@@ -202,4 +203,49 @@ if (this.player2.y >= this.cameras.main.height && !this.deathMessage) {
   });
 }
   }
+
+
+  gagner() {
+    // Affichage du message de victoire
+      // Affichage de l'image de victoire
+      this.add.image(
+        this.cameras.main.worldView.x + this.cameras.main.width / 2, // Position X centrée
+        this.cameras.main.worldView.y + this.cameras.main.height / 2, // Position Y centrée
+        "tileset_image" // Clé de l'image à afficher
+    ).setOrigin(0.5);
+  
+    // Désactive les mouvements du joueur
+    this.player.setVelocity(0, 0); // Immobilise le joueur en arrêtant ses vitesses X et Y
+    this.player.anims.stop();
+    this.player2.setVelocity(0, 0); // Immobilise le joueur en arrêtant ses vitesses X et Y
+    this.player2.anims.stop();  // Stoppe l'animation du joueur
+    this.physics.world.pause(); // Met en pause la physique du monde (plus rien ne bouge)
+  
+  // Afficher l'asset de bouton
+let boutonMenu = this.add.image(
+  this.cameras.main.worldView.x + this.cameras.main.width / 2, // Position X centrée
+  this.cameras.main.worldView.y + this.cameras.main.height / 2 + 240, // Position Y sous l'image
+  "tileset_bouton" // Clé de ton image de bouton
+).setOrigin(0.5)
+.setInteractive().setScale(0.25);
+
+// Ajouter le texte "Menu" par-dessus le bouton
+let texteMenu = this.add.text(
+  boutonMenu.x, // Position X centrée sur le bouton
+  boutonMenu.y, // Position Y centrée sur le bouton
+  "Niveau \nSuivant",
+  {
+      font: "20px Arial",
+      fill: "#000",   // Texte en noir
+      align: "center"
+  }
+).setOrigin(0.5);
+
+// Rendre le bouton cliquable
+boutonMenu.on("pointerdown", () => {
+  this.scene.start("selection");
+});
+
+  }
+
 }
