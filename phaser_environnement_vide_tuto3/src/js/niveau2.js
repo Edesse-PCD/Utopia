@@ -133,7 +133,10 @@ this.boutonMenu.on("pointerdown", () => {
 // Ajout d'une touche pour redémarrer au niveau 
 this.toucheEntree = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.ENTER);
 
+
+
   }
+
 
   update() {
     let messageDisplayed = false; // Pour s'assurer que le message n'est affiché qu'une seule fois
