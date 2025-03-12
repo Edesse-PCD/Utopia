@@ -6,9 +6,11 @@ var Pyramide1
 var cabane4
 var cloud3
 var igloo2
+var introShown
 let keyQ
 let keyD
 let keyZ
+
 
 
 export default class selection extends Phaser.Scene  {
@@ -47,13 +49,45 @@ export default class selection extends Phaser.Scene  {
     this.load.image("bouton","src/assets/bouton.png");
 
     this.load.tilemapTiledJSON("mapdebut", "src/assets/mapdebut.json");
-    
+    introShown = false;
+
 
 
   }
   create() {
-this.img_bienvenue = this.add.image(400, 300, "img_bienvenue").setDepth(10).setScale(0.5);
-    // Création du bouton "Commencer"
+
+if (!this.introShown) {
+    // Image d'intro (affichée une seule fois)
+    this.img_bienvenue = this.add.image(400, 300, "img_bienvenue").setDepth(10).setScale(0.5);
+    this.boutonCommencer = this.add.image(
+      this.cameras.main.width - 400, // Position X en haut à droite
+      400, // Position Y en haut
+      "bouton" // Clé de ton image de bouton
+    ).setOrigin(0.5)
+    .setScrollFactor(0) // Rendre le bouton fixe par rapport à la caméra
+    .setInteractive().setScale(0.20).setDepth(11);
+    
+    // Ajouter le texte "Menu" par-dessus le bouton
+    this.texteCommencer = this.add.text(
+      this.boutonCommencer.x, // Position X centrée sur le bouton
+      this.boutonCommencer.y, // Position Y centrée sur le bouton
+      "Commencer",
+      {
+          font: "20px Arial",
+          fill: "#000",   // Texte en noir
+          align: "center"
+      }
+    ).setOrigin(0.5)
+    .setScrollFactor(0).setDepth(12); // Rendre le texte fixe par rapport à la caméra
+    
+    // Rendre le bouton cliquable
+    this.boutonCommencer.on("pointerdown", () => {
+      this.boutonCommencer.destroy();
+      this.img_bienvenue.destroy();
+      this.texteCommencer.destroy();
+        });
+    this.introShown = true; // Marque l'intro comme affichée
+}
 
     if (this.game.config.spawnX != undefined) this.spawnX = this.game.config.spawnX;
     if (this.game.config.spawnY != undefined) this.spawnY = this.game.config.spawnY;
@@ -105,33 +139,7 @@ keyD = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.D);
     this.cameras.main.setBounds(0,0,2560,640);
     clavier = this.input.keyboard.createCursorKeys();
     
-    this.boutonCommencer = this.add.image(
-      this.cameras.main.width - 400, // Position X en haut à droite
-      400, // Position Y en haut
-      "bouton" // Clé de ton image de bouton
-    ).setOrigin(0.5)
-    .setScrollFactor(0) // Rendre le bouton fixe par rapport à la caméra
-    .setInteractive().setScale(0.20).setDepth(11);
     
-    // Ajouter le texte "Menu" par-dessus le bouton
-    this.texteCommencer = this.add.text(
-      this.boutonCommencer.x, // Position X centrée sur le bouton
-      this.boutonCommencer.y, // Position Y centrée sur le bouton
-      "Commencer",
-      {
-          font: "20px Arial",
-          fill: "#000",   // Texte en noir
-          align: "center"
-      }
-    ).setOrigin(0.5)
-    .setScrollFactor(0).setDepth(12); // Rendre le texte fixe par rapport à la caméra
-    
-    // Rendre le bouton cliquable
-    this.boutonCommencer.on("pointerdown", () => {
-      this.boutonCommencer.destroy();
-      this.img_bienvenue.destroy();
-      this.texteCommencer.destroy();
-        });
 
     this.anims.create({
       key: "anim_tourne_gauche", // key est le nom de l'animation : doit etre unique poru la scene.
@@ -175,7 +183,7 @@ keyD = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.D);
 
     player.setScale(2);
     player2.setScale(2);
-   
+    
   }
 
   update() {

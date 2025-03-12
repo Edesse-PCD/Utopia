@@ -49,7 +49,7 @@ this.load.tilemapTiledJSON("CarteJungle", "src/assets/Niveau4/MapJungle.json");
       musique_de_fond.play();  
 // Position de départ (respawn du joueur)
 this.startPosition = { x: 100, y: 450 };
-
+this.maxDistance = 700; // Distance maximale autorisée entre les joueurs
 this.deathMessage = null;
 
       // Chargement de la carte
@@ -268,7 +268,36 @@ this.texteMenu.setDepth(1001);
     console.log(this.danger);
     let dangerTile = this.danger.getTileAtWorldXY(playerTopCenter.x, playerTopCenter.y);
     let dangerTile2 = this.danger.getTileAtWorldXY(playerBottomCenter.x, playerBottomCenter.y);
+    const distance = Phaser.Math.Distance.Between(this.player.x, this.player.y, this.player2.x, this.player2.y);
 
+    if (distance > this.maxDistance) {
+        // Afficher le message de mort pour les deux joueurs
+        if (!this.deathMessage) {
+          this.deathMessage = this.add.text(400, 300, 'Vous êtes trop éloignés! Restez coopératifs', { 
+              font: '32px Georgia', 
+              fill: '#fff',
+          }).setOrigin(0.5).setScrollFactor(0); // Centrer par rapport à la caméra
+      }
+        // Désactiver les mouvements des deux joueurs
+        this.player.setVelocity(0, 0);
+        this.player2.setVelocity(0, 0);
+        this.player.body.enable = false;
+        this.player2.body.enable = false;
+    
+        // Attendre un court instant avant de les respawn
+        this.time.delayedCall(2000, () => {
+            this.player.setPosition(this.startPosition.x, this.startPosition.y);
+            this.player2.setPosition(this.startPosition.x+50, this.startPosition.y);
+            this.player.body.enable = true;
+            this.player2.body.enable = true;
+    
+            // Supprimer le message de mort
+            if (this.deathMessage) {
+                this.deathMessage.destroy();
+                this.deathMessage = null;
+            }
+        });
+    }
     if (dangerTile || dangerTile2) {
       if (!this.deathMessage) {
           this.deathMessage = this.add.text(400, 300, 'Vous êtes mort !', { 

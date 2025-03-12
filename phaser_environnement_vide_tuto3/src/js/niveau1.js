@@ -8,6 +8,8 @@ export default class niveau1 extends Phaser.Scene {
       key: "niveau1" //  ici on précise le nom de la classe en tant qu'identifiant
     });
   }
+
+  
   preload() {
     // chargement tuiles de jeu
     // Chargement des tuiles de jeu
@@ -55,7 +57,7 @@ export default class niveau1 extends Phaser.Scene {
 
     // chargement de la carte
     this.load.tilemapTiledJSON("map", "src/assets/niveau1/utopia niveau 1 map.tmj")
-
+  
   }
 
 
@@ -66,8 +68,6 @@ export default class niveau1 extends Phaser.Scene {
     musique_de_fond.play();  
 
 
-    this.scene.launch("interface"); // Lancer l'interface
-this.scene.bringToTop("interface"); // Mettre l'interface au premier plan
 
 
     // Afficher l'image d'introduction
@@ -179,18 +179,21 @@ this.scene.bringToTop("interface"); // Mettre l'interface au premier plan
     this.player2.setCollideWorldBounds(true);
     this.clavier = this.input.keyboard.createCursorKeys();
     this.physics.add.collider(this.player2, this.groupe_plateformes);
-    this.elephant = this.physics.add.sprite(300, 110, "elephantcute1");
+    this.elephant = this.physics.add.sprite(5500, 110, "elephantcute1");
     this.elephant.setImmovable(true); // L'oiseau ne doit pas bouger s'il est touché
 this.elephant.body.allowGravity = false; // Il ne doit pas tomber
 
     // Redimensionnement du monde avec les dimensions calculées via Tiled
     this.physics.world.setBounds(0, 0, 6400, 640);
-
+this.elephant.x = 400;
     // Définition de la caméra pour couvrir toute la map
     this.cameras.main.setBounds(0, 0, 6400, 640
 
     );
+    this.scene.bringToTop("interfaceJeu");
 
+    var sij = this.scene.get("interfaceJeu");
+    sij.debloquerAnimal(0);
 
 
 
@@ -331,7 +334,6 @@ this.elephant.body.allowGravity = false; // Il ne doit pas tomber
         }
       });
 
-
     }
 
 
@@ -392,11 +394,7 @@ this.elephant.body.allowGravity = false; // Il ne doit pas tomber
 
   gagner() {
 
-        // Marquer le premier animal comme acquis
-        this.capturedAnimals[0] = true; 
 
-        // Mettre à jour l'affichage
-        this.animalsIcons[0].setTexture("animal1_acquis");
 
 
     // Affichage du message de victoire
