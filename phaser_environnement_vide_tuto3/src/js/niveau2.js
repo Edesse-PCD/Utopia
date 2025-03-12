@@ -23,11 +23,10 @@ export default class niveau2 extends Phaser.Scene {
     this.load.image("15", "src/assets/niveau2/Tiles/15.png");
     this.load.image("16", "src/assets/niveau2/Tiles/16.png");
     this.load.image("17", "src/assets/niveau2/Tiles/17.png");
-    this.load.image("Polarbear", "src/assets/niveau2/PolarBear.png");
     this.load.image("BG", "src/assets/niveau2/BG.png");
     this.load.image("ours", "src/assets/niveau2/ours.png");
-    this.load.image("tileset_image", "src/assets/Niveau_3/victoire_image.png");
-
+    this.load.image("tileset_image", "src/assets/victoire_image.png");
+    this.load.image("bouton","src/assets/bouton.png")
     this.load.tilemapTiledJSON("map2", "src/assets/niveau2/mapBanquise.json");
   }
 
@@ -51,14 +50,12 @@ export default class niveau2 extends Phaser.Scene {
     const tile15 = carteDuNiveau.addTilesetImage("15", "15");
     const tile16 = carteDuNiveau.addTilesetImage("16", "16");
     const tile17 = carteDuNiveau.addTilesetImage("17", "17");
-    const polarBear = carteDuNiveau.addTilesetImage("Polarbear", "Polarbear");
     const bg = carteDuNiveau.addTilesetImage("BG", "BG");
 
     // Vous pouvez maintenant les combiner dans un seul tableau
     const tileset2 = [
       crate, Crystal, iceBox, snowMan, tree1, tree2,
-      tile1, tile2, tile3, tile7, tile14, tile15, tile16, tile17,
-      polarBear, bg
+      tile1, tile2, tile3, tile7, tile14, tile15, tile16, tile17, bg
     ];
 
 
@@ -73,10 +70,8 @@ export default class niveau2 extends Phaser.Scene {
    
     this.player = this.physics.add.sprite(100, 450, "img_dino");
     this.player.refreshBody();
-    this.player.setBounce(0.2);
     this.player.setCollideWorldBounds(true);
     this.cameras.main.startFollow(this.player);
-
     this.clavier = this.input.keyboard.createCursorKeys();
     this.keyQ = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.Q);
     this.keyZ = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.Z);
@@ -84,7 +79,6 @@ export default class niveau2 extends Phaser.Scene {
     this.physics.add.collider(this.player, calque_plateform)
     this.player2 = this.physics.add.sprite(100, 450, "img_dino2");
     this.player2.refreshBody();
-    this.player2.setBounce(0.2);
     this.player2.setCollideWorldBounds(true);
     this.physics.add.collider(this.player2, calque_plateform);    
     this.physics.world.setBounds(0,0,6400,640);
@@ -93,12 +87,41 @@ export default class niveau2 extends Phaser.Scene {
     this.ours.setImmovable(true); // L'oiseau ne doit pas bouger s'il est touché
 this.ours.body.allowGravity = false; // Il ne doit pas tomber
 
-// Détection de collision entre le joueur et l'oiseau
-this.physics.add.overlap(this.player, this.ours, this.gagner, null, this);
-this.physics.add.overlap(this.player2, this.ours, this.gagner2, null, this);
+
+this.physics.add.overlap(this.player, this.ours, () => {
+  if (this.physics.overlap(this.player2, this.ours)) {
+      this.gagner();
+  }
+}, null, this);
+ // Création du bouton en haut à droite
+ this.boutonMenu = this.add.image(
+  this.cameras.main.width - 50, // Position X en haut à droite
+  25, // Position Y en haut
+  "bouton" // Clé de ton image de bouton
+).setOrigin(0.5)
+.setScrollFactor(0) // Rendre le bouton fixe par rapport à la caméra
+.setInteractive().setScale(0.10);
+
+// Ajouter le texte "Menu" par-dessus le bouton
+this.texteMenu = this.add.text(
+  this.boutonMenu.x, // Position X centrée sur le bouton
+  this.boutonMenu.y, // Position Y centrée sur le bouton
+  "Menu",
+  {
+      font: "20px Arial",
+      fill: "#000",   // Texte en noir
+      align: "center"
+  }
+).setOrigin(0.5)
+.setScrollFactor(0); // Rendre le texte fixe par rapport à la caméra
+
+// Rendre le bouton cliquable
+this.boutonMenu.on("pointerdown", () => {
+  this.scene.start("selection");
+});
 
 
-// Ajout d'une touche pour redémarrer au niveau 1
+// Ajout d'une touche pour redémarrer au niveau 
 this.toucheEntree = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.ENTER);
 
   }
@@ -204,7 +227,6 @@ this.time.delayedCall(500, () => {
       this.player2.anims.play("animdino2_marche", true);
     } else if (this.keyQ.isDown) {
       this.player2.flipX=true;
-
       this.player2.setVelocityX(-160);
       this.player2.anims.play("animdino2_marche", true);
     } else {
@@ -218,10 +240,10 @@ this.time.delayedCall(500, () => {
 
 
     if (this.clavier.up.isDown && this.player.body.blocked.down) {
-      this.player.setVelocityY(-330);
+      this.player.setVelocityY(-350);
     }
     if (this.keyZ.isDown && this.player2.body.blocked.down) {
-      this.player2.setVelocityY(-330);
+      this.player2.setVelocityY(-350);
     }
     if (Phaser.Input.Keyboard.JustDown(this.clavier.space) == true) {
       if (this.physics.overlap(this.player, this.porte_retour) || this.physics.overlap(this.player2, this.porte_retour)) {
@@ -235,10 +257,10 @@ this.time.delayedCall(500, () => {
     // Affichage du message de victoire
       // Affichage de l'image de victoire
       this.add.image(
-        this.player.x-400, // Position X du joueur 2
-        this.player.y+500, // Position Y du joueur 2
+        this.cameras.main.worldView.x + this.cameras.main.width / 2, // Position X centrée
+        this.cameras.main.worldView.y + this.cameras.main.height / 2, // Position Y centrée
         "tileset_image" // Clé de l'image à afficher
-      ).setOrigin(0.5); // Centrer l'image
+    ).setOrigin(0.5);
   
     // Désactive les mouvements du joueur
     this.player.setVelocity(0, 0); // Immobilise le joueur en arrêtant ses vitesses X et Y
@@ -247,29 +269,30 @@ this.time.delayedCall(500, () => {
     this.player2.anims.stop();  // Stoppe l'animation du joueur
     this.physics.world.pause(); // Met en pause la physique du monde (plus rien ne bouge)
   
-    // Ajout d'un écouteur d'événement sur la touche "Entrée"
-    this.input.keyboard.on("keydown-ENTER", () => {
-        this.scene.start("selection"); // Charge la scène du niveau 1 quand on appuie sur Entrée
-    });
+  // Afficher l'asset de bouton
+let boutonMenu = this.add.image(
+  this.cameras.main.worldView.x + this.cameras.main.width / 2, // Position X centrée
+  this.cameras.main.worldView.y + this.cameras.main.height / 2 + 240, // Position Y sous l'image
+  "bouton" // Clé de ton image de bouton
+).setOrigin(0.5)
+.setInteractive().setScale(0.15);
+
+// Ajouter le texte "Menu" par-dessus le bouton
+let texteMenu = this.add.text(
+  boutonMenu.x, // Position X centrée sur le bouton
+  boutonMenu.y, // Position Y centrée sur le bouton
+  "Menu",
+  {
+      font: "20px Arial",
+      fill: "#000",   // Texte en noir
+      align: "center"
   }
-  gagner2() {
-    // Affichage du message de victoire
-    this.add.image(
-      this.player2.x-400, // Position X du joueur 2
-      this.player2.y +500, // Position Y légèrement au-dessus du joueur 2
-      "tileset_image" // Clé de l'image à afficher
-    ).setOrigin(0.5);
-  
-    // Désactive les mouvements du joueur
-    this.player.setVelocity(0, 0); // Immobilise le joueur en arrêtant ses vitesses X et Y
-    this.player.anims.stop();
-    this.player2.setVelocity(0, 0); // Immobilise le joueur en arrêtant ses vitesses X et Y
-    this.player2.anims.stop(); // Stoppe l'animation du joueur
-    this.physics.world.pause(); // Met en pause la physique du monde (plus rien ne bouge)
-  
-    // Ajout d'un écouteur d'événement sur la touche "Entrée"
-    this.input.keyboard.on("keydown-ENTER", () => {
-        this.scene.start("selection"); // Charge la scène du niveau 1 quand on appuie sur Entrée
-    });
+).setOrigin(0.5);
+
+// Rendre le bouton cliquable
+boutonMenu.on("pointerdown", () => {
+  this.scene.start("selection");
+});
+
   }
 }
