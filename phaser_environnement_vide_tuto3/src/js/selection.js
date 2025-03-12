@@ -141,7 +141,7 @@ keyD = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.D);
 
     player.setScale(2);
     player2.setScale(2);
-   
+    
   }
 
   update() {

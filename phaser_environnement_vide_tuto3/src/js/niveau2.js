@@ -127,6 +127,9 @@ this.boutonMenu.on("pointerdown", () => {
 // Ajout d'une touche pour redémarrer au niveau 
 this.toucheEntree = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.ENTER);
 
+var sij = this.scene.get("interfaceJeu");
+sij.debloquerAnimal(0); // Garde l'éléphant
+sij.debloquerAnimal(1); // Débloque l'ours
 
 
   }

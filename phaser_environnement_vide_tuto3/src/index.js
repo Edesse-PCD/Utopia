@@ -8,6 +8,8 @@ import niveau1 from "./js/niveau1.js";
 import niveau2 from "./js/niveau2.js";
 import niveau3 from "./js/niveau3.js"; 
 import niveau4 from "./js/niveau4.js";
+import interfaceJeu from "./js/interface.js"; 
+
 var config = {
   type: Phaser.AUTO,
   width: 800, 
@@ -23,7 +25,7 @@ var config = {
       debug: true 
     }
   },
-  scene: [selection, niveau1,niveau2, niveau3,niveau4] 
+  scene: [interfaceJeu, selection, niveau1,niveau2, niveau3,niveau4] 
   }
 
 var game = new Phaser.Game(config);
