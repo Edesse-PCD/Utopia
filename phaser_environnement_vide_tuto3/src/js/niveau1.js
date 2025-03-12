@@ -320,9 +320,8 @@ if (distance > this.maxDistance) {
     if (dangerTile || dangerTile2) {
       if (!this.deathMessage) {
         this.deathMessage = this.add.text(400, 300, 'Vous êtes mort !', {
-          font: '32px Arial',
+          font: '32px Gorgia',
           fill: '#fff',
-          backgroundColor: '#000'
         }).setOrigin(0.5).setScrollFactor(0);
       }
 
@@ -330,12 +329,17 @@ if (distance > this.maxDistance) {
       // Désactiver le corps physique du joueur temporairement
       this.player.setVelocity(0, 0); // Stoppe les mouvements
       this.player.body.enable = false;
+      this.player2.setVelocity(0, 0);
+      this.player2.body.enable = false;
+
+
 
       // Attendre un court instant avant de le faire respawn (évite un bug de collision)
       this.time.delayedCall(500, () => {
         this.player.setPosition(this.startPosition.x, this.startPosition.y); // Respawn au point de départ
         this.player.body.enable = true; // Réactiver le corps du joueur
-
+        this.player2.setPosition(this.startPosition.x, this.startPosition.y); // Respawn au point de départ
+        this.player2.body.enable = true; // Réactiver le corps du joueur
 
         // Supprimer le message de mort
         if (this.deathMessage) {
@@ -373,12 +377,15 @@ if (distance > this.maxDistance) {
       // Désactiver le corps physique du joueur temporairement
       this.player2.setVelocity(0, 0); // Stoppe les mouvements
       this.player2.body.enable = false;
+      this.player.setVelocity(0, 0); // Stoppe les mouvements
+      this.player.body.enable = false;
 
       // Attendre un court instant avant de le faire respawn (évite un bug de collision)
       this.time.delayedCall(500, () => {
         this.player2.setPosition(this.startPosition.x, this.startPosition.y); // Respawn au point de départ
         this.player2.body.enable = true; // Réactiver le corps du joueur
-
+        this.player.setPosition(this.startPosition.x, this.startPosition.y); // Respawn au point de départ
+        this.player.body.enable = true; // Réactiver le corps du joueur
 
         // Supprimer le message de mort
         if (this.deathMessage) {

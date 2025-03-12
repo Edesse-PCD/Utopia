@@ -33,6 +33,7 @@ export default class niveau4 extends Phaser.Scene {
   this.load.image("Arbre", "src/assets/Niveau4/Arbre.png");
   this.load.image("bouton","src/assets/bouton.png")
   this.load.image("tileset_image", "src/assets/victoire_image.png");
+  this.load.image("imageNiveau4", "src/assets/Niveau4/imageNiveau4.png");
   this.load.audio('background4', 'src/assets/Niveau4/indiana_johns.mp3'); 
   // chargement de la carte
 this.load.tilemapTiledJSON("CarteJungle", "src/assets/Niveau4/MapJungle.json"); 
@@ -47,6 +48,34 @@ this.load.tilemapTiledJSON("CarteJungle", "src/assets/Niveau4/MapJungle.json");
       
       this.musique_de_fond4 = this.sound.add('background4'); 
       this.musique_de_fond4.play();  
+      this.imageNiveau4 = this.add.image(400, 350, "imageNiveau4").setDepth(20).setScale(0.5);
+    this.boutonCommencer = this.add.image(
+      this.cameras.main.width - 250, // Position X en haut à droite
+      410, // Position Y en haut
+      "bouton" // Clé de ton image de bouton
+    ).setOrigin(0.5)
+    .setScrollFactor(0) // Rendre le bouton fixe par rapport à la caméra
+    .setInteractive().setScale(0.20).setDepth(21);
+    
+    // Ajouter le texte "Menu" par-dessus le bouton
+    this.texteCommencer = this.add.text(
+      this.boutonCommencer.x, // Position X centrée sur le bouton
+      this.boutonCommencer.y, // Position Y centrée sur le bouton
+      "Commencer",
+      {
+          font: "20px Arial",
+          fill: "#000",   // Texte en noir
+          align: "center"
+      }
+    ).setOrigin(0.5)
+    .setScrollFactor(0).setDepth(22); // Rendre le texte fixe par rapport à la caméra
+    
+    // Rendre le bouton cliquable
+    this.boutonCommencer.on("pointerdown", () => {
+      this.boutonCommencer.destroy();
+      this.imageNiveau4.destroy();
+      this.texteCommencer.destroy();
+        });
 // Position de départ (respawn du joueur)
 this.startPosition = { x: 100, y: 450 };
 this.maxDistance = 700; // Distance maximale autorisée entre les joueurs
@@ -307,9 +336,8 @@ this.texteMenu.setDepth(1001);
     if (dangerTile || dangerTile2) {
       if (!this.deathMessage) {
           this.deathMessage = this.add.text(400, 300, 'Vous êtes mort !', { 
-              font: '32px Arial', 
+              font: '32px Gorgia', 
               fill: '#fff', 
-              backgroundColor: '#000' 
           }).setOrigin(0.5).setScrollFactor(0);
       }
   
