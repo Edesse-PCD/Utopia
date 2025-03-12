@@ -134,7 +134,7 @@ export default class niveau3 extends Phaser.Scene {
     this.player2.setScale(2);
 
 
-    this.oiseau = this.physics.add.sprite(6300, 300, "tileset_oiseau");
+    this.oiseau = this.physics.add.sprite(300, 300, "tileset_oiseau");
   
   
 this.oiseau.setImmovable(true); // L'oiseau ne doit pas bouger s'il est touché
