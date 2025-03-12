@@ -26,7 +26,7 @@ export default class niveau2 extends Phaser.Scene {
     this.load.image("BG", "src/assets/niveau2/BG.png");
     this.load.image("ours", "src/assets/niveau2/ours.png");
     this.load.image("tileset_image", "src/assets/victoire_image.png");
-    this.load.image("bouton","src/assets/bouton.png")
+    this.load.image("tileset_bouton","src/assets/bouton.png")
     this.load.tilemapTiledJSON("map2", "src/assets/niveau2/mapBanquise.json");
   }
 
