@@ -181,7 +181,12 @@ if (distance > this.maxDistance) {
           font: '32px Georgia', 
           fill: '#fff',
       }).setOrigin(0.5).setScrollFactor(0); // Centrer par rapport à la caméra
-  }
+      this.time.delayedCall(3000, () => {
+        if (this.deathMessage) {
+            this.deathMessage.destroy();
+            this.deathMessage = null;
+        }});
+    }
     // Désactiver les mouvements des deux joueurs
     this.player.setVelocity(0, 0);
     this.player2.setVelocity(0, 0);
@@ -189,17 +194,13 @@ if (distance > this.maxDistance) {
     this.player2.body.enable = false;
 
     // Attendre un court instant avant de les respawn
-    this.time.delayedCall(2000, () => {
+    this.time.delayedCall(50, () => {
         this.player.setPosition(this.startPosition.x, this.startPosition.y);
         this.player2.setPosition(this.startPosition.x+50, this.startPosition.y);
         this.player.body.enable = true;
         this.player2.body.enable = true;
 
-        // Supprimer le message de mort
-        if (this.deathMessage) {
-            this.deathMessage.destroy();
-            this.deathMessage = null;
-        }
+      
     });
 }
 
@@ -218,7 +219,13 @@ if (distance > this.maxDistance) {
               font: '32px Georgia', 
               fill: '#fff', 
           }).setOrigin(0.5).setScrollFactor(0);
+          this.time.delayedCall(3000, () => {
+            if (this.deathMessage) {
+                this.deathMessage.destroy();
+                this.deathMessage = null;
+            }});
       }
+
   
 
             // Désactiver le corps physique du joueur temporairement
@@ -228,7 +235,7 @@ if (distance > this.maxDistance) {
     this.player2.body.enable = false;
 
     // Attendre un court instant avant de le faire respawn (évite un bug de collision)
-    this.time.delayedCall(1000, () => {
+    this.time.delayedCall(50, () => {
         this.player.setPosition(this.startPosition.x+50, this.startPosition.y); 
         this.player2.setPosition(this.startPosition.x, this.startPosition.y); // Respawn au point de départ
         // Respawn au point de départ
@@ -237,10 +244,7 @@ if (distance > this.maxDistance) {
 
 
         // Supprimer le message de mort
-        if (this.deathMessage) {
-          this.deathMessage.destroy();
-          this.deathMessage = null;
-      }
+        
     });
     
         
@@ -266,8 +270,12 @@ if (dangerTile3 || dangerTile4) {
       this.deathMessage = this.add.text(400, 300, 'Vous êtes mort !', { 
           font: '32px Georgia', 
           fill: '#fff', 
-      }).setOrigin(0.5).setScrollFactor(0); // Rendre le texte fixe par rapport à la caméra
-      
+      }).setOrigin(0.5).setScrollFactor(0); 
+      this.time.delayedCall(3000, () => {
+        if (this.deathMessage) {
+            this.deathMessage.destroy();
+            this.deathMessage = null;
+        }});
   }
 
 
@@ -279,7 +287,7 @@ this.player.body.enable = false;
 
 
 // Attendre un court instant avant de le faire respawn (évite un bug de collision)
-this.time.delayedCall(1000, () => {
+this.time.delayedCall(50, () => {
     this.player2.setPosition(this.startPosition.x+50, this.startPosition.y);
     this.player.setPosition(this.startPosition.x, this.startPosition.y); // Respawn au point de départ
     // Respawn au point de départ
@@ -288,10 +296,7 @@ this.time.delayedCall(1000, () => {
 
 
     // Supprimer le message de mort
-    if (this.deathMessage) {
-      this.deathMessage.destroy();
-      this.deathMessage = null;
-  }
+  
 });}
 
 
