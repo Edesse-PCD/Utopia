@@ -31,6 +31,8 @@ export default class niveau4 extends Phaser.Scene {
   this.load.image("shack2", "src/assets/Niveau4/shack2.png");
   this.load.image("shack3", "src/assets/Niveau4/shack3.png");
   this.load.image("Tree_2", "src/assets/Niveau4/Tree_2.png");
+  this.load.image("bouton","src/assets/bouton.png")
+  this.load.image("tileset_image", "src/assets/victoire_image.png");
   
   // chargement de la carte
 this.load.tilemapTiledJSON("CarteJungle", "src/assets/Niveau4/MapJungle.json"); 
@@ -123,11 +125,6 @@ const calque_ajoutCabane = carteDuNiveau.createLayer(
 );
 calque_ajoutCabane.setCollisionByProperty({ EstSolide: true })
 
-// Calque Animal : Objets ramassables (Animal)
-const calque_Animal = carteDuNiveau.createLayer(
-  "Animal",
-  tilesets
-);
 
 // Crée le calque "danger" à partir du Tilemap
 this.danger = this.map.createLayer("danger", this.tileset, 0, 0);
@@ -157,11 +154,6 @@ if (this.ladder_layer) {
 
     this.porte_retour = this.physics.add.staticSprite(100, 550, "img_porte1"); 
 
-    // ajout d'un texte distintcif  du niveau
-    this.add.text(400, 100, "Vous êtes dans le niveau 4   ", {
-      fontFamily: 'Georgia, "Goudy Bookletter 1911", Times, serif',
-      fontSize: "22pt"
-      });
 
     this.player = this.physics.add.sprite(100, 450, "img_dino");
     this.physics.add.collider(this.player, calque_feuillageSolide);
@@ -183,6 +175,10 @@ if (this.ladder_layer) {
     this.player2.setBounce(0.2);
     this.player2.setCollideWorldBounds(true);
     this.clavier = this.input.keyboard.createCursorKeys();
+
+    this.Panda = this.physics.add.sprite(500, 620, "Panda");
+    this.Panda.setImmovable(true); // le panda ne doit pas bouger s'il est touché
+    this.Panda.body.allowGravity = false; // Il ne doit pas tomber
     
 
     // Redimensionnement du monde avec les dimensions calculées via Tiled
@@ -204,8 +200,49 @@ this.player2.setDepth(20); // Met aussi le 2e joueur devant
 this.player.setScale(2);
 this.player2.setScale(2);
 
+//gagner interagie avec le panda
 
-    
+this.physics.add.overlap(this.player, this.Panda, () => {
+    if (this.physics.overlap(this.player2, this.Panda)) {
+        this.gagner();
+    }
+  }, null, this);
+   // Création du bouton en haut à droite
+   this.boutonMenu = this.add.image(
+    this.cameras.main.width - 50, // Position X en haut à droite
+    25, // Position Y en haut
+    "bouton" // Clé de ton image de bouton
+  )
+  .setOrigin(0.5)
+  .setScrollFactor(0) // Rendre le bouton fixe par rapport à la caméra
+  .setInteractive()
+  .setScale(0.10);
+
+  // Appliquer setDepth() après la création
+this.boutonMenu.setDepth(1000);
+  
+  // Ajouter le texte "Menu" par-dessus le bouton
+  this.texteMenu = this.add.text(
+    this.boutonMenu.x, // Position X centrée sur le bouton
+    this.boutonMenu.y, // Position Y centrée sur le bouton
+    "Menu",
+    {
+        font: "20px Arial",
+        fill: "#000",   // Texte en noir
+        align: "center"
+    }
+  )
+  .setOrigin(0.5)
+  .setScrollFactor(0); // Rendre le texte fixe par rapport à la caméra
+  
+  // Appliquer setDepth() au texte après la création
+this.texteMenu.setDepth(1001);
+  
+  // Rendre le bouton cliquable
+  this.boutonMenu.on("pointerdown", () => {
+    this.scene.start("selection");
+  });
+
     
     } 
   
@@ -305,15 +342,15 @@ this.time.delayedCall(500, () => {
       if (this.clavier.left.isDown) {
         this.player.flipX=true;
         this.player.setVelocityX(-160);
-        this.player.anims.play("animdino_marche", true);
+        this.player.anims.play("animdino_marche", true); // player 1 tourne a gauche
       } else if (this.clavier.right.isDown) {
         this.player.flipX=false;
         this.player.setVelocityX(160);
-        this.player.anims.play("animdino_marche", true);
+        this.player.anims.play("animdino_marche", true); // player 1 tourne a droite
       } else if (this.keyD.isDown) {
         this.player2.flipX=false;
         this.player2.setVelocityX(160);
-        this.player2.anims.play("animdino2_marche", true);
+        this.player2.anims.play("animdino2_marche", true); // player 2 tourne a droite
       } else if (this.keyQ.isDown) {
         this.player2.flipX=true;
 
@@ -347,7 +384,6 @@ this.time.delayedCall(500, () => {
       }
   }
   
-  
   /**
    * Gère le mouvement d'un joueur sur les lianes.
    */
@@ -365,7 +401,8 @@ this.time.delayedCall(500, () => {
           }
       } else {
           player.body.setAllowGravity(true); // Réactive la gravité si pas sur une liane
-      }     
+      }   
+      
 
     }
     checkLadder() {
@@ -392,7 +429,7 @@ this.time.delayedCall(500, () => {
           
       }
     // Vérification pour **player2**
-      const player2TileUp = this.ladder_layer.getTileAtWorldXY(this.player2.x, this.player2.getTopCenter().y + 1);
+    const player2TileUp = this.ladder_layer.getTileAtWorldXY(this.player2.x, this.player2.getTopCenter().y + 1);
     const player2TileDown = this.ladder_layer.getTileAtWorldXY(this.player2.x, this.player2.getBottomCenter().y - 1);
 
     if (player2TileUp || player2TileDown) {
@@ -407,8 +444,55 @@ this.time.delayedCall(500, () => {
     }
 
 
+    gagner() {
+      console.log("Affichage du message de victoire !");  
+
+ // Affichage du message de victoire
+      // Affichage de l'image de victoire
+      this.add.image(
+        this.cameras.main.worldView.x + this.cameras.main.width / 2, // Position X centrée
+        this.cameras.main.worldView.y + this.cameras.main.height / 2, // Position Y centrée
+        "tileset_image" // Clé de l'image à afficher
+    ).setOrigin(0.5)
+    .setDepth(100); // Premier plan
+        
+   
+  
+    // Désactive les mouvements du joueur
+    this.player.setVelocity(0, 0); // Immobilise le joueur en arrêtant ses vitesses X et Y
+    this.player.anims.stop();
+    this.player2.setVelocity(0, 0); // Immobilise le joueur en arrêtant ses vitesses X et Y
+    this.player2.anims.stop();  // Stoppe l'animation du joueur
+    this.physics.world.pause(); // Met en pause la physique du monde (plus rien ne bouge)
+  
+  // Afficher l'asset de bouton
+let boutonMenu = this.add.image(
+  this.cameras.main.worldView.x + this.cameras.main.width / 2, // Position X centrée
+  this.cameras.main.worldView.y + this.cameras.main.height / 2 + 240, // Position Y sous l'image
+  "bouton" // Clé de ton image de bouton
+).setOrigin(0.5)
+.setInteractive()
+.setScale(0.15).setDepth(100);// Premier plan
+
+
+// Ajouter le texte "Menu" par-dessus le bouton
+let texteMenu = this.add.text(
+  boutonMenu.x, // Position X centrée sur le bouton
+  boutonMenu.y, // Position Y centrée sur le bouton
+  "Menu",
+  {
+      font: "20px Arial",
+      fill: "#000",   // Texte en noir
+      align: "center"
   }
+).setOrigin(0.5).setDepth(100);
+
+// Rendre le bouton cliquable
+boutonMenu.on("pointerdown", () => {
+  this.scene.start("selection");
+});
 
 
+}
 
-
+}
