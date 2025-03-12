@@ -170,6 +170,7 @@ if (this.ladder_layer) {
     this.clavier = this.input.keyboard.createCursorKeys();
     this.keyQ = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.Q);
     this.keyZ = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.Z);
+    this.keyS = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.S);
     this.keyD = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.D);
     
     
@@ -180,7 +181,7 @@ if (this.ladder_layer) {
     this.player2.setCollideWorldBounds(true);
     this.clavier = this.input.keyboard.createCursorKeys();
 
-    this.Panda = this.physics.add.sprite(500, 620, "Panda");
+    this.Panda = this.physics.add.sprite(100, 560, "Panda");
     this.Panda.setImmovable(true); // le panda ne doit pas bouger s'il est touché
     this.Panda.body.allowGravity = false; // Il ne doit pas tomber
     
@@ -374,11 +375,11 @@ this.time.delayedCall(500, () => {
       // Déplacement joueur 1
       if (this.clavier.left.isDown) {
         this.player.flipX=true;
-        this.player.setVelocityX(-160);
+        this.player.setVelocityX(-1600);
         this.player.anims.play("animdino_marche", true); // player 1 tourne a gauche
       } else if (this.clavier.right.isDown) {
         this.player.flipX=false;
-        this.player.setVelocityX(160);
+        this.player.setVelocityX(1600);
         this.player.anims.play("animdino_marche", true); // player 1 tourne a droite
       } else if (this.keyD.isDown) {
         this.player2.flipX=false;
@@ -396,46 +397,52 @@ this.time.delayedCall(500, () => {
         this.player2.anims.play("animdino2_face");
       }
       
-      if (this.clavier.up.isDown && this.player.body.blocked.down) {
-        this.player.setVelocityY(-245);
-    }
-  
-      // Saut joueur 2
-      if (this.keyZ.isDown && this.player2.body.blocked.down) {
-          this.player2.setVelocityY(-245);
+        if (this.clavier.up.isDown && this.player.body.blocked.down) {
+          this.player.setVelocityY(-2450);
       }
-  
-      // Gestion des lianes pour **les deux joueurs**
-      this.handleLadderMovement(this.player, this.clavier.up, this.clavier.down);
-      this.handleLadderMovement(this.player2, this.keyZ, this.clavier.down);
-  
-      // Interaction avec la porte
-      if (Phaser.Input.Keyboard.JustDown(this.clavier.space)) {
-          if (this.physics.overlap(this.player, this.porte_retour) || this.physics.overlap(this.player2, this.porte_retour)) {
-              this.scene.start("selection");
-          }
-      }
+    
+        // Saut joueur 2
+        if (this.keyZ.isDown && this.player2.body.blocked.down) {
+            this.player2.setVelocityY(-245);
+        }
+    
+        // Gestion des lianes pour **les deux joueurs**
+        this.handleLadderMovement(this.player, this.clavier.up, this.clavier.down);
+        this.handleLadderMovement(this.player2, this.keyZ, this.keyS);
+    
+        // Interaction avec la porte
+        if (Phaser.Input.Keyboard.JustDown(this.clavier.space)) {
+            if (this.physics.overlap(this.player, this.porte_retour) || this.physics.overlap(this.player2, this.porte_retour)) {
+                this.scene.start("selection");
+            }
+        }
   }
   
   /**
    * Gère le mouvement d'un joueur sur les lianes.
    */
   handleLadderMovement(player, keyUp, keyDown) {
-      if (player.onLadder) {
-          player.body.setAllowGravity(false); // Désactive la gravité
-  
-          // Déplacement vertical
-          if (keyUp.isDown) {
-              player.setVelocityY(-100); // Monter
-          } else if (keyDown.isDown) {
-              player.setVelocityY(100); // Descendre
-          } else {
-              player.setVelocityY(0); // Arrêt
-          }
-      } else {
-          player.body.setAllowGravity(true); // Réactive la gravité si pas sur une liane
-      }   
-      
+    if (!keyUp || !keyDown) return; // Vérifier que les touches existent
+
+    if (player.onLadder) {
+        player.body.setAllowGravity(false); // Désactiver la gravité
+        console.log(`🧗‍♂️ Player ${player === this.player ? "1" : "2"} sur une liane !`);
+
+        // Déplacement vertical
+        if (keyUp.isDown) {
+            player.setVelocityY(-100); // Monter
+            console.log("⬆️ Monte !");
+        } else if (keyDown.isDown) {
+            player.setVelocityY(100); // Descendre
+            console.log("⬇️ Descend !");
+        } else {
+            player.setVelocityY(0); // Arrêt
+        }
+    } else {
+        player.body.setAllowGravity(true); // Réactiver la gravité si pas sur une liane
+    }
+
+    
 
     }
     checkLadder() {
@@ -529,3 +536,5 @@ boutonMenu.on("pointerdown", () => {
 }
 
 }
+
+//ajout inutile
