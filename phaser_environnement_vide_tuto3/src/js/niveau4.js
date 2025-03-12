@@ -33,7 +33,7 @@ export default class niveau4 extends Phaser.Scene {
   this.load.image("Tree_2", "src/assets/Niveau4/Tree_2.png");
   this.load.image("bouton","src/assets/bouton.png")
   this.load.image("tileset_image", "src/assets/victoire_image.png");
-  
+  this.load.audio('background', 'src/assets/Niveau4/indiana_johns.mp3'); 
   // chargement de la carte
 this.load.tilemapTiledJSON("CarteJungle", "src/assets/Niveau4/MapJungle.json"); 
  
