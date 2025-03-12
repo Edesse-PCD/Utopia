@@ -35,8 +35,8 @@ export default class niveau2 extends Phaser.Scene {
 
   create() {
    
-    musique_de_fond = this.sound.add('background'); 
-    musique_de_fond.play();  
+    this.musique_de_fond = this.sound.add('background'); 
+    this.musique_de_fond.play();  
     this.imageNiveau2 = this.add.image(400, 350, "imageNiveau2").setDepth(10).setScale(0.5);
     this.boutonCommencer = this.add.image(
       this.cameras.main.width - 250, // Position X en haut à droite
@@ -378,7 +378,7 @@ this.time.delayedCall(1000, () => {
   
   // Rendre le bouton cliquable
   boutonMenu.on("pointerdown", () => {
-    musique_de_fond.stop();
+    this.musique_de_fond.stop();
     this.game.config.spawnX= 2050;
     this.game.config.spawnY=300;
     this.scene.start("selection");
