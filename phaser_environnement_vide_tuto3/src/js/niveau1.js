@@ -201,7 +201,7 @@ export default class niveau1 extends Phaser.Scene {
     this.clavier = this.input.keyboard.createCursorKeys();
     this.physics.add.collider(this.player2, this.groupe_plateformes);
     this.elephant = this.physics.add.sprite(5500, 110, "elephantcute1");
-    this.elephant.setImmovable(true); // L'oiseau ne doit pas bouger s'il est touché
+    this.elephant.setImmovable(true); // L'elephant ne doit pas bouger s'il est touché
 this.elephant.body.allowGravity = false; // Il ne doit pas tomber
 
     // Redimensionnement du monde avec les dimensions calculées via Tiled

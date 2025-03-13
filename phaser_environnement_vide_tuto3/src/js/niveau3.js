@@ -129,7 +129,7 @@ export default class niveau3 extends Phaser.Scene {
     this.keyD = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.D);
 
 
-    this.player2 = this.physics.add.sprite(375, 450, "img_dino2");
+    this.player2 = this.physics.add.sprite(375, 450, "img_dino2"); 
     this.player2.refreshBody();
     this.player2.setBounce(0.2);
     this.player2.setCollideWorldBounds(true);
