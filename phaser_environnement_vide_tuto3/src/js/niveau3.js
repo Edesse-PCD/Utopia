@@ -197,27 +197,30 @@ if (distance > this.maxDistance) {
             font: '32px Georgia', 
             fill: '#fff', 
         }).setOrigin(0.5).setScrollFactor(0); // Centrer par rapport à la caméra
+        this.time.delayedCall(3000, () => {
+          if (this.deathMessage) {
+              this.deathMessage.destroy();
+              this.deathMessage = null;
+          }});
+      
+      // Désactiver les mouvements des deux joueurs
+      this.player.setVelocity(0, 0);
+      this.player2.setVelocity(0, 0);
+      this.player.body.enable = false;
+      this.player2.body.enable = false;
+  
+      // Attendre un court instant avant de les respawn
+      this.time.delayedCall(50, () => {
+          this.player.setPosition(this.startPosition.x, this.startPosition.y);
+          this.player2.setPosition(this.startPosition.x+50, this.startPosition.y);
+          this.player.body.enable = true;
+          this.player2.body.enable = true;
+  
+        
+      });
     }
 
-    // Désactiver les mouvements des deux joueurs
-    this.player.setVelocity(0, 0);
-    this.player2.setVelocity(0, 0);
-    this.player.body.enable = false;
-    this.player2.body.enable = false;
-
-    // Attendre un court instant avant de les respawn
-    this.time.delayedCall(1000, () => {
-        this.player.setPosition(this.startPosition.x, this.startPosition.y);
-        this.player2.setPosition(this.startPosition.x, this.startPosition.y);
-        this.player.body.enable = true;
-        this.player2.body.enable = true;
-
-        // Supprimer le message de mort
-        if (this.deathMessage) {
-            this.deathMessage.destroy();
-            this.deathMessage = null;
-        }
-    });
+    
 }
     if (this.clavier.left.isDown) {
       this.player.flipX=true;
@@ -261,14 +264,27 @@ if (this.player.y >= this.cameras.main.height && !this.deathMessage) {
     fill: '#fff', 
   }).setOrigin(0.5).setScrollFactor(0);
   
-  // Désactiver le corps physique du joueur 1
-  this.player.setVelocity(0, 0);
-  this.player.body.enable = false;
+  this.time.delayedCall(3000, () => {
+    if (this.deathMessage) {
+        this.deathMessage.destroy();
+        this.deathMessage = null;
+    }});
 
-  // Redémarrer la scène après 500 ms
-  this.time.delayedCall(1000, () => {
-    this.scene.restart();
-  });
+// Désactiver les mouvements des deux joueurs
+this.player.setVelocity(0, 0);
+this.player2.setVelocity(0, 0);
+this.player.body.enable = false;
+this.player2.body.enable = false;
+
+// Attendre un court instant avant de les respawn
+this.time.delayedCall(50, () => {
+    this.player.setPosition(this.startPosition.x, this.startPosition.y);
+    this.player2.setPosition(this.startPosition.x+50, this.startPosition.y);
+    this.player.body.enable = true;
+    this.player2.body.enable = true;
+
+  
+});
 }
 
 // Mort joueur 2
@@ -279,16 +295,29 @@ if (this.player2.y >= this.cameras.main.height && !this.deathMessage) {
     fill: '#fff', 
   }).setOrigin(0.5).setScrollFactor(0);
   
-  // Désactiver le corps physique du joueur 2
-  this.player2.setVelocity(0, 0);
-  this.player2.body.enable = false;
+  this.time.delayedCall(3000, () => {
+    if (this.deathMessage) {
+        this.deathMessage.destroy();
+        this.deathMessage = null;
+    }});
 
-  // Redémarrer la scène après 500 ms
-  this.time.delayedCall(1000, () => {
-    this.scene.restart();
-  });
+// Désactiver les mouvements des deux joueurs
+this.player.setVelocity(0, 0);
+this.player2.setVelocity(0, 0);
+this.player.body.enable = false;
+this.player2.body.enable = false;
+
+// Attendre un court instant avant de les respawn
+this.time.delayedCall(50, () => {
+    this.player.setPosition(this.startPosition.x, this.startPosition.y);
+    this.player2.setPosition(this.startPosition.x+50, this.startPosition.y);
+    this.player.body.enable = true;
+    this.player2.body.enable = true;
+
+  
+});
 }
-  }
+}
 
 
   gagner() {

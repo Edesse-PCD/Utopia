@@ -184,15 +184,6 @@ export default class niveau1 extends Phaser.Scene {
 
 
 
-
-
-    this.porte_retour = this.physics.add.staticSprite(100, 550, "img_porte1");
-    // ajout d'un texte distintcif  du niveau
-    this.add.text(400, 100, "Vous êtes dans le niveau 1", {
-      fontFamily: 'Georgia, "Goudy Bookletter 1911", Times, serif',
-      fontSize: "22pt"
-    });
-
     this.player = this.physics.add.sprite(100, 450, "img_dino");
     this.physics.add.collider(this.player, calque_plateformes);
     this.player.refreshBody();
@@ -237,12 +228,17 @@ this.elephant.x = 400;
 
 if (distance > this.maxDistance) {
     // Afficher le message de mort pour les deux joueurs
-    if (!this.deathMessage) {
+    if (!this.deathMessage){
       this.deathMessage = this.add.text(400, 300, 'Vous êtes trop éloignés! Restez coopératifs', { 
           font: '32px Georgia', 
           fill: '#fff',
       }).setOrigin(0.5).setScrollFactor(0); // Centrer par rapport à la caméra
-  }
+      this.time.delayedCall(3000, () => {
+        if (this.deathMessage) {
+            this.deathMessage.destroy();
+            this.deathMessage = null;
+        }});
+    
     // Désactiver les mouvements des deux joueurs
     this.player.setVelocity(0, 0);
     this.player2.setVelocity(0, 0);
@@ -250,18 +246,14 @@ if (distance > this.maxDistance) {
     this.player2.body.enable = false;
 
     // Attendre un court instant avant de les respawn
-    this.time.delayedCall(2000, () => {
+    this.time.delayedCall(50, () => {
         this.player.setPosition(this.startPosition.x, this.startPosition.y);
         this.player2.setPosition(this.startPosition.x+50, this.startPosition.y);
         this.player.body.enable = true;
         this.player2.body.enable = true;
 
-        // Supprimer le message de mort
-        if (this.deathMessage) {
-            this.deathMessage.destroy();
-            this.deathMessage = null;
-        }
-    });
+      
+    });}
 }
 
 
@@ -324,30 +316,27 @@ if (distance > this.maxDistance) {
           font: '32px Gorgia',
           fill: '#fff',
         }).setOrigin(0.5).setScrollFactor(0);
-      }
-
-
-      // Désactiver le corps physique du joueur temporairement
-      this.player.setVelocity(0, 0); // Stoppe les mouvements
-      this.player.body.enable = false;
+        this.time.delayedCall(3000, () => {
+          if (this.deathMessage) {
+              this.deathMessage.destroy();
+              this.deathMessage = null;
+          }});
+      
+      // Désactiver les mouvements des deux joueurs
+      this.player.setVelocity(0, 0);
       this.player2.setVelocity(0, 0);
+      this.player.body.enable = false;
       this.player2.body.enable = false;
-
-
-
-      // Attendre un court instant avant de le faire respawn (évite un bug de collision)
-      this.time.delayedCall(500, () => {
-        this.player.setPosition(this.startPosition.x, this.startPosition.y); // Respawn au point de départ
-        this.player.body.enable = true; // Réactiver le corps du joueur
-        this.player2.setPosition(this.startPosition.x, this.startPosition.y); // Respawn au point de départ
-        this.player2.body.enable = true; // Réactiver le corps du joueur
-
-        // Supprimer le message de mort
-        if (this.deathMessage) {
-          this.deathMessage.destroy();
-          this.deathMessage = null;
-        }
-      });
+  
+      // Attendre un court instant avant de les respawn
+      this.time.delayedCall(50, () => {
+          this.player.setPosition(this.startPosition.x, this.startPosition.y);
+          this.player2.setPosition(this.startPosition.x+50, this.startPosition.y);
+          this.player.body.enable = true;
+          this.player2.body.enable = true;
+  
+        
+      });}
     }
 
     // gestion de la mort et respawn du JOUEUR 2 
@@ -368,32 +357,30 @@ if (distance > this.maxDistance) {
     if (dangerTile3 || dangerTile4) {
       if (!this.deathMessage) {
         this.deathMessage = this.add.text(400, 300, 'Vous êtes mort !', {
-          font: '32px Arial',
+          font: '32px Gorgia',
           fill: '#fff',
-          backgroundColor: '#000'
         }).setOrigin(0.5).setScrollFactor(0);
-      }
-
-
-      // Désactiver le corps physique du joueur temporairement
-      this.player2.setVelocity(0, 0); // Stoppe les mouvements
-      this.player2.body.enable = false;
-      this.player.setVelocity(0, 0); // Stoppe les mouvements
+        this.time.delayedCall(3000, () => {
+          if (this.deathMessage) {
+              this.deathMessage.destroy();
+              this.deathMessage = null;
+          }});
+      
+      // Désactiver les mouvements des deux joueurs
+      this.player.setVelocity(0, 0);
+      this.player2.setVelocity(0, 0);
       this.player.body.enable = false;
-
-      // Attendre un court instant avant de le faire respawn (évite un bug de collision)
-      this.time.delayedCall(500, () => {
-        this.player2.setPosition(this.startPosition.x, this.startPosition.y); // Respawn au point de départ
-        this.player2.body.enable = true; // Réactiver le corps du joueur
-        this.player.setPosition(this.startPosition.x, this.startPosition.y); // Respawn au point de départ
-        this.player.body.enable = true; // Réactiver le corps du joueur
-
-        // Supprimer le message de mort
-        if (this.deathMessage) {
-          this.deathMessage.destroy();
-          this.deathMessage = null;
-        }
-      });
+      this.player2.body.enable = false;
+  
+      // Attendre un court instant avant de les respawn
+      this.time.delayedCall(50, () => {
+          this.player.setPosition(this.startPosition.x, this.startPosition.y);
+          this.player2.setPosition(this.startPosition.x+50, this.startPosition.y);
+          this.player.body.enable = true;
+          this.player2.body.enable = true;
+  
+        
+      });}
 
     }
 
