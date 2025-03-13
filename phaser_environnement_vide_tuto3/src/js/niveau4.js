@@ -200,6 +200,7 @@ if (this.ladder_layer) {
     this.keyQ = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.Q);
     this.keyZ = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.Z);
     this.keyD = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.D);
+    this.keyS = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.S);
     
     
     this.player2 = this.physics.add.sprite(100, 450, "img_dino2");
@@ -425,6 +426,7 @@ if (dangerTile3 || dangerTile4) {
       } else {
         this.player.setVelocityX(0);
         this.player.anims.play("animdino_face");}
+
       if (this.keyD.isDown) {
         this.player2.flipX=false;
         this.player2.setVelocityX(160);
@@ -450,7 +452,7 @@ if (dangerTile3 || dangerTile4) {
   
       // Gestion des lianes pour **les deux joueurs**
       this.handleLadderMovement(this.player, this.clavier.up, this.clavier.down);
-      this.handleLadderMovement(this.player2, this.keyZ, this.clavier.down);
+      this.handleLadderMovement(this.player2, this.keyZ, this.keyS);
   
       // Interaction avec la porte
       if (Phaser.Input.Keyboard.JustDown(this.clavier.space)) {
@@ -473,6 +475,7 @@ if (dangerTile3 || dangerTile4) {
           if (keyUp.isDown) {
               player.setVelocityY(-100); // Monter
           } else if (keyDown.isDown) {
+          
               player.setVelocityY(100); // Descendre
           } else {
               player.setVelocityY(0); // Arrêt
@@ -575,7 +578,6 @@ boutonMenu.on("pointerdown", () => {
 
 }
 
-
+ 
 }
 
-//ajout inutile
