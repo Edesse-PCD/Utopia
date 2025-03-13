@@ -123,7 +123,6 @@ export default class niveau2 extends Phaser.Scene {
     this.physics.world.setBounds(0,0,6400,640);
     this.cameras.main.setBounds(0,0,6400,640);
     this.ours = this.physics.add.sprite(6350, 340, "ours").setScale(0.5);
-    this.ours.x = 400;
     this.ours.setImmovable(true); // L'oiseau ne doit pas bouger s'il est touché
 this.ours.body.allowGravity = false; // Il ne doit pas tomber
 
