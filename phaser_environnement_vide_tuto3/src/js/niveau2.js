@@ -159,7 +159,17 @@ this.texteMenu = this.add.text(
 this.boutonMenu.on("pointerdown", () => {
  if (this.musique_de_fond2.isPlaying) this.musique_de_fond2.stop();  
  this.musique_de_fond2.destroy() //permet d'éviter que plusieurs pistes soient créées
-  this.scene.start("selection");
+  // Ajouter l'écouteur d'événement sur le bouton
+this.boutonMenu.on('pointerdown', () => {
+  // 1. Arrêter la scène 'interfaceJeu' pour fermer l'interface
+  this.scene.stop('interfaceJeu'); // Arrête l'interface
+
+  // 2. Arrêter la scène du niveau actuel 
+  this.scene.stop('niveau2'); // Arrêter le niveau actuel
+
+  // 3. Démarrer le menu principal (ou toute autre scène)
+  this.scene.start('selection'); // Lancer la scène du menu
+});
 });
 
 
@@ -172,6 +182,7 @@ sij.debloquerAnimal(0); // Garde l'éléphant
 
 
   }
+
 
 
   update() {

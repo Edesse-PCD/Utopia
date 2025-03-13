@@ -284,7 +284,19 @@ this.texteMenu.setDepth(1001);
 
     if (this.musique_de_fond4.isPlaying) this.musique_de_fond4.stop();
     this.musique_de_fond4.destroy() 
-    this.scene.start("selection");
+       // 1. Cacher l'interface
+       let interfaceJeu = this.scene.get('interfaceJeu');
+       if (interfaceJeu) {
+           interfaceJeu.cacherInterface();  // Cacher l'interface
+       }
+     
+       // 2. Arrêter le niveau actuel 
+       this.scene.stop('niveau4'); // Arrêter le niveau actuel
+     
+       // 3. Lancer la scène du menu principal
+       this.scene.start('selection'); // Lancer la scène du menu principal
+     
+  
   });
 
   var sij = this.scene.get("interfaceJeu");

@@ -220,8 +220,6 @@ this.elephant.x = 400;
   }
 
 
-
-
   update() {
     // tracking du joueur
     this.cameras.main.startFollow(this.player);
@@ -291,13 +289,25 @@ if (distance > this.maxDistance) {
     ).setOrigin(0.5)
     .setScrollFactor(0); // Rendre le texte fixe par rapport à la caméra
     
-    // Rendre le bouton cliquable
-    this.boutonMenu.on("pointerdown", () => {
-      if (this.musique_de_fond1.isPlaying) this.musique_de_fond1.stop();  
-      this.musique_de_fond1.destroy()
-      
-      this.scene.start("selection");
-    });
+// Ajouter l'écouteur d'événement sur le bouton
+this.boutonMenu.on('pointerdown', () => {
+  if (this.musique_de_fond1.isPlaying) this.musique_de_fond1.stop();  
+  this.musique_de_fond1.destroy() //permet d'éviter que plusieurs pistes soient créées
+  // 1. Cacher l'interface
+  let interfaceJeu = this.scene.get('interfaceJeu');
+  if (interfaceJeu) {
+      interfaceJeu.cacherInterface();  // Cacher l'interface
+  }
+
+  // 2. Arrêter le niveau actuel 
+  this.scene.stop('niveau1'); // Arrêter le niveau actuel
+
+  // 3. Lancer la scène du menu principal
+  this.scene.start('selection'); // Lancer la scène du menu principal
+});
+
+
+
 
 
     // Supposons que vous avez un calque 'danger' et un personnage (player)

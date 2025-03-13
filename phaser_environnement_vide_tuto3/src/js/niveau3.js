@@ -177,7 +177,18 @@ this.texteMenu = this.add.text(
 this.boutonMenu.on("pointerdown", () => {
   if (this.musique_de_fond3.isPlaying)  this.musique_de_fond3.stop();  
   this.musique_de_fond3.destroy() 
-  this.scene.start("selection");
+    // 1. Cacher l'interface
+    let interfaceJeu = this.scene.get('interfaceJeu');
+    if (interfaceJeu) {
+        interfaceJeu.cacherInterface();  // Cacher l'interface
+    }
+  
+    // 2. Arrêter le niveau actuel 
+    this.scene.stop('niveau3'); // Arrêter le niveau actuel
+  
+    // 3. Lancer la scène du menu principal
+    this.scene.start('selection'); // Lancer la scène du menu principal
+  
 });
 
 // Ajout d'une touche pour redémarrer au niveau 1
