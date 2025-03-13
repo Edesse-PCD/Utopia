@@ -206,7 +206,6 @@ this.elephant.body.allowGravity = false; // Il ne doit pas tomber
 
     // Redimensionnement du monde avec les dimensions calculées via Tiled
     this.physics.world.setBounds(0, 0, 6400, 640);
-this.elephant.x = 400;
     // Définition de la caméra pour couvrir toute la map
     this.cameras.main.setBounds(0, 0, 6400, 640
 

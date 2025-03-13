@@ -217,7 +217,6 @@ if (this.ladder_layer) {
     this.clavier = this.input.keyboard.createCursorKeys();
 
     this.Panda = this.physics.add.sprite(6310, 580, "Panda");
-    this.Panda.x = 400;
     this.Panda.setImmovable(true); // le panda ne doit pas bouger s'il est touché
     this.Panda.body.allowGravity = false; // Il ne doit pas tomber
     this.Panda.setDepth(0); // Met le Panda derrière tous les autres éléments
@@ -561,13 +560,13 @@ if (dangerTile3 || dangerTile4) {
 // Ajouter le texte "Menu" par-dessus le bouton
       
   this.imageFin = this.add.image(400, 350, "imageFin").setDepth(10).setScale(0.5);
-    this.boutonCommencer = this.add.image(
-      this.cameras.main.width - 200, // Position X en haut à droite
-      410, // Position Y en haut
-      "bouton" // Clé de ton image de bouton
-    ).setOrigin(0.5)
-    .setScrollFactor(0) // Rendre le bouton fixe par rapport à la caméra
-    .setInteractive().setScale(0.20).setDepth(11);
+      this.boutonCommencer = this.add.image(
+        this.cameras.main.width - 400, // Position X en haut à droite
+        420, // Position Y en haut
+        "bouton" // Clé de ton image de bouton
+      ).setOrigin(0.5)
+      .setScrollFactor(0) // Rendre le bouton fixe par rapport à la caméra
+      .setInteractive().setScale(0.20).setDepth(11);
     
     // Ajouter le texte "Menu" par-dessus le bouton
     this.texteCommencer = this.add.text(
@@ -586,13 +585,8 @@ if (dangerTile3 || dangerTile4) {
     this.boutonCommencer.on("pointerdown", () => {
     // Détruire le jeu complètement
     this.game.destroy(true);
-    new Phaser.Game(config); 
-
-        });
+   
 
 
-}
-
- 
-}
-
+});
+    }}
