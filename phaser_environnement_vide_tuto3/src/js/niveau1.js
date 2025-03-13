@@ -66,8 +66,12 @@ export default class niveau1 extends Phaser.Scene {
 
   create() {
     
-    this.musique_de_fond1 = this.sound.add('background1'); 
-    this.musique_de_fond1.play();  
+    if (!this.sound.get('background1')) {
+      this.musique_de_fond1 = this.sound.add('background1', { loop: true });
+      this.musique_de_fond1.play();  
+    }else{
+      this.musique_de_fond1 = this.sound.get('background1');
+    }
     this.maxDistance = 700; // Distance maximale autorisée entre les joueurs
     this.imageNiveau1 = this.add.image(400, 350, "imageNiveau1").setDepth(10).setScale(0.5);
     this.boutonCommencer = this.add.image(
@@ -181,9 +185,6 @@ export default class niveau1 extends Phaser.Scene {
     );
 
 
-
-
-
     this.player = this.physics.add.sprite(100, 450, "img_dino");
     this.physics.add.collider(this.player, calque_plateformes);
     this.player.refreshBody();
@@ -292,7 +293,8 @@ if (distance > this.maxDistance) {
     
     // Rendre le bouton cliquable
     this.boutonMenu.on("pointerdown", () => {
-      this.musique_de_fond1.stop();  
+      if (this.musique_de_fond1.isPlaying) this.musique_de_fond1.stop();  
+      this.musique_de_fond1.destroy()
       this.scene.start("selection");
     });
 
@@ -476,7 +478,9 @@ let texteMenu = this.add.text(
 
 // Rendre le bouton cliquable
 boutonMenu.on("pointerdown", () => {
-  this.musique_de_fond1.stop();
+  if (this.musique_de_fond1.isPlaying) this.musique_de_fond1.stop();
+  this.musique_de_fond1.destroy()
+
   
   this.game.config.spawnX= 1270;
   this.game.config.spawnY=410;

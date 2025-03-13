@@ -46,8 +46,12 @@ this.load.tilemapTiledJSON("CarteJungle", "src/assets/Niveau4/MapJungle.json");
     create() {
 
       
-      this.musique_de_fond4 = this.sound.add('background4'); 
-      this.musique_de_fond4.play();  
+      if (!this.sound.get('background4')) {
+        this.musique_de_fond4 = this.sound.add('background4', { loop: true });
+        this.musique_de_fond4.play();
+       } else {
+        this.musique_de_fond4 = this.sound.get('background4');
+       }
       this.imageNiveau4 = this.add.image(400, 350, "imageNiveau4").setDepth(20).setScale(0.5);
     this.boutonCommencer = this.add.image(
       this.cameras.main.width - 250, // Position X en haut à droite
@@ -277,7 +281,8 @@ this.texteMenu.setDepth(1001);
   this.boutonMenu.on("pointerdown", () => {
    
 
-    this.musique_de_fond4.stop();
+    if (this.musique_de_fond4.isPlaying) this.musique_de_fond4.stop();
+    this.musique_de_fond4.destroy() 
     this.scene.start("selection");
   });
 
@@ -570,7 +575,8 @@ let texteMenu = this.add.text(
 // Rendre le bouton cliquable
 boutonMenu.on("pointerdown", () => {
 
-  this.musique_de_fond4.stop();
+  if (this.musique_de_fond4.isPlaying) this.musique_de_fond4.stop();
+  this.musique_de_fond3.destroy() 
   this.scene.start("selection");
 });
 
