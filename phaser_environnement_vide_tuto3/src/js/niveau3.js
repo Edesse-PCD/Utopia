@@ -334,6 +334,9 @@ this.time.delayedCall(50, () => {
         this.cameras.main.worldView.y + this.cameras.main.height / 2, // Position Y centrée
         "tileset_image" // Clé de l'image à afficher
     ).setOrigin(0.5);
+
+    var sij = this.scene.get("interfaceJeu");
+sij.debloquerAnimal(2); //  l'oiseau
   
     // Désactive les mouvements du joueur
     this.player.setVelocity(0, 0); // Immobilise le joueur en arrêtant ses vitesses X et Y
