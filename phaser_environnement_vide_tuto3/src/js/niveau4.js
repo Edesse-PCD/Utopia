@@ -312,7 +312,13 @@ this.texteMenu.setDepth(1001);
               font: '32px Georgia', 
               fill: '#fff',
           }).setOrigin(0.5).setScrollFactor(0).setDepth(22); // Centrer par rapport à la caméra
-      }
+  
+          this.time.delayedCall(3000, () => {
+            if (this.deathMessage) {
+                this.deathMessage.destroy();
+                this.deathMessage = null;
+            }});
+        }
         // Désactiver les mouvements des deux joueurs
         this.player.setVelocity(0, 0);
         this.player2.setVelocity(0, 0);
@@ -320,17 +326,13 @@ this.texteMenu.setDepth(1001);
         this.player2.body.enable = false;
     
         // Attendre un court instant avant de les respawn
-        this.time.delayedCall(2000, () => {
+        this.time.delayedCall(50, () => {
             this.player.setPosition(this.startPosition.x, this.startPosition.y);
             this.player2.setPosition(this.startPosition.x+50, this.startPosition.y);
             this.player.body.enable = true;
             this.player2.body.enable = true;
     
-            // Supprimer le message de mort
-            if (this.deathMessage) {
-                this.deathMessage.destroy();
-                this.deathMessage = null;
-            }
+          
         });
     }
     if (dangerTile || dangerTile2) {
@@ -338,27 +340,28 @@ this.texteMenu.setDepth(1001);
           this.deathMessage = this.add.text(400, 300, 'Vous êtes mort !', { 
               font: '32px Gorgia', 
               fill: '#fff', 
-          }).setOrigin(0.5).setScrollFactor(0);
-      }
-  
-
-            // Désactiver le corps physique du joueur temporairement
-    this.player.setVelocity(0, 0); // Stoppe les mouvements
-    this.player.body.enable = false; 
-
-    // Attendre un court instant avant de le faire respawn (évite un bug de collision)
-    this.time.delayedCall(500, () => {
-        this.player.setPosition(this.startPosition.x, this.startPosition.y); // Respawn au point de départ
-        this.player.body.enable = true; // Réactiver le corps du joueur
-        
-
-        // Supprimer le message de mort
-        if (this.deathMessage) {
-          this.deathMessage.destroy();
-          this.deathMessage = null;
-      }
-    });
+          }).setOrigin(0.5).setScrollFactor(0).setDepth(20);
+          this.time.delayedCall(3000, () => {
+            if (this.deathMessage) {
+                this.deathMessage.destroy();
+                this.deathMessage = null;
+            }});
+        }
+        // Désactiver les mouvements des deux joueurs
+        this.player.setVelocity(0, 0);
+        this.player2.setVelocity(0, 0);
+        this.player.body.enable = false;
+        this.player2.body.enable = false;
     
+        // Attendre un court instant avant de les respawn
+        this.time.delayedCall(50, () => {
+            this.player.setPosition(this.startPosition.x, this.startPosition.y);
+            this.player2.setPosition(this.startPosition.x+50, this.startPosition.y);
+            this.player.body.enable = true;
+            this.player2.body.enable = true;
+    
+          
+        });
         
     }
 
@@ -380,30 +383,32 @@ let dangerTile4 = this.danger.getTileAtWorldXY(player2BottomCenter.x, player2Bot
 if (dangerTile3 || dangerTile4) {
   if (!this.deathMessage) {
       this.deathMessage = this.add.text(400, 300, 'Vous êtes mort !', { 
-          font: '32px Arial', 
+          font: '32px Gorgia', 
           fill: '#fff', 
-          backgroundColor: '#000' 
-      }).setOrigin(0.5).setScrollFactor(0); // Rendre le texte fixe par rapport à la caméra
+      }).setOrigin(0.5).setScrollFactor(0).setDepth(20); // Rendre le texte fixe par rapport à la caméra
       
-  }
+      this.time.delayedCall(3000, () => {
+        if (this.deathMessage) {
+            this.deathMessage.destroy();
+            this.deathMessage = null;
+        }});
+    }
+    // Désactiver les mouvements des deux joueurs
+    this.player.setVelocity(0, 0);
+    this.player2.setVelocity(0, 0);
+    this.player.body.enable = false;
+    this.player2.body.enable = false;
 
+    // Attendre un court instant avant de les respawn
+    this.time.delayedCall(50, () => {
+        this.player.setPosition(this.startPosition.x, this.startPosition.y);
+        this.player2.setPosition(this.startPosition.x+50, this.startPosition.y);
+        this.player.body.enable = true;
+        this.player2.body.enable = true;
 
-        // Désactiver le corps physique du joueur temporairement
-this.player2.setVelocity(0, 0); // Stoppe les mouvements
-this.player2.body.enable = false; 
-
-// Attendre un court instant avant de le faire respawn (évite un bug de collision)
-this.time.delayedCall(500, () => {
-    this.player2.setPosition(this.startPosition.x, this.startPosition.y); // Respawn au point de départ
-    this.player2.body.enable = true; // Réactiver le corps du joueur
-    
-
-    // Supprimer le message de mort
-    if (this.deathMessage) {
-      this.deathMessage.destroy();
-      this.deathMessage = null;
-  }
-});}
+      
+    });
+}
 
       
 
