@@ -12,6 +12,7 @@ export default class interfaceJeu extends Phaser.Scene {
         this.load.image("ours", "src/assets/niveau2/ourspolaire.png");
         this.load.image("tileset_oiseau", "src/assets/Niveau_3/Oiseau.png");
         this.load.image("Panda", "src/assets/Niveau4/Panda.png");
+        this.load.image("bouton","src/assets/bouton.png")
 
     }
     create() {
@@ -36,7 +37,10 @@ export default class interfaceJeu extends Phaser.Scene {
                 .setVisible(false);
             this.cases.push(animal);
         }
+    
+
     }
+
 
     // Fonction pour faire apparaître un animal
     debloquerAnimal(index) {
@@ -45,5 +49,26 @@ export default class interfaceJeu extends Phaser.Scene {
             this.animauxDebloques[index] = true;
             this.cases[index * 2 + 1].setVisible(true); // Active l'image de l'animal
         }
+    }
+
+    // Méthode pour cacher l'interface sans la fermer
+    cacherInterface() {
+        this.cases.forEach(caseElement => {
+            caseElement.setVisible(false); // Cache les éléments de l'interface
+        });
+        this.barreTaches.setVisible(false); // Cache la barre des tâches
+    }
+
+    // Méthode pour réafficher l'interface lorsque tu reviens au niveau
+    afficherInterface() {
+        this.cases.forEach(caseElement => {
+            caseElement.setVisible(true); // Réaffiche les éléments de l'interface
+        });
+        this.barreTaches.setVisible(true); // Réaffiche la barre des tâches
+    }
+
+    // Méthode pour gérer l'événement de réactivation de l'interface quand le niveau revient
+    onWake() {
+        this.afficherInterface(); // Réactive l'interface lorsque la scène est réactivée
     }
 }
