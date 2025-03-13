@@ -25,8 +25,12 @@ export default class niveau3 extends Phaser.Scene {
   }
 
   create() {
-    this.musique_de_fond3 = this.sound.add('background3'); 
-    this.musique_de_fond3.play();  
+    if (!this.sound.get('background3')) {
+      this.musique_de_fond3 = this.sound.add('background3', { loop: true });
+      this.musique_de_fond3.play(); 
+    } else {
+      this.musique_de_fond3 = this.sound.get('background3');
+    }
     this.maxDistance = 700; // Distance maximale autorisée entre les joueurs
     this.imageNiveau3 = this.add.image(400, 350, "imageNiveau3").setDepth(10).setScale(0.5);
     this.boutonCommencer = this.add.image(
@@ -171,7 +175,8 @@ this.texteMenu = this.add.text(
 
 // Rendre le bouton cliquable
 this.boutonMenu.on("pointerdown", () => {
-  this.musique_de_fond3.stop();  
+  if (this.musique_de_fond3.isPlaying)  this.musique_de_fond3.stop();  
+  this.musique_de_fond3.destroy() 
   this.scene.start("selection");
 });
 
@@ -360,7 +365,8 @@ let texteMenu = this.add.text(
 // Rendre le bouton cliquable
 boutonMenu.on("pointerdown", () => {
 
-  this.musique_de_fond3.stop();  
+  if (this.musique_de_fond3.isPlaying) this.musique_de_fond3.stop();  
+  this.musique_de_fond3.destroy() 
   this.game.config.spawnX= 2450;
     this.game.config.spawnY=270;
   this.scene.start("selection");
