@@ -215,6 +215,7 @@ if (this.ladder_layer) {
     this.clavier = this.input.keyboard.createCursorKeys();
 
     this.Panda = this.physics.add.sprite(6310, 580, "Panda");
+    this.Panda.x = 400;
     this.Panda.setImmovable(true); // le panda ne doit pas bouger s'il est touché
     this.Panda.body.allowGravity = false; // Il ne doit pas tomber
     this.Panda.setDepth(0); // Met le Panda derrière tous les autres éléments
