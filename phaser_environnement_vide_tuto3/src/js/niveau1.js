@@ -7,6 +7,7 @@ export default class niveau1 extends Phaser.Scene {
     super({
       key: "niveau1" //  ici on précise le nom de la classe en tant qu'identifiant
     });
+   
   }
 
   
@@ -64,9 +65,9 @@ export default class niveau1 extends Phaser.Scene {
 
 
   create() {
-    var musique_de_fond;
-    musique_de_fond = this.sound.add('background'); 
-    musique_de_fond.play();  
+    
+    this.musique_de_fond1 = this.sound.add('background1'); 
+    this.musique_de_fond1.play();  
     this.maxDistance = 700; // Distance maximale autorisée entre les joueurs
     this.imageNiveau1 = this.add.image(400, 350, "imageNiveau1").setDepth(10).setScale(0.5);
     this.boutonCommencer = this.add.image(
