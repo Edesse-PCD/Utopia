@@ -35,6 +35,8 @@ export default class niveau4 extends Phaser.Scene {
   this.load.image("tileset_image", "src/assets/victoire_image.png");
   this.load.image("imageNiveau4", "src/assets/Niveau4/imageNiveau4.png");
   this.load.audio('background4', 'src/assets/Niveau4/indiana_johns.mp3'); 
+  this.load.image("imageFin", "src/assets/imageFin.png");
+
   // chargement de la carte
 this.load.tilemapTiledJSON("CarteJungle", "src/assets/Niveau4/MapJungle.json"); 
  
@@ -531,20 +533,7 @@ if (dangerTile3 || dangerTile4) {
 
 
     gagner() {
-      console.log("Affichage du message de victoire !");  
-
- // Affichage du message de victoire
-      // Affichage de l'image de victoire
-      this.add.image(
-        this.cameras.main.worldView.x + this.cameras.main.width / 2, // Position X centrée
-        this.cameras.main.worldView.y + this.cameras.main.height / 2, // Position Y centrée
-        "tileset_image" // Clé de l'image à afficher
-    ).setOrigin(0.5)
-    .setDepth(100); // Premier plan
-        
-   
-  
-    // Désactive les mouvements du joueur
+      // Désactive les mouvements du joueur
     this.player.setVelocity(0, 0); // Immobilise le joueur en arrêtant ses vitesses X et Y
     this.player.anims.stop();
     this.player2.setVelocity(0, 0); // Immobilise le joueur en arrêtant ses vitesses X et Y
@@ -552,43 +541,42 @@ if (dangerTile3 || dangerTile4) {
     this.physics.world.pause(); // Met en pause la physique du monde (plus rien ne bouge)
   
   // Afficher l'asset de bouton
-let boutonMenu = this.add.image(
-  this.cameras.main.worldView.x + this.cameras.main.width / 2, // Position X centrée
-  this.cameras.main.worldView.y + this.cameras.main.height / 2 + 240, // Position Y sous l'image
-  "bouton" // Clé de ton image de bouton
-).setOrigin(0.5)
-.setInteractive()
-.setScale(0.15).setDepth(100);// Premier plan
 
     // Débloquer l’icône du panda dans l'interface
     var sij = this.scene.get("interfaceJeu");
     sij.debloquerAnimal(3);  // Ici, 3 correspond au panda
 
-    // Ajouter un délai avant de retourner au menu
-    this.time.delayedCall(3000, () => {
-        this.scene.start("selection");  // Retour au menu
-    });
-
-
 // Ajouter le texte "Menu" par-dessus le bouton
-let texteMenu = this.add.text(
-  boutonMenu.x, // Position X centrée sur le bouton
-  boutonMenu.y, // Position Y centrée sur le bouton
-  "Niveau\nsuivant",
-  {
-      font: "20px Arial",
-      fill: "#000",   // Texte en noir
-      align: "center"
-  }
-).setOrigin(0.5).setDepth(100);
+      
+  this.imageFin = this.add.image(400, 350, "imageFin").setDepth(10).setScale(0.5);
+    this.boutonCommencer = this.add.image(
+      this.cameras.main.width - 200, // Position X en haut à droite
+      410, // Position Y en haut
+      "bouton" // Clé de ton image de bouton
+    ).setOrigin(0.5)
+    .setScrollFactor(0) // Rendre le bouton fixe par rapport à la caméra
+    .setInteractive().setScale(0.20).setDepth(11);
+    
+    // Ajouter le texte "Menu" par-dessus le bouton
+    this.texteCommencer = this.add.text(
+      this.boutonCommencer.x, // Position X centrée sur le bouton
+      this.boutonCommencer.y, // Position Y centrée sur le bouton
+      "Recommencer",
+      {
+          font: "20px Arial",
+          fill: "#000",   // Texte en noir
+          align: "center"
+      }
+    ).setOrigin(0.5)
+    .setScrollFactor(0).setDepth(12); // Rendre le texte fixe par rapport à la caméra
+    
+    // Rendre le bouton cliquable
+    this.boutonCommencer.on("pointerdown", () => {
+    // Détruire le jeu complètement
+    this.game.destroy(true);
+    new Phaser.Game(config); 
 
-// Rendre le bouton cliquable
-boutonMenu.on("pointerdown", () => {
-
-  if (this.musique_de_fond4.isPlaying) this.musique_de_fond4.stop();
-  this.musique_de_fond3.destroy() 
-  this.scene.start("selection");
-});
+        });
 
 
 }
