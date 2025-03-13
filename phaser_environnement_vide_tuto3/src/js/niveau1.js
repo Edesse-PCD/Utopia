@@ -7,6 +7,7 @@ export default class niveau1 extends Phaser.Scene {
     super({
       key: "niveau1" //  ici on précise le nom de la classe en tant qu'identifiant
     });
+   
   }
 
   
@@ -49,8 +50,9 @@ export default class niveau1 extends Phaser.Scene {
     this.load.image("14", "src/assets/niveau1/14.png");
     this.load.image("15", "src/assets/niveau1/15.png");
     this.load.image("16", "src/assets/niveau1/16.png");
+    this.load.image("imageNiveau1","src/assets/niveau1/imageNiveau1.png")
     this.load.image("0017", "src/assets/niveau1/0017.png");
-    this.load.audio('background', 'src/assets/niveau1/western.mp3'); 
+    this.load.audio('background1', 'src/assets/niveau1/western.mp3'); 
 
 
 
@@ -63,16 +65,43 @@ export default class niveau1 extends Phaser.Scene {
 
 
   create() {
-  
-    this.musique_de_fond = this.sound.add('background'); 
-    this.musique_de_fond.play();  
+    
+    this.musique_de_fond1 = this.sound.add('background1'); 
+    this.musique_de_fond1.play();  
+    this.maxDistance = 700; // Distance maximale autorisée entre les joueurs
+    this.imageNiveau1 = this.add.image(400, 350, "imageNiveau1").setDepth(10).setScale(0.5);
+    this.boutonCommencer = this.add.image(
+      this.cameras.main.width - 250, // Position X en haut à droite
+      410, // Position Y en haut
+      "bouton" // Clé de ton image de bouton
+    ).setOrigin(0.5)
+    .setScrollFactor(0) // Rendre le bouton fixe par rapport à la caméra
+    .setInteractive().setScale(0.20).setDepth(11);
+    
+    // Ajouter le texte "Menu" par-dessus le bouton
+    this.texteCommencer = this.add.text(
+      this.boutonCommencer.x, // Position X centrée sur le bouton
+      this.boutonCommencer.y, // Position Y centrée sur le bouton
+      "Commencer",
+      {
+          font: "20px Arial",
+          fill: "#000",   // Texte en noir
+          align: "center"
+      }
+    ).setOrigin(0.5)
+    .setScrollFactor(0).setDepth(12); // Rendre le texte fixe par rapport à la caméra
+    
+    // Rendre le bouton cliquable
+    this.boutonCommencer.on("pointerdown", () => {
+      this.boutonCommencer.destroy();
+      this.imageNiveau1.destroy();
+      this.texteCommencer.destroy();
+        });
 
 
 
 
-    // Afficher l'image d'introduction
-    this.image_2_depart_niveau_1 = this.add.image(400, 300, "imagedepart").setDepth(10).setScale(0.8);
-
+    
 
 
     // Ajouter la gestion de la touche "Entrée"
@@ -155,15 +184,6 @@ export default class niveau1 extends Phaser.Scene {
 
 
 
-
-
-    this.porte_retour = this.physics.add.staticSprite(100, 550, "img_porte1");
-    // ajout d'un texte distintcif  du niveau
-    this.add.text(400, 100, "Vous êtes dans le niveau 1", {
-      fontFamily: 'Georgia, "Goudy Bookletter 1911", Times, serif',
-      fontSize: "22pt"
-    });
-
     this.player = this.physics.add.sprite(100, 450, "img_dino");
     this.physics.add.collider(this.player, calque_plateformes);
     this.player.refreshBody();
@@ -204,6 +224,38 @@ this.elephant.x = 400;
   update() {
     // tracking du joueur
     this.cameras.main.startFollow(this.player);
+    const distance = Phaser.Math.Distance.Between(this.player.x, this.player.y, this.player2.x, this.player2.y);
+
+if (distance > this.maxDistance) {
+    // Afficher le message de mort pour les deux joueurs
+    if (!this.deathMessage){
+      this.deathMessage = this.add.text(400, 300, 'Vous êtes trop éloignés! Restez coopératifs', { 
+          font: '32px Georgia', 
+          fill: '#fff',
+      }).setOrigin(0.5).setScrollFactor(0); // Centrer par rapport à la caméra
+      this.time.delayedCall(3000, () => {
+        if (this.deathMessage) {
+            this.deathMessage.destroy();
+            this.deathMessage = null;
+        }});
+    
+    // Désactiver les mouvements des deux joueurs
+    this.player.setVelocity(0, 0);
+    this.player2.setVelocity(0, 0);
+    this.player.body.enable = false;
+    this.player2.body.enable = false;
+
+    // Attendre un court instant avant de les respawn
+    this.time.delayedCall(50, () => {
+        this.player.setPosition(this.startPosition.x, this.startPosition.y);
+        this.player2.setPosition(this.startPosition.x+50, this.startPosition.y);
+        this.player.body.enable = true;
+        this.player2.body.enable = true;
+
+      
+    });}
+}
+
 
     // Détection de l'overlap entre les joueurs et les objets dangereux
     this.player.setScale(2);
@@ -240,16 +292,10 @@ this.elephant.x = 400;
     
     // Rendre le bouton cliquable
     this.boutonMenu.on("pointerdown", () => {
-      this.musique_de_fond.stop();  
+      this.musique_de_fond1.stop();  
       this.scene.start("selection");
     });
 
-
-    // Vérifier si la touche "Entrée" est pressée pour démarrer le jeu
-    if (!this.gameStarted && Phaser.Input.Keyboard.JustDown(this.enterKey)) {
-      this.image_2_depart_niveau_1.destroy();  // Supprimer l'image d'intro
-      this.gameStarted = true;
-    }
 
     // Supposons que vous avez un calque 'danger' et un personnage (player)
     let messageDisplayed = false; // Pour s'assurer que le message n'est affiché qu'une seule fois
@@ -267,29 +313,30 @@ this.elephant.x = 400;
     if (dangerTile || dangerTile2) {
       if (!this.deathMessage) {
         this.deathMessage = this.add.text(400, 300, 'Vous êtes mort !', {
-          font: '32px Arial',
+          font: '32px Gorgia',
           fill: '#fff',
-          backgroundColor: '#000'
         }).setOrigin(0.5).setScrollFactor(0);
-      }
-
-
-      // Désactiver le corps physique du joueur temporairement
-      this.player.setVelocity(0, 0); // Stoppe les mouvements
+        this.time.delayedCall(3000, () => {
+          if (this.deathMessage) {
+              this.deathMessage.destroy();
+              this.deathMessage = null;
+          }});
+      
+      // Désactiver les mouvements des deux joueurs
+      this.player.setVelocity(0, 0);
+      this.player2.setVelocity(0, 0);
       this.player.body.enable = false;
-
-      // Attendre un court instant avant de le faire respawn (évite un bug de collision)
-      this.time.delayedCall(500, () => {
-        this.player.setPosition(this.startPosition.x, this.startPosition.y); // Respawn au point de départ
-        this.player.body.enable = true; // Réactiver le corps du joueur
-
-
-        // Supprimer le message de mort
-        if (this.deathMessage) {
-          this.deathMessage.destroy();
-          this.deathMessage = null;
-        }
-      });
+      this.player2.body.enable = false;
+  
+      // Attendre un court instant avant de les respawn
+      this.time.delayedCall(50, () => {
+          this.player.setPosition(this.startPosition.x, this.startPosition.y);
+          this.player2.setPosition(this.startPosition.x+50, this.startPosition.y);
+          this.player.body.enable = true;
+          this.player2.body.enable = true;
+  
+        
+      });}
     }
 
     // gestion de la mort et respawn du JOUEUR 2 
@@ -310,29 +357,30 @@ this.elephant.x = 400;
     if (dangerTile3 || dangerTile4) {
       if (!this.deathMessage) {
         this.deathMessage = this.add.text(400, 300, 'Vous êtes mort !', {
-          font: '32px Arial',
+          font: '32px Gorgia',
           fill: '#fff',
-          backgroundColor: '#000'
         }).setOrigin(0.5).setScrollFactor(0);
-      }
-
-
-      // Désactiver le corps physique du joueur temporairement
-      this.player2.setVelocity(0, 0); // Stoppe les mouvements
+        this.time.delayedCall(3000, () => {
+          if (this.deathMessage) {
+              this.deathMessage.destroy();
+              this.deathMessage = null;
+          }});
+      
+      // Désactiver les mouvements des deux joueurs
+      this.player.setVelocity(0, 0);
+      this.player2.setVelocity(0, 0);
+      this.player.body.enable = false;
       this.player2.body.enable = false;
-
-      // Attendre un court instant avant de le faire respawn (évite un bug de collision)
-      this.time.delayedCall(500, () => {
-        this.player2.setPosition(this.startPosition.x, this.startPosition.y); // Respawn au point de départ
-        this.player2.body.enable = true; // Réactiver le corps du joueur
-
-
-        // Supprimer le message de mort
-        if (this.deathMessage) {
-          this.deathMessage.destroy();
-          this.deathMessage = null;
-        }
-      });
+  
+      // Attendre un court instant avant de les respawn
+      this.time.delayedCall(50, () => {
+          this.player.setPosition(this.startPosition.x, this.startPosition.y);
+          this.player2.setPosition(this.startPosition.x+50, this.startPosition.y);
+          this.player.body.enable = true;
+          this.player2.body.enable = true;
+  
+        
+      });}
 
     }
 
@@ -428,7 +476,7 @@ let texteMenu = this.add.text(
 
 // Rendre le bouton cliquable
 boutonMenu.on("pointerdown", () => {
-  this.musique_de_fond.stop();
+  this.musique_de_fond1.stop();
   
   this.game.config.spawnX= 1270;
   this.game.config.spawnY=410;

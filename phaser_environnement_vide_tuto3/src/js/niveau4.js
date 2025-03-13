@@ -33,7 +33,8 @@ export default class niveau4 extends Phaser.Scene {
   this.load.image("Arbre", "src/assets/Niveau4/Arbre.png");
   this.load.image("bouton","src/assets/bouton.png")
   this.load.image("tileset_image", "src/assets/victoire_image.png");
-  this.load.audio('background', 'src/assets/Niveau4/indiana_johns.mp3'); 
+  this.load.image("imageNiveau4", "src/assets/Niveau4/imageNiveau4.png");
+  this.load.audio('background4', 'src/assets/Niveau4/indiana_johns.mp3'); 
   // chargement de la carte
 this.load.tilemapTiledJSON("CarteJungle", "src/assets/Niveau4/MapJungle.json"); 
  
@@ -45,8 +46,36 @@ this.load.tilemapTiledJSON("CarteJungle", "src/assets/Niveau4/MapJungle.json");
     create() {
 
       
-      this.musique_de_fond = this.sound.add('background'); 
-      this.musique_de_fond.play();  
+      this.musique_de_fond4 = this.sound.add('background4'); 
+      this.musique_de_fond4.play();  
+      this.imageNiveau4 = this.add.image(400, 350, "imageNiveau4").setDepth(20).setScale(0.5);
+    this.boutonCommencer = this.add.image(
+      this.cameras.main.width - 250, // Position X en haut à droite
+      410, // Position Y en haut
+      "bouton" // Clé de ton image de bouton
+    ).setOrigin(0.5)
+    .setScrollFactor(0) // Rendre le bouton fixe par rapport à la caméra
+    .setInteractive().setScale(0.20).setDepth(21);
+    
+    // Ajouter le texte "Menu" par-dessus le bouton
+    this.texteCommencer = this.add.text(
+      this.boutonCommencer.x, // Position X centrée sur le bouton
+      this.boutonCommencer.y, // Position Y centrée sur le bouton
+      "Commencer",
+      {
+          font: "20px Arial",
+          fill: "#000",   // Texte en noir
+          align: "center"
+      }
+    ).setOrigin(0.5)
+    .setScrollFactor(0).setDepth(22); // Rendre le texte fixe par rapport à la caméra
+    
+    // Rendre le bouton cliquable
+    this.boutonCommencer.on("pointerdown", () => {
+      this.boutonCommencer.destroy();
+      this.imageNiveau4.destroy();
+      this.texteCommencer.destroy();
+        });
 // Position de départ (respawn du joueur)
 this.startPosition = { x: 100, y: 450 };
 this.maxDistance = 700; // Distance maximale autorisée entre les joueurs
@@ -247,7 +276,7 @@ this.texteMenu.setDepth(1001);
   this.boutonMenu.on("pointerdown", () => {
    
 
-    this.musique_de_fond.stop();
+    this.musique_de_fond4.stop();
     this.scene.start("selection");
   });
 
@@ -282,8 +311,14 @@ this.texteMenu.setDepth(1001);
           this.deathMessage = this.add.text(400, 300, 'Vous êtes trop éloignés! Restez coopératifs', { 
               font: '32px Georgia', 
               fill: '#fff',
-          }).setOrigin(0.5).setScrollFactor(0); // Centrer par rapport à la caméra
-      }
+          }).setOrigin(0.5).setScrollFactor(0).setDepth(22); // Centrer par rapport à la caméra
+  
+          this.time.delayedCall(3000, () => {
+            if (this.deathMessage) {
+                this.deathMessage.destroy();
+                this.deathMessage = null;
+            }});
+        }
         // Désactiver les mouvements des deux joueurs
         this.player.setVelocity(0, 0);
         this.player2.setVelocity(0, 0);
@@ -291,46 +326,42 @@ this.texteMenu.setDepth(1001);
         this.player2.body.enable = false;
     
         // Attendre un court instant avant de les respawn
-        this.time.delayedCall(2000, () => {
+        this.time.delayedCall(50, () => {
             this.player.setPosition(this.startPosition.x, this.startPosition.y);
             this.player2.setPosition(this.startPosition.x+50, this.startPosition.y);
             this.player.body.enable = true;
             this.player2.body.enable = true;
     
-            // Supprimer le message de mort
-            if (this.deathMessage) {
-                this.deathMessage.destroy();
-                this.deathMessage = null;
-            }
+          
         });
     }
     if (dangerTile || dangerTile2) {
       if (!this.deathMessage) {
           this.deathMessage = this.add.text(400, 300, 'Vous êtes mort !', { 
-              font: '32px Arial', 
+              font: '32px Gorgia', 
               fill: '#fff', 
-              backgroundColor: '#000' 
-          }).setOrigin(0.5).setScrollFactor(0);
-      }
-  
-
-            // Désactiver le corps physique du joueur temporairement
-    this.player.setVelocity(0, 0); // Stoppe les mouvements
-    this.player.body.enable = false; 
-
-    // Attendre un court instant avant de le faire respawn (évite un bug de collision)
-    this.time.delayedCall(500, () => {
-        this.player.setPosition(this.startPosition.x, this.startPosition.y); // Respawn au point de départ
-        this.player.body.enable = true; // Réactiver le corps du joueur
-        
-
-        // Supprimer le message de mort
-        if (this.deathMessage) {
-          this.deathMessage.destroy();
-          this.deathMessage = null;
-      }
-    });
+          }).setOrigin(0.5).setScrollFactor(0).setDepth(20);
+          this.time.delayedCall(3000, () => {
+            if (this.deathMessage) {
+                this.deathMessage.destroy();
+                this.deathMessage = null;
+            }});
+        }
+        // Désactiver les mouvements des deux joueurs
+        this.player.setVelocity(0, 0);
+        this.player2.setVelocity(0, 0);
+        this.player.body.enable = false;
+        this.player2.body.enable = false;
     
+        // Attendre un court instant avant de les respawn
+        this.time.delayedCall(50, () => {
+            this.player.setPosition(this.startPosition.x, this.startPosition.y);
+            this.player2.setPosition(this.startPosition.x+50, this.startPosition.y);
+            this.player.body.enable = true;
+            this.player2.body.enable = true;
+    
+          
+        });
         
     }
 
@@ -352,30 +383,32 @@ let dangerTile4 = this.danger.getTileAtWorldXY(player2BottomCenter.x, player2Bot
 if (dangerTile3 || dangerTile4) {
   if (!this.deathMessage) {
       this.deathMessage = this.add.text(400, 300, 'Vous êtes mort !', { 
-          font: '32px Arial', 
+          font: '32px Gorgia', 
           fill: '#fff', 
-          backgroundColor: '#000' 
-      }).setOrigin(0.5).setScrollFactor(0); // Rendre le texte fixe par rapport à la caméra
+      }).setOrigin(0.5).setScrollFactor(0).setDepth(20); // Rendre le texte fixe par rapport à la caméra
       
-  }
+      this.time.delayedCall(3000, () => {
+        if (this.deathMessage) {
+            this.deathMessage.destroy();
+            this.deathMessage = null;
+        }});
+    }
+    // Désactiver les mouvements des deux joueurs
+    this.player.setVelocity(0, 0);
+    this.player2.setVelocity(0, 0);
+    this.player.body.enable = false;
+    this.player2.body.enable = false;
 
+    // Attendre un court instant avant de les respawn
+    this.time.delayedCall(50, () => {
+        this.player.setPosition(this.startPosition.x, this.startPosition.y);
+        this.player2.setPosition(this.startPosition.x+50, this.startPosition.y);
+        this.player.body.enable = true;
+        this.player2.body.enable = true;
 
-        // Désactiver le corps physique du joueur temporairement
-this.player2.setVelocity(0, 0); // Stoppe les mouvements
-this.player2.body.enable = false; 
-
-// Attendre un court instant avant de le faire respawn (évite un bug de collision)
-this.time.delayedCall(500, () => {
-    this.player2.setPosition(this.startPosition.x, this.startPosition.y); // Respawn au point de départ
-    this.player2.body.enable = true; // Réactiver le corps du joueur
-    
-
-    // Supprimer le message de mort
-    if (this.deathMessage) {
-      this.deathMessage.destroy();
-      this.deathMessage = null;
-  }
-});}
+      
+    });
+}
 
       
 
@@ -534,7 +567,7 @@ let texteMenu = this.add.text(
 // Rendre le bouton cliquable
 boutonMenu.on("pointerdown", () => {
 
-  this.musique_de_fond.stop();
+  this.musique_de_fond4.stop();
   this.scene.start("selection");
 });
 

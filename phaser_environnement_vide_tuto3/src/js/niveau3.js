@@ -15,7 +15,7 @@ export default class niveau3 extends Phaser.Scene {
     this.load.image("tileset_image", "src/assets/victoire_image.png");
     this.load.image("tileset_bouton", "src/assets/bouton.png");
     this.load.image("bouton","src/assets/bouton.png")
-    this.load.audio('background', 'src/assets/Niveau_3/ciel.mp3');  
+    this.load.audio('background3', 'src/assets/Niveau_3/ciel.mp3');  
     this.load.image("imageNiveau3","src/assets/Niveau_3/imageNiveau3.png")
   
 
@@ -25,8 +25,8 @@ export default class niveau3 extends Phaser.Scene {
   }
 
   create() {
-    this.musique_de_fond = this.sound.add('background'); 
-    this.musique_de_fond.play();  
+    this.musique_de_fond3 = this.sound.add('background3'); 
+    this.musique_de_fond3.play();  
     this.maxDistance = 700; // Distance maximale autorisée entre les joueurs
     this.imageNiveau3 = this.add.image(400, 350, "imageNiveau3").setDepth(10).setScale(0.5);
     this.boutonCommencer = this.add.image(
@@ -134,7 +134,7 @@ export default class niveau3 extends Phaser.Scene {
     this.player2.setScale(2);
 
 
-    this.oiseau = this.physics.add.sprite(6300, 300, "tileset_oiseau");
+    this.oiseau = this.physics.add.sprite(300, 300, "tileset_oiseau");
   
   
 this.oiseau.setImmovable(true); // L'oiseau ne doit pas bouger s'il est touché
@@ -170,7 +170,7 @@ this.texteMenu = this.add.text(
 
 // Rendre le bouton cliquable
 this.boutonMenu.on("pointerdown", () => {
-  this.musique_de_fond.stop();  
+  this.musique_de_fond3.stop();  
   this.scene.start("selection");
 });
 
@@ -197,27 +197,30 @@ if (distance > this.maxDistance) {
             font: '32px Georgia', 
             fill: '#fff', 
         }).setOrigin(0.5).setScrollFactor(0); // Centrer par rapport à la caméra
+        this.time.delayedCall(3000, () => {
+          if (this.deathMessage) {
+              this.deathMessage.destroy();
+              this.deathMessage = null;
+          }});
+      
+      // Désactiver les mouvements des deux joueurs
+      this.player.setVelocity(0, 0);
+      this.player2.setVelocity(0, 0);
+      this.player.body.enable = false;
+      this.player2.body.enable = false;
+  
+      // Attendre un court instant avant de les respawn
+      this.time.delayedCall(50, () => {
+          this.player.setPosition(this.startPosition.x, this.startPosition.y);
+          this.player2.setPosition(this.startPosition.x+50, this.startPosition.y);
+          this.player.body.enable = true;
+          this.player2.body.enable = true;
+  
+        
+      });
     }
 
-    // Désactiver les mouvements des deux joueurs
-    this.player.setVelocity(0, 0);
-    this.player2.setVelocity(0, 0);
-    this.player.body.enable = false;
-    this.player2.body.enable = false;
-
-    // Attendre un court instant avant de les respawn
-    this.time.delayedCall(1000, () => {
-        this.player.setPosition(this.startPosition.x, this.startPosition.y);
-        this.player2.setPosition(this.startPosition.x, this.startPosition.y);
-        this.player.body.enable = true;
-        this.player2.body.enable = true;
-
-        // Supprimer le message de mort
-        if (this.deathMessage) {
-            this.deathMessage.destroy();
-            this.deathMessage = null;
-        }
-    });
+    
 }
     if (this.clavier.left.isDown) {
       this.player.flipX=true;
@@ -261,14 +264,27 @@ if (this.player.y >= this.cameras.main.height && !this.deathMessage) {
     fill: '#fff', 
   }).setOrigin(0.5).setScrollFactor(0);
   
-  // Désactiver le corps physique du joueur 1
-  this.player.setVelocity(0, 0);
-  this.player.body.enable = false;
+  this.time.delayedCall(3000, () => {
+    if (this.deathMessage) {
+        this.deathMessage.destroy();
+        this.deathMessage = null;
+    }});
 
-  // Redémarrer la scène après 500 ms
-  this.time.delayedCall(1000, () => {
-    this.scene.restart();
-  });
+// Désactiver les mouvements des deux joueurs
+this.player.setVelocity(0, 0);
+this.player2.setVelocity(0, 0);
+this.player.body.enable = false;
+this.player2.body.enable = false;
+
+// Attendre un court instant avant de les respawn
+this.time.delayedCall(50, () => {
+    this.player.setPosition(this.startPosition.x, this.startPosition.y);
+    this.player2.setPosition(this.startPosition.x+50, this.startPosition.y);
+    this.player.body.enable = true;
+    this.player2.body.enable = true;
+
+  
+});
 }
 
 // Mort joueur 2
@@ -279,16 +295,29 @@ if (this.player2.y >= this.cameras.main.height && !this.deathMessage) {
     fill: '#fff', 
   }).setOrigin(0.5).setScrollFactor(0);
   
-  // Désactiver le corps physique du joueur 2
-  this.player2.setVelocity(0, 0);
-  this.player2.body.enable = false;
+  this.time.delayedCall(3000, () => {
+    if (this.deathMessage) {
+        this.deathMessage.destroy();
+        this.deathMessage = null;
+    }});
 
-  // Redémarrer la scène après 500 ms
-  this.time.delayedCall(1000, () => {
-    this.scene.restart();
-  });
+// Désactiver les mouvements des deux joueurs
+this.player.setVelocity(0, 0);
+this.player2.setVelocity(0, 0);
+this.player.body.enable = false;
+this.player2.body.enable = false;
+
+// Attendre un court instant avant de les respawn
+this.time.delayedCall(50, () => {
+    this.player.setPosition(this.startPosition.x, this.startPosition.y);
+    this.player2.setPosition(this.startPosition.x+50, this.startPosition.y);
+    this.player.body.enable = true;
+    this.player2.body.enable = true;
+
+  
+});
 }
-  }
+}
 
 
   gagner() {
@@ -330,7 +359,7 @@ let texteMenu = this.add.text(
 // Rendre le bouton cliquable
 boutonMenu.on("pointerdown", () => {
 
-  this.musique_de_fond.stop();  
+  this.musique_de_fond3.stop();  
   this.game.config.spawnX= 2450;
     this.game.config.spawnY=270;
   this.scene.start("selection");

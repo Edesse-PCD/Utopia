@@ -29,14 +29,14 @@ export default class niveau2 extends Phaser.Scene {
     this.load.image("tileset_bouton","src/assets/bouton.png")
     this.load.image("imageNiveau2","src/assets/niveau2/imageNiveau2.png")
     this.load.tilemapTiledJSON("map2", "src/assets/niveau2/mapBanquise.json");
-    this.load.audio('background', 'src/assets/niveau2/aglagla.mp3');   
+    this.load.audio('background2', 'src/assets/niveau2/aglagla.mp3');   
   }
 
 
   create() {
    
-    this.musique_de_fond = this.sound.add('background'); 
-    this.musique_de_fond.play();  
+    this.musique_de_fond2 = this.sound.add('background2'); 
+    this.musique_de_fond2.play();  
     this.imageNiveau2 = this.add.image(400, 350, "imageNiveau2").setDepth(10).setScale(0.5);
     this.boutonCommencer = this.add.image(
       this.cameras.main.width - 250, // Position X en haut à droite
@@ -152,7 +152,7 @@ this.texteMenu = this.add.text(
 
 // Rendre le bouton cliquable
 this.boutonMenu.on("pointerdown", () => {
-  this.musique_de_fond.stop();  
+  this.musique_de_fond2.stop();  
   this.scene.start("selection");
 });
 
@@ -181,7 +181,12 @@ if (distance > this.maxDistance) {
           font: '32px Georgia', 
           fill: '#fff',
       }).setOrigin(0.5).setScrollFactor(0); // Centrer par rapport à la caméra
-  }
+      this.time.delayedCall(3000, () => {
+        if (this.deathMessage) {
+            this.deathMessage.destroy();
+            this.deathMessage = null;
+        }});
+    }
     // Désactiver les mouvements des deux joueurs
     this.player.setVelocity(0, 0);
     this.player2.setVelocity(0, 0);
@@ -189,17 +194,13 @@ if (distance > this.maxDistance) {
     this.player2.body.enable = false;
 
     // Attendre un court instant avant de les respawn
-    this.time.delayedCall(2000, () => {
+    this.time.delayedCall(50, () => {
         this.player.setPosition(this.startPosition.x, this.startPosition.y);
         this.player2.setPosition(this.startPosition.x+50, this.startPosition.y);
         this.player.body.enable = true;
         this.player2.body.enable = true;
 
-        // Supprimer le message de mort
-        if (this.deathMessage) {
-            this.deathMessage.destroy();
-            this.deathMessage = null;
-        }
+      
     });
 }
 
@@ -218,7 +219,13 @@ if (distance > this.maxDistance) {
               font: '32px Georgia', 
               fill: '#fff', 
           }).setOrigin(0.5).setScrollFactor(0);
+          this.time.delayedCall(3000, () => {
+            if (this.deathMessage) {
+                this.deathMessage.destroy();
+                this.deathMessage = null;
+            }});
       }
+
   
 
             // Désactiver le corps physique du joueur temporairement
@@ -228,7 +235,7 @@ if (distance > this.maxDistance) {
     this.player2.body.enable = false;
 
     // Attendre un court instant avant de le faire respawn (évite un bug de collision)
-    this.time.delayedCall(1000, () => {
+    this.time.delayedCall(50, () => {
         this.player.setPosition(this.startPosition.x+50, this.startPosition.y); 
         this.player2.setPosition(this.startPosition.x, this.startPosition.y); // Respawn au point de départ
         // Respawn au point de départ
@@ -237,10 +244,7 @@ if (distance > this.maxDistance) {
 
 
         // Supprimer le message de mort
-        if (this.deathMessage) {
-          this.deathMessage.destroy();
-          this.deathMessage = null;
-      }
+        
     });
     
         
@@ -266,8 +270,12 @@ if (dangerTile3 || dangerTile4) {
       this.deathMessage = this.add.text(400, 300, 'Vous êtes mort !', { 
           font: '32px Georgia', 
           fill: '#fff', 
-      }).setOrigin(0.5).setScrollFactor(0); // Rendre le texte fixe par rapport à la caméra
-      
+      }).setOrigin(0.5).setScrollFactor(0); 
+      this.time.delayedCall(3000, () => {
+        if (this.deathMessage) {
+            this.deathMessage.destroy();
+            this.deathMessage = null;
+        }});
   }
 
 
@@ -279,8 +287,8 @@ this.player.body.enable = false;
 
 
 // Attendre un court instant avant de le faire respawn (évite un bug de collision)
-this.time.delayedCall(1000, () => {
-    this.player2.setPosition(this.startPosition.x, this.startPosition.y);
+this.time.delayedCall(50, () => {
+    this.player2.setPosition(this.startPosition.x+50, this.startPosition.y);
     this.player.setPosition(this.startPosition.x, this.startPosition.y); // Respawn au point de départ
     // Respawn au point de départ
     this.player2.body.enable = true; // Réactiver le corps du joueur
@@ -288,10 +296,7 @@ this.time.delayedCall(1000, () => {
 
 
     // Supprimer le message de mort
-    if (this.deathMessage) {
-      this.deathMessage.destroy();
-      this.deathMessage = null;
-  }
+  
 });}
 
 
@@ -378,7 +383,7 @@ this.time.delayedCall(1000, () => {
   
   // Rendre le bouton cliquable
   boutonMenu.on("pointerdown", () => {
-    this.musique_de_fond.stop();
+    this.musique_de_fond2.stop();
     this.game.config.spawnX= 2050;
     this.game.config.spawnY=300;
     this.scene.start("selection");

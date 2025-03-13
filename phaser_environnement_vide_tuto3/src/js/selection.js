@@ -130,7 +130,7 @@ keyD = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.D);
       fill: "#fff",
   }).setOrigin(0.5);
 
-    player = this.physics.add.sprite(this.spawnX, this.spawnY, 'img_dino');
+    player = this.physics.add.sprite(this.spawnX+50, this.spawnY, 'img_dino');
     this.cameras.main.startFollow(player);
     player2= this.physics.add.sprite(this.spawnX,this.spawnY, 'img_dino2');
     player.setCollideWorldBounds(true);
