@@ -555,6 +555,15 @@ let boutonMenu = this.add.image(
 .setInteractive()
 .setScale(0.15).setDepth(100);// Premier plan
 
+    // Débloquer l’icône du panda dans l'interface
+    var sij = this.scene.get("interfaceJeu");
+    sij.debloquerAnimal(3);  // Ici, 3 correspond au panda
+
+    // Ajouter un délai avant de retourner au menu
+    this.time.delayedCall(3000, () => {
+        this.scene.start("selection");  // Retour au menu
+    });
+
 
 // Ajouter le texte "Menu" par-dessus le bouton
 let texteMenu = this.add.text(
